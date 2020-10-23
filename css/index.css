@@ -32,7 +32,7 @@ body{
 }
 
 .cover {
-  background: url(../img/cover.jpeg) center;
+  background: url(../img/cover.jpg) center;
   background-size: cover;
   position: relative;
 }
@@ -81,7 +81,7 @@ footer{
   color: white;
   padding-top: 100px;
   text-align: center;
-  
+
 }
 
 footer p{
