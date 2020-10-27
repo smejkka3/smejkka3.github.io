@@ -69,8 +69,45 @@
   </header>
 
   <article class="post-content">
-  <p>To start with F1Tenth, the first lecture covers mostly overview of the whole curse, the advances and use cases of autonomous
-    vehicles.
+  <p>To start with F1Tenth, the first lecture covers mostly overview of the whole curse and a brief introduction of autonomous
+    racing. The point of the lecture was mostly to motivate students and set an outline of what to expect during the course.
+  </p>
+
+  <p>
+    After watching the first lecture the next content in line was the first tutorial. The slides on the website only briefly
+    cover the F1Tenth simulator how to install it and how to manually drive the car inside of the simulator using keyboard. So
+    I used tutorial video from University of Virginia by Prof. Madhur Behl availible <a href="https://www.youtube.com/playlist?list=PL868twsx7OjddCq3az74hu6pVsuJJzXvP">here</a>
+    and <a href="https://linklab-uva.github.io/autonomousracing/">here</a> as well as watched the first 5 videos all the way up to [F1/10 Lectures] Online ROS F1/10 Simulator to cover
+    all the basics of ROS, which are later needed in the Lab1 Assigment. I'm gonna list bellow some of the basic points I should remember from the tutorials.
+  </p>
+
+  <p>
+    The <a href="http://wiki.ros.org/">ROS wiki</a> already has great tutorials to use when learning basics of ROS, however I'm gonna mention
+    some of the main points from the first turorial. The turotial was focused on the ROS as middleware which manages communication between
+    diffrent parts of the autonomous car. Here are the some of the basics components of ROS:
+    <ul>
+      <li><a href="http://wiki.ros.org/Nodes">Nodes</a> Programs with specific functionality, that runs as a single process and they communicate
+        with other nodes using topics and messages. A node is written using the client library, the main ones are roscpp for C++ and rospy for Python.
+        There are also some experimental client libraries such as R and Java.
+          <ul>
+          <li><a href="http://wiki.ros.org/Master">ROS Master</a>  is special node which runs always and it doesn't have to be written by user. It
+          allows nodes to be able to exchange message among each other. ROS Master always has to be running. To start the ROS Master Node there is a command
+          roscore
+          </ul>
+      <li><a href="http://wiki.ros.org/Topics">Topics</a> are channels over which nodes exchange messages. Nodes can subscribe to or publish to a topic.
+        Topics has many-to-many relationship, so there can be multiple publishers and multiple subscribers on one topic and each topic has only one type
+        of message.
+      <li><a href="http://wiki.ros.org/Messages">Messages</a> are strongly-typed data structures for a topic.
+      <li><a href="http://wiki.ros.org/Packages">Packages</a> are part of software, which contains one or more nodes.
+    </ul>
+  </p>
+
+  <p>The ROS Publishers and Subscribers, Messages and topic concept is very well described at <a href="https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html"> mathworks.com</a> with the
+    following image:
+    <img src="https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png" alt="The concept of topics, publishers, and subscribers.">
+  </p>
+  <p>
+    The next thing to try for me was to follow the turtlesim tutorital, which is basically "hello word" of ROS. The tutorial availible at <a href="http://wiki.ros.org/turtlesim/Tutorials">ROS wiki</a>
   </p>
 
 
@@ -101,7 +138,7 @@
   })();
   </script>
   <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  <a href="http://foo.com/bar.html#disqus_thread">Link</a>.
+
 
 </div>
       </div>
