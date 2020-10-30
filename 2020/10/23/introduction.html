@@ -138,6 +138,28 @@
          </div></div>
     </ul>
   </p>
+  <p>
+    Moving on to the next video and Lecture 3 from the University of Virginia, which talks about one of the most important concepts in ROS and that's Publishers and
+    Subscribers. This lecture starts with example of <a href="http://wiki.ros.org/rospy">rospy client library</a>, explaning initialization of ROS Node with
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rospy.init_node('my_node_name')</span>
+    </code></pre></div></div>
+    and
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rospy.init_node('my_node_name', anonymous=True)</span>
+    </code></pre></div></div>
+    This tells ROS that this code is ROS node with the name my_node_name and this name must be unique. The <i>anonymous=True</i> parameter create unique name for you adding unique id to the end of the node name.
+    To not kill the node immediately after one run using
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rospy.spin()</span>
+    </code></pre></div></div>
+    is used to achieve this by consuming some CPU cycles.
+  </p>
+  <p>
+    <a href="http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29">ROS publisher</a> is a node which will continually broadcast a message.
+    <div class="imgcap">
+    <div style="display:inline-block">
+     <img src="/img/publisher.png" alt="Publisher", height="200">
+     <div class="thecap">Example of Publisher Node with explanation of what each line is doing, ref: <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L04-compressed.pdf">UV F1/10 lecture</a></div>
+     </div></div>
+  </p>
   </article>
 
   <!-- mathjax -->
