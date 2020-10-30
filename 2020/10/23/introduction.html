@@ -92,7 +92,8 @@
           <ul>
           <li><a href="http://wiki.ros.org/Master">ROS Master</a>  is special node which runs always and it doesn't have to be written by user. It
           allows nodes to be able to exchange message among each other. ROS Master always has to be running. To start the ROS Master Node there is a command
-          roscore
+          <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">roscore</span>
+          </code></pre></div></div>
           </ul>
       <li><a href="http://wiki.ros.org/Topics">Topics</a> are channels over which nodes exchange messages. Nodes can subscribe to or publish to a topic.
         Topics has many-to-many relationship, so there can be multiple publishers and multiple subscribers on one topic and each topic has only one type
@@ -104,10 +105,11 @@
 
   <p>The ROS Publishers and Subscribers, Messages and topic concept is very well described at <a href="https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html"> mathworks.com</a> with the
     following image:
-    <img src="https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png" alt="The concept of topics, publishers, and subscribers.">
+    <div class="imgcap"><img src="https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png" alt="The concept of topics, publishers, and subscribers.">
+    <div class="thecap">The ROS Publishers and Subscribers, Messages and topic illustrated.</div></div>
   </p>
   <p>
-    The next thing to try for me was to follow the turtlesim tutorital, which is basically "hello word" of ROS. The tutorial is availible at <a href="http://wiki.ros.org/turtlesim/Tutorials">ROS wiki</a>
+    The next thing to try for me was to follow the turtlesim tutorital, which is basically "hello world" of ROS. The tutorial is availible at <a href="http://wiki.ros.org/turtlesim/Tutorials">ROS wiki</a>
   </p>
   <p>
     The next lecture was about ROS filesystem. Although very important topic to know to succesfully work in ROS, it is better to try it on your own inside turtlesim or your own ROS project.
@@ -120,10 +122,20 @@
     <ul>
       <li><a href="http://wiki.ros.org/catkin">Catkin</a>: Is the build system of ROS which generates executables nad libraries. It is based on CMake from C programming language and it
         extends it with ROS specific features. It also makes the package more standard compliant, and thus reusable by other programmers. In the following figure is shown how the
-        catkin workspace should be organized (taken from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf">UV F1/10 lecture</a>). <img src="/img/catkin_ws.png" alt="Catkin Workspace">
+        catkin workspace should be organized (taken from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf">UV F1/10 lecture</a>).
+        <div class="imgcap">
+        <div style="display:inline-block">
+        <img src="/img/catkin_ws.png" alt="Catkin Workspace", height="200">
+        <div class="thecap">Example of catkin workspace structure</div>
+        </div></div>
       <li><a href="http://wiki.ros.org/catkin/package.xml">Package.xml</a>: Contains the meta information of a package such as name, description, version, license and dependencies.
       <li><a href="http://wiki.ros.org/catkin/CMakeLists.txt">CMakeLists.txt</a>: The main CMake file to build the package and calls catkin-specific functions. Exaple of how should very basic CMakeLists.txt look look like is
-        in the following figure (taken from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf">UV F1/10 lecture</a>): <img src="/img/CMake.png" alt="CMakeLists.txt">
+        in the following figure (taken from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf">UV F1/10 lecture</a>):
+        <div class="imgcap">
+        <div style="display:inline-block">
+         <img src="/img/CMake.png" alt="CMakeLists.txt", height="200">
+         <div class="thecap">Example of CMakeLists.txt</div>
+         </div></div>
     </ul>
   </p>
   </article>
