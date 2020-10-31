@@ -175,7 +175,16 @@
     Altought I completed <a href="https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros">Lab1 of F1Tenth</a> already, I decided to do
     the <a href="https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf">first assignment</a> from the F1/10 course from University of Virginia as well to gain very good base knowledge of ROS.
     There are 4 tasks in total. The first one is to create node <i>swim_shool.py</i> where the turtle from turtlesim tutorial draw figure 8 by doing movement specified by linear and angular
-    velocity defined by user. I'm not uploading the code as it is univeristy course credited assignment but my results are shown in gif bellow.
+    velocity defined by user. I'm not uploading the code as it is univeristy course credited assignment but my results are shown in gif bellow. My first idea was to create subscriber in the node
+    which is getting the pose of the turtle and when the <a href="http://docs.ros.org/en/melodic/api/turtlesim/html/msg/Pose.html"> pose.theta </a> is very close to 0 (means horizontal to X axis) multiply
+    angular velocity of turtle by -1, which makes the turtle turn the other side to which is turtle curently rotating. However due the slight inaccuracies of the pose.theta and rospy.rate the pose.theta
+    never was exactly 0 or its absolute value was not close enough to accurately follow the 8 figure each round. I partially solved this by increasing queue size and rospy.rate to 1000hz to increase rate of <thead>
+    loop which gave me more <i>pose.theta</i> values, however this solution still was not accurate enough. What worked great is to calculate the radius of the circle from the <i>linear</i> and <i>angular</i> velocites
+    inputted by user. Using this radius I could calculate circumference of the circle the turtle is going to draw as well as at the same time computing the distance which turtle travelled at each run of the loop and once
+    the turtle crossed the distance of circumference of the circle multiply angular velocity of turtle by -1 and combine this approach with the <i>pose.theta</i> checking (as the circumference check was not
+    accurate enough and the turtle turned slightly before finsihing the complete circle most likely because of <i>&#928</i> inaccurate representation) mention above with slightly less accuracy. Combining
+    these two condition made my turtle not skip the turns after finishing drawing the complete circle.
+    </thead>
     <div class="imgcap">
     <div style="display:inline-block">
      <img src="/img/swim_school1.gif" alt="swim_shool1", height="300">
@@ -186,7 +195,7 @@
       <img src="/img/swim_school2.gif" alt="swim_shool2", height="300">
       <div class="thecap">problem 1a) from assignment 1 of <a href="https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf">UV F1/10 course</a></div>
       </div></div>
-      The second task was very similar to the previous one. The only difference is that the initial position of the turtle should be random as well as linear and
+      The second task <i>random_swim_shool.py</i> was very similar to the previous one. The only difference is that the initial position of the turtle should be random as well as linear and
       angular velocity of the turtle. My results shown again in gifs bellow.
       <div class="imgcap">
       <div style="display:inline-block">
@@ -198,6 +207,16 @@
         <img src="/img/random_swim_school2.gif" alt="random_swim_shool2", height="300">
         <div class="thecap">problem 1b) from assignment 1 of <a href="https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf">UV F1/10 course</a></div>
         </div></div>
+        <div class="imgcap">
+        <div style="display:inline-block">
+         <img src="/img/back_to_sqaure_one.gif" alt="back_to_sqaure_one", height="300">
+         <div class="thecap">problem 1c) from assignment 1 of <a href="https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf">UV F1/10 course</a></div>
+         </div></div>
+         <div class="imgcap">
+         <div style="display:inline-block">
+          <img src="/img/swim_to_goal.gif" alt="swim_to_goal", height="300">
+          <div class="thecap">problem 2) from assignment 1 of <a href="https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf">UV F1/10 course</a></div>
+          </div></div>
   </p>
   </article>
 
