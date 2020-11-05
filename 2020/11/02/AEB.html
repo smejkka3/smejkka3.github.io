@@ -70,7 +70,32 @@
 
   <article class="post-content">
   <h3 id="intro">Introduction</h3>
-
+<p>
+  The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
+  into nearby objects. This is achieved by computing TTC (Time To Collision) using before mentioned LaserScan message. This assignment
+  checks more into the depth the ability work with publishers and subscribe and forces me to explore more Odometry message and
+  AckermannDriveStamped message because both of them are used to prevent the collision. But first let's look at some theory.
+</p>
+  <h3 id="aeb">AEB (Automatic Emergency Braking)</h3>
+<p>
+  AEB is simply forcing stop before expected collision with nearby object. It is a safety reaction of the car based on the
+  information it is gathering from its sensors. It is simple binary classification problem which answers question break/not break.
+</p>
+  <h5 id="failures">Failures</h5>
+<p>
+  The big problem in AEB is false negative. This means the car won't stop when it is about to collide with an obstacle. As you can imagine
+  noone will deploy a car which can't avoid collison or even can kill people. Another, but not as serious problem are false positives, when
+  car stops randomly when it should not and there is no danger of colliding.
+</p>
+<h5 id="ttc">TTC (Time to Collision)</h5>
+<p>
+    Let's explain how TTC is calculated
+</p>
+  <h5 id="lidar">Lidar</h5>
+<p>
+  Although I have worked with lidar in previous assignment, it worths explaning the <a href="http://docs.ros.org/en/api/sensor_msgs/html/msg/LaserScan.htmlLaserScan">LaserScan message data fields</a>
+  I will have to use in this assignment.
+</p>
 
   <h3 id="intro">F1Tenth Lab2 assignment </h3>
   My final package as required in the task is availible bellow.
