@@ -64,66 +64,121 @@
       <div class="post">
 
   <header class="post-header">
-    <h1>Automatic Emergency Braking</h1>
-    <p class="meta">2 Nov 2020</p>
+    <h1>Wallfollowing</h1>
+    <p class="meta">6 Nov 2020</p>
   </header>
 
   <article class="post-content">
   <h3 id="intro">Introduction</h3>
-<p>
-  The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
-  into nearby objects. This is achieved by computing TTC (Time To Collision) using before mentioned LaserScan message. This assignment
-  checks more into the depth the ability work with publishers and subscribe and forces me to explore more Odometry message and
-  AckermannDriveStamped message because both of them are used to prevent the collision. But first let's look at some theory.
-</p>
-  <h3 id="aeb">AEB (Automatic Emergency Braking)</h3>
-<p>
-  AEB is simply forcing stop before expected collision with nearby object. It is a safety reaction of the car based on the
-  information it is gathering from its sensors. It is simple binary classification problem which answers question break/not break.
-</p>
-  <h4 id="failures">Failures</h4>
-<p>
-  The big problem in AEB is false negative. This means the car won't stop when it is about to collide with an obstacle. As you can imagine
-  noone will deploy a car which can't avoid collison or even can kill people. Another, but not as serious problem are false positives, when
-  car stops randomly when it should not and there is no danger of colliding.
-</p>
-<h4 id="ttc">TTC (Time to Collision)</h4>
-<p>
-    Let's explain how TTC is calculated:
-    <div class="imgcap">
-    <div style="display:inline-block">
-    <img src="/img/TTC_formula.png" alt="ttc", height="200">
-    <div class="thecap">Time to Collision formula from <a href="https://f1tenth.org/learn.html">lecture 2</a></div> of F1/10 course
-    </div></div>
-    where denominator that's time derivative of range between vehicle and given obstacle, also called as "range rate" is defined as:
-    <div class="imgcap">
-    <div style="display:inline-block">
-    <img src="/img/range_rate.png" alt="rr", height="200">
-    <div class="thecap">Formula  for range-rate from <a href="https://f1tenth.org/learn.html">lecture 2</a></div> of F1/10 course
-    </div></div>
-</p>
-  <h4 id="lidar">Lidar</h4>
-<p>
-  Although I have worked with lidar in previous assignment, it worths explaning the <a href="http://docs.ros.org/en/api/sensor_msgs/html/msg/LaserScan.htmlLaserScan">LaserScan message data fields</a>
-  I will have to use in this assignment. Based on the TTC formula above, I'm gonna need <i>float32[] ranges</i> to calculate distance between obstacle and the car, which is numerator in the the TTC formula.
-  For denominator (range-rate) I have to use all <i>float32 angle_min, float32 angle_max and float32 angle_increment</i>. That's because for range-rate computation I need cosine of each beam angle (whith these 3 variables
-  I can get every single angle of my LaserScan data). Also as mentioned I need to take max of given range-rate of given beam and 0 so meaning if range-range for specific beam is less than 0, assign it 0. In both of my nodes (Python and C++) to avoid division by 0 I set this value very close
-  to 0. I was trying to remove 0 from denominator completly together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.
-</p>
-<p>
-  Another message I need is <i>Odometry</i>, specificaly <i>geometry_msgs/TwistWithCovariance twist.linear.x</i>, which is linear speed of my car, used
-  again in the range-rate calculation.
-</p>
-  <h3 id="intro">F1Tenth Lab2 assignment </h3>
-  TTC threshold for braking was set to 0.3 accoding to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.
-  My final package as required in the task is availible bellow.
   <p>
-  <a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/karel_safety.zip">karel_safety.zip</a>
+  Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS intruductory topic as that are Rigid Body Transformation.
+  Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
+  set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any poistion of word, robot, etc. only makes sense
+  when we defined the frame in which we are describing the pose. The direction of X,Y, Z axes is defined by right-handed rule, where index finger points in
+  X direction, middle finger in y direction and thumb in Z direction. Lets look more into transfomations and frames.
   </p>
-  txt with video links of the assignment availible bellow.
+  <h3 id="trans_frames">Transfomations and Frames</h3>
   <p>
-  <a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/karel_lab2_video.txt">karel_lab2_video.txt</a>
+  Why do we need transformations between different sensors? Each time I get data in sensor frame (for specific sensor) which I want to transform in some unified way.
+  FOr example we can have frame of reference of lidar which we can transform into the frame of reference of robot, which is the center of the rear axle. As example in
+  the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain legnth and lidar
+  can be place in the center of the car. Therefore the correct way of stopping before collision should be calculated from the front of the car (or edge of the car), not from the
+  position of the lidar. Between frames there will exist transofmation taht convert measurent from one frame to another.
   </p>
+  <h3 id="f1_frames">Reference Frames on F1Tenth car</h3>
+  <p>
+    <ul>
+      <li>map
+        <p>
+          The origin set by the user and every other transformation can be measured with respect to the map. Represent the enviroment where
+          the car will be racing. Can be place arbitrary and typically never moves after its placed.
+        </p>
+      <li>base_link
+        <p>
+          Positioned at center of the rear axle of the car. Moves with the car relative to the map frame.
+        </p>
+      <li>lidar
+        <p>
+          The frame of reference where lidar scan measurements are taken. Moves with the car relative to the map frame.
+        </p>
+      <li>odom
+        <p>
+          Typically required by ROS. Usually the initial position of the robot in the map before everything began. Fixed relative to the map.
+        </p>
+    </ul>
+  </p>
+  <h4 id="rbt">Rigid Body Transfomation</h4>
+  <p>
+    How to transform data and postition between one frame and anohter. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.
+  </p>
+      <div class="imgcap">
+      <div style="display:inline-block">
+      <img src="/img/frames.png" alt="frames", height="200">
+      <div class="thecap">2 diffrent coordinate frames and point p from<a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></div>
+      </div></div>
+    Steps:
+    <ol>
+      <li> Overlap both frames so their origins are at the same point. The reason is that we want to compute how is second frame of reference rotated. (apply rotation)
+      <li> Describe the unit vectors of the second frame of reference in the terms of unit vectors of first frame of reference. As on picture bellow.
+        <div class="imgcap">
+        <div style="display:inline-block">
+        <img src="/img/frames2.png" alt="frames", height="200">
+        <div class="thecap">Overlapped frames of reference from<a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></div>
+        </div></div>
+        <p>
+          x<sub>2</sub> = R<sub>11</sub>x<sub>1</sub> + R<sub>21</sub> y<sub>1</sub><br>
+          y<sub>2</sub> = R<sub>12</sub>x<sub>1</sub> + R<sub>22</sub> y<sub>1</sub><br>
+          The formula above describes the units vector of new frame of referece as a linear combination of the original frame of reference. (considering only X,Y axis - 2D problem, no Z).
+          The formula can be also rewriten as matrix:
+         </p>
+         <div class="imgcap">
+         <div style="display:inline-block">
+         <img src="/img/rotation_matrix.png" alt="matrix", height="100">
+         <div class="thecap">Rotation matrix from<a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></div>
+         </div></div>
+         <p>
+        Also we define &theta; as angle between x<sub>1</sub> and x<sub>2</sub> as shown on figure bellow. This angle tells us how rotated this frame is.
+        </p>
+        <div class="imgcap">
+        <div style="display:inline-block">
+        <img src="/img/theta.png" alt="theta", height="200">
+        <div class="thecap">Overlapped frames of reference with angle theta from<a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></div>
+        </div></div>
+        <p>
+        To get the coefficients R<sub>11</sub>, R<sub>21</sub>, R<sub>12</sub>, R<sub>22</sub>, along x<sub>2</sub> unit vector direction, contains the cos unit component of x<sub>1</sub>
+        unit vector as well as sin component of y<sub>1</sub> unit vector. Thefore  x<sub>2</sub> and similary y<sub>2</sub> can be written as:
+        </p>
+        <p>
+        x<sub>2</sub> = cos(&theta;)x<sub>1</sub> + sin(&theta;)y<sub>1</sub><br>
+        y<sub>2</sub> = -sin(&theta;)x<sub>1</sub> + cos(&theta;)y<sub>1</sub><br>
+        </p>
+        <p>
+          Therefore I get:
+        </p>
+          <div class="imgcap">
+          <div style="display:inline-block">
+          <img src="/img/rotation_matrix2.png" alt="matrix2", height="100">
+          <div class="thecap">Rotation matrix from<a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></div>
+          </div></div>
+    </ol>
+    <p>
+      With this we are able to represent unit vectors in the new frame of reference in terms of unit vectors of original frame of reference.
+      Similary we can express the position of point P in the new frame of reference using the rotation matrix as shown on formulas bellow.
+    </p>
+      <div class="imgcap">
+      <div style="display:inline-block">
+      <img src="/img/rotation_p.png" alt="matrix_p", height="100">
+      <div class="thecap">Rotation matrix of point p from<a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></div>
+      </div></div>
+      <p>
+        We can't forget to apply the translation as well.
+      </p>
+  <h3 id="wf">Wallfollowing</h3>
+  The idea is we are trying to compute the error between the future position of the car instead of current error because of constant movement of the car.
+  By minimizing the future distance from the wall with respect to the optimal trajectory we are able to follow the wall.
+  TODO DESCRIBE MY IMPLEMENTATION AS THE ALGORITHM
+  <h3 id="lab3">F1Tenth Lab3 assignment </h3>
+
   </article>
 
   <!-- mathjax -->
