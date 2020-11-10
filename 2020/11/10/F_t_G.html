@@ -12,7 +12,7 @@
     <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="My F1Tenth journey" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/css/main.css">
 
 </head>
     <body>
@@ -23,7 +23,7 @@
 
     <div style="float:left; margin-top:10px; margin-right:10px;">
     <a href="/index.html">
-      <img src="img/icon.png" width="40">
+      <img src="/img/icon.png" width="40">
     </a>
     </div>
 
@@ -42,7 +42,7 @@
         </svg>
       </a>
       <div class="trigger">
-          <a href="CV_2020.pdf">Curriculum Vitae<i class="far fa-file"></i></i></a>
+          <a href="/CV_2020.pdf">Curriculum Vitae<i class="far fa-file"></i></i></a>
 
 
 
@@ -61,41 +61,49 @@
 
     <div class="page-content">
       <div class="wrap">
-      <div class="home">
+      <div class="post">
 
-  <ul class="posts">
-    <li>
-      <span class="post-date">6 Nov, 2020</span>
-      <a class="post-link" href="/2020/11/10/F_t_G.html">04 - Follow the Gap</a>
-      <br>
-      Indroducing Follow the Gap algorithm, which is more robust and suitable for racing than simple wallfollowing.
-    </li>
+  <header class="post-header">
+    <h1>Follow the Gap</h1>
+    <p class="meta">10 Nov 2020</p>
+  </header>
 
-    <li>
-      <span class="post-date">6 Nov, 2020</span>
-      <a class="post-link" href="/2020/11/06/WF.html">03 - Wallfollowing</a>
-      <br>
-      Let's start driving autonomously with F1Tenth car. Starting with wallfollowing algorithm.
-    </li>
+  <article class="post-content">
+  <h3 id="intro">Introduction</h3>
 
-      <li>
-        <span class="post-date">2 Nov, 2020</span>
-        <a class="post-link" href="/2020/11/02/AEB.html">02 - Automatic Emergency Braking</a>
-        <br>
-        Working with the LaserScan message in ROS, and implementing AEB (Automatic Emergency Breaking) System to prevent car collison with nearby obstacles.
-      </li>
+  <h3 id="f_t_g">Follow the Gap</h3>
 
-      <li>
-        <span class="post-date">23 Oct, 2020</span>
-        <a class="post-link" href="/2020/10/23/introduction.html">01 - Introduction to Robotic Operating System (ROS)</a>
-        <br>
-        My first steps into F1Tenth. Mostly just introduction to the world of autonomous racing and ROS.
-      </li>
 
-  </ul>
+  </article>
+
+  <!-- mathjax -->
+
+
+  <!-- disqus comments -->
+
+  <div id="disqus_thread"></div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+  /*
+  var disqus_config = function () {
+  this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  };
+  */
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://smejkka3-github-io.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 
 </div>
-
       </div>
     </div>
 
@@ -171,7 +179,5 @@
   </div>
 
 </footer>
-
-
     </body>
 </html>
