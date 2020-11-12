@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-12T18:01:30+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Follow the Gap</title><link href="http://localhost:4000/2020/11/10/follow_the_gap.html" rel="alternate" type="text/html" title="Follow the Gap" /><published>2020-11-10T00:00:00+01:00</published><updated>2020-11-10T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/10/follow_the_gap</id><content type="html" xml:base="http://localhost:4000/2020/11/10/follow_the_gap.html"></content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Wallfollowing</title><link href="http://localhost:4000/2020/11/06/wallfollowing.html" rel="alternate" type="text/html" title="Wallfollowing" /><published>2020-11-06T00:00:00+01:00</published><updated>2020-11-06T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/06/wallfollowing</id><content type="html" xml:base="http://localhost:4000/2020/11/06/wallfollowing.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
+Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
+set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any poistion of word, robot, etc. only makes sense
+when we defined the frame in which we are describing the pose. The direction of X,Y, Z axes is defined by right-handed rule, where index finger points in
+X direction, middle finger in y direction and thumb in Z direction. Let’s look more into transformations and frames.&lt;/p&gt;
+
+&lt;h2 id=&quot;transfomations-and-frames&quot;&gt;Transfomations and Frames&lt;/h2&gt;
+
+&lt;p&gt;Why do we need transformations between different sensors? Each time I get data in sensor frame (for specific sensor) which I want to transform in some unified way.
+For example we can have frame of reference of lidar which we can transform into the frame of reference of robot, which is the center of the rear axle. As example in
+the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain legnth and lidar
+can be place in the center of the car. Therefore the correct way of stopping before collision should be calculated from the front of the car (or edge of the car), not from the
+position of the lidar. Between frames there will exist transformation that convert measuring from one frame to another.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference-frames-on-f1tenth-car&quot;&gt;Reference Frames on F1Tenth car&lt;/h2&gt;
+
+&lt;h4 id=&quot;map&quot;&gt;map&lt;/h4&gt;
+&lt;p&gt;The origin set by the user and every other transformation can be measured with respect to the map. Represent the environment where the car will be racing. Can be place arbitrary and typically never moves after its placed.&lt;/p&gt;
+
+&lt;h4 id=&quot;base_link&quot;&gt;base_link&lt;/h4&gt;
+&lt;p&gt;Positioned at center of the rear axle of the car. Moves with the car relative to the map frame.&lt;/p&gt;
+
+&lt;h4 id=&quot;lidar&quot;&gt;lidar&lt;/h4&gt;
+&lt;p&gt;The frame of reference where lidar scan measurements are taken. Moves with the car relative to the map frame.&lt;/p&gt;
+
+&lt;h4 id=&quot;odom&quot;&gt;odom&lt;/h4&gt;
+&lt;p&gt;Typically required by ROS. Usually the initial position of the robot in the map before everything began. Fixed relative to the map.&lt;/p&gt;
+
+&lt;h3 id=&quot;rigid-body-transfomation&quot;&gt;Rigid Body Transfomation&lt;/h3&gt;
+
+&lt;p&gt;How to transform data and postition between one frame and anohter. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/frames.png&quot; /&gt;
+2 diffrent coordinate frames and point p from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;
+  Steps:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Overlap both frames so their origins are at the same point. The reason is that we want to compute how is second frame of reference rotated. (apply rotation)&lt;/li&gt;
+  &lt;li&gt;Describe the unit vectors of the second frame of reference in the terms of unit vectors of first frame of reference. As on picture bellow.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/frames2.png&quot; /&gt;
+Overlapped frames of reference from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;x&lt;sub&gt;2&lt;/sub&gt; = R&lt;sub&gt;11&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + R&lt;sub&gt;21&lt;/sub&gt; y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
+y&lt;sub&gt;2&lt;/sub&gt; = R&lt;sub&gt;12&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + R&lt;sub&gt;22&lt;/sub&gt; y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
+The formula above describes the units vector of new frame of referece as a linear combination of the original frame of reference. (considering only X,Y axis - 2D problem, no Z).
+The formula can be also rewriten as matrix:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix.png&quot; /&gt;
+Rotation matrix from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Also we define θ as angle between x&lt;sub&gt;1&lt;/sub&gt; and x&lt;sub&gt;2&lt;/sub&gt; as shown on figure bellow. This angle tells us how rotated this frame is.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/theta.png&quot; /&gt;
+Overlapped frames of reference with angle theta from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;To get the coefficients R&lt;sub&gt;11&lt;/sub&gt;, R&lt;sub&gt;21&lt;/sub&gt;, R&lt;sub&gt;12&lt;/sub&gt;, R&lt;sub&gt;22&lt;/sub&gt;, along x&lt;sub&gt;2&lt;/sub&gt; unit vector direction, contains the cos unit component of x&lt;sub&gt;1&lt;/sub&gt;
+unit vector as well as sin component of y&lt;sub&gt;1&lt;/sub&gt; unit vector. Thefore  x&lt;sub&gt;2&lt;/sub&gt; and similary y&lt;sub&gt;2&lt;/sub&gt; can be written as:&lt;/p&gt;
+
+&lt;p&gt;x&lt;sub&gt;2&lt;/sub&gt; = cos(θ)x&lt;sub&gt;1&lt;/sub&gt; + sin(θ)y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
+y&lt;sub&gt;2&lt;/sub&gt; = -sin(θ)x&lt;sub&gt;1&lt;/sub&gt; + cos(θ)y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Therefore I get:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix2.png&quot; /&gt;
+Rotation matrix from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;With this we are able to represent unit vectors in the new frame of reference in terms of unit vectors of original frame of reference. Similarly we can express the position of point P in the new frame of reference using the rotation matrix as shown on formulas bellow.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_p.png&quot; /&gt;
+Rotation matrix of point p from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;.
+We can’t forget to apply the translation as well.&lt;/p&gt;
+
+&lt;h4 id=&quot;wallfollowing&quot;&gt;Wallfollowing&lt;/h4&gt;
+&lt;p&gt;The idea is we are trying to compute the error between the future position of the car instead of current error because of constant movement of the car.
+By minimising the future distance from the wall with respect to the optimal trajectory we are able to follow the wall.
+TODO DESCRIBE MY IMPLEMENTATION AS THE ALGORITHM.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab3-assignment&quot;&gt;F1Tenth Lab3 assignment&lt;/h2&gt;
+&lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip&quot;&gt;karel_lab3.zip&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;txt with video links of the assignment included in the zipfile.&lt;/p&gt;
+
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/5nLtlszkRvI&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">Introduction</summary></entry><entry><title type="html">Automatic Emergency Braking</title><link href="http://localhost:4000/2020/11/02/aeb.html" rel="alternate" type="text/html" title="Automatic Emergency Braking" /><published>2020-11-02T00:00:00+01:00</published><updated>2020-11-02T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/02/aeb</id><content type="html" xml:base="http://localhost:4000/2020/11/02/aeb.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
+into nearby objects. This is achieved by computing TTC (Time To Collision) using before mentioned LaserScan message. This assignment
+checks more into the depth the ability work with publishers and subscribe and forces me to explore more Odometry message and
+AckermannDriveStamped message because both of them are used to prevent the collision. But first let’s look at some theory.&lt;/p&gt;
+
+&lt;h2 id=&quot;aeb-automatic-emergency-braking&quot;&gt;AEB (Automatic Emergency Braking)&lt;/h2&gt;
+
+&lt;p&gt;AEB is simply forcing stop before expected collision with nearby object. It is a safety reaction of the car based on the
+information it is gathering from its sensors. It is simple binary classification problem which answers question break/not break.&lt;/p&gt;
+
+&lt;h4 id=&quot;failures&quot;&gt;Failures&lt;/h4&gt;
+
+&lt;p&gt;The big problem in AEB is false negative. This means the car won’t stop when it is about to collide with an obstacle. As you can imagine no one will deploy a car which can’t avoid collision or even can kill people. Another, but not as serious problem are false positives, when car stops randomly when it should not and there is no danger of colliding.&lt;/p&gt;
+
+&lt;h4 id=&quot;ttc-time-to-collision&quot;&gt;TTC (Time to Collision)&lt;/h4&gt;
+
+&lt;p&gt;Let’s explain how TTC is calculated:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/TTC_formula.png&quot; /&gt;
+  Time to Collision formula from &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;lecture 2&lt;/a&gt; of F1/10 course&lt;/p&gt;
+
+&lt;p&gt;where denominator that’s time derivative of range between vehicle and given obstacle, also called as “range rate” is defined as:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/range_rate.png&quot; /&gt;
+  Formula  for range-rate from &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;lecture 2&lt;/a&gt; of F1/10 course&lt;/p&gt;
+
+&lt;h4 id=&quot;lidar&quot;&gt;Lidar&lt;/h4&gt;
+
+&lt;p&gt;Although I have worked with lidar in previous assignment, it worths explaining the &lt;a href=&quot;http://docs.ros.org/en/api/sensor_msgs/html/msg/LaserScan.htmlLaserScan&quot;&gt;LaserScan message data fields&lt;/a&gt;
+I will have to use in this assignment. Based on the TTC formula above, I’m gonna need &lt;i&gt;float32[] ranges&lt;/i&gt; to calculate distance between obstacle and the car, which is numerator in the the TTC formula.
+For denominator (range-rate) I have to use all &lt;i&gt;float32 angle_min, float32 angle_max and float32 angle_increment&lt;/i&gt;. That’s because for range-rate computation I need cosine of each beam angle (with these 3 variables
+I can get every single angle of my LaserScan data). Also as mentioned I need to take max of given range-rate of given beam and 0 so meaning if range-range for specific beam is less than 0, assign it 0. In both of my nodes (Python and C++) to avoid division by 0 I set this value very close
+to 0. I was trying to remove 0 from denominator completly together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.&lt;/p&gt;
+
+&lt;p&gt;Another message I need is &lt;i&gt;Odometry&lt;/i&gt;, specifically &lt;i&gt;geometry_msgs/TwistWithCovariance twist.linear.x&lt;/i&gt;, which is linear speed of my car, used
+again in the range-rate calculation.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab2-assignment&quot;&gt;F1Tenth Lab2 assignment&lt;/h2&gt;
+&lt;p&gt;TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.
+My final package as required in the task is available bellow.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab2.zip&quot;&gt;karel_lab2.zip&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;txt with video links of the assignment included in the zipfile.&lt;/p&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/LXWpBoFb4nk&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/zna-dPAIdUQ&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;
+&lt;/p&gt;</content><author><name></name></author><summary type="html">Introduction</summary></entry><entry><title type="html">Introduction to Robotic Operating System (ROS)</title><link href="http://localhost:4000/2020/10/23/Introduction.html" rel="alternate" type="text/html" title="Introduction to Robotic Operating System (ROS)" /><published>2020-10-23T00:00:00+02:00</published><updated>2020-10-23T00:00:00+02:00</updated><id>http://localhost:4000/2020/10/23/Introduction</id><content type="html" xml:base="http://localhost:4000/2020/10/23/Introduction.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;To start with F1Tenth, the first lecture covers mostly overview of the whole curse and a brief introduction of autonomous racing. The point of the lecture was mostly to motivate students and set an outline of what to expect during the course.&lt;/p&gt;
+
+&lt;p&gt;After watching the first lecture the next content in line was the first tutorial. The slides on the website only briefly cover the F1Tenth simulator how to install it and how to manually drive the car inside of the simulator using keyboard. So I used lecture videos from University of Virginia by Prof. Madhur Behl available &lt;a href=&quot;https://www.youtube.com/playlist?list=PL868twsx7OjddCq3az74hu6pVsuJJzXvP&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/&quot;&gt;here&lt;/a&gt; as well as watched the first 5 videos all the way up to [F1/10 Lectures] Online ROS F1/10 Simulator to cover all the basics of ROS, which are later needed in the Lab1 Assignment. I’m gonna list bellow some of the basic points I should remember from these lectures.&lt;/p&gt;
+
+&lt;h2 id=&quot;ros-basics&quot;&gt;ROS basics&lt;/h2&gt;
+
+&lt;p&gt;The &lt;a href=&quot;http://wiki.ros.org/&quot;&gt;ROS wiki&lt;/a&gt; already has great tutorials to use when learning basics of ROS, however I’m gonna mention some of the main points from the first lecture. It was focused on the ROS as middleware which manages communication between different parts of the autonomous car. Here are the some of the basics components of ROS:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/Nodes&quot;&gt;Nodes&lt;/a&gt; Programs with specific functionality, that runs as a single process and they communicate with other nodes using topics and messages. A node is written using the client library, the main ones are roscpp for C++ and rospy for Python. There are also some experimental client libraries such as R and Java.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/Master&quot;&gt;ROS Master&lt;/a&gt; is special node which runs always and it doesn’t have to be written by user. It allows nodes to be able to exchange message among each other. ROS Master always has to be running. To start the ROS Master Node there is a command
+        &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; roscore
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/Topics&quot;&gt;Topics&lt;/a&gt; are channels over which nodes exchange messages. Nodes can subscribe to or publish to a topic. Topics has many-to-many relationship, so there can be multiple publishers and multiple subscribers on one topic and each topic has only one type of message.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/Messages&quot;&gt;Messages&lt;/a&gt; are strongly-typed data structures for a topic.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/Packages&quot;&gt;Packages&lt;/a&gt; are part of software, which contains one or more nodes.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The ROS Publishers and Subscribers, Messages and topic concept is very well described at
+&lt;a href=&quot;https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html&quot;&gt; mathworks.com&lt;/a&gt; with the following image:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next thing to try for me was to follow the turtlesim tutorial, which is basically “hello world” of ROS. The tutorial is available at &lt;a href=&quot;http://wiki.ros.org/turtlesim/Tutorials&quot;&gt;ROS wiki&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The next lecture was about ROS filesystem. Although very important topic to know to successfully work in ROS, it is better to try it on your own inside turtlesim or your own ROS project. So what is &lt;a href=&quot;http://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem&quot;&gt;ROS filesystem&lt;/a&gt;? It centralises the build process of a project, while at the same time provide enough flexibility and tooling to decentralise its dependencies. The main points of the lecture were about &lt;a href=&quot;http://wiki.ros.org/catkin&quot;&gt;catkin&lt;/a&gt;, &lt;a href=&quot;http://wiki.ros.org/catkin/commands/catkin_make&quot;&gt;cakin_make&lt;/a&gt; command and most importantly about &lt;a href=&quot;http://wiki.ros.org/catkin/package.xml&quot;&gt;package.xml&lt;/a&gt; and &lt;a href=&quot;http://wiki.ros.org/catkin/CMakeLists.txt&quot;&gt;CMakeLists.txt&lt;/a&gt; file inside ROS package.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/catkin&quot;&gt;Catkin&lt;/a&gt;: Is the build system of ROS which generates executables nad libraries. It is based on CMake from C programming language and it extends it with ROS specific features. It also makes the package more standard compliant, and thus reusable by other programmers. In the following figure is shown how the catkin workspace should be organised (taken from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf&quot;&gt;UV F1/10 lecture&lt;/a&gt;).
+&lt;img src=&quot;/assets/catkin_ws.png&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/catkin/package.xml&quot;&gt;Package.xml&lt;/a&gt;: Contains the meta information of a package such as name, description, version, license and dependencies.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/catkin/CMakeLists.txt&quot;&gt;CMakeLists.txt&lt;/a&gt;: The main CMake file to build the package and calls catkin-specific functions. Example of how should very basic  * CMakeLists.txt look look like is in the following figure (taken from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf&quot;&gt;UV F1/10 lecture&lt;/a&gt;):
+CMakeLists.txt
+&lt;img src=&quot;/assets/CMake.png&quot; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Moving on to the next video and Lecture 3 from the University of Virginia, which talks about one of the most important concepts in ROS and that’s Publishers and Subscribers. This lecture starts with example of &lt;a href=&quot;http://wiki.ros.org/rospy&quot;&gt;rospy client library&lt;/a&gt;, explaining initialisation of ROS Node with&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rospy.init_node&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_node_name'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rospy.init_node&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my_node_name'&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;anonymous&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;True&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This tells ROS that this code is ROS node with the name my_node_name and this name must be unique. The anonymous=True parameter create unique name for you adding unique id to the end of the node name. To not kill the node immediately after one run using&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rospy.spin&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;to achieve this by consuming some CPU cycles.&lt;/p&gt;
+
+&lt;h4 id=&quot;publisher&quot;&gt;Publisher&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29&quot;&gt;ROS Publisher&lt;/a&gt; is a node which will continually broadcast a message.
+&lt;img src=&quot;/assets/publisher.png&quot; /&gt;
+Example of Publisher Node with explanation of what each line is doing, ref: &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L04-compressed.pdf&quot;&gt;UV F1/10 lecture&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;subscriber&quot;&gt;Subscriber&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29&quot;&gt;ROS Subscriber&lt;/a&gt; tells ROS that you want to receive messages on a given topic.
+&lt;img src=&quot;/assets/subscriber.png&quot; /&gt;
+Example of Subscriber Node with explanation of what each line is doing, ref: UV F1/10 lecture
+The next video is hands on ROS commands and exploring the workspace from terminal available here. It is great hands-on experience of all the lectures before and worth trying it and following along.&lt;/p&gt;
+
+&lt;h2 id=&quot;autoturtle-assignment&quot;&gt;Autoturtle assignment&lt;/h2&gt;
+
+&lt;p&gt;Although I completed &lt;a href=&quot;https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros&quot;&gt;Lab1 of F1Tenth&lt;/a&gt; already, I decided to do the &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf&quot;&gt;first assignment&lt;/a&gt; from the F1/10 course from University of Virginia as well to gain very good base knowledge of ROS. There are 4 tasks in total. The first one is to create node swim_shool.py where the turtle from turtlesim tutorial draw figure 8 by doing movement specified by linear and angular velocity defined by user. I’m not uploading the code as it is university course credited assignment but my results are shown in gif bellow. My first idea was to create subscriber in the node which is getting the pose of the turtle and when the pose.theta is very close to 0 (means horizontal to X axis) multiply angular velocity of turtle by -1, which makes the turtle turn the other side to which is turtle currently rotating. However due the slight inaccuracies of the pose.theta and rospy.rate the &lt;a href=&quot;http://docs.ros.org/en/melodic/api/turtlesim/html/msg/Pose.html&quot;&gt; pose.theta &lt;/a&gt; never was exactly 0 or its absolute value was not close enough to accurately follow the 8 figure each round. I partially solved this by increasing queue size and rospy.rate to 1000hz to increase rate of loop which gave me more pose.theta values, however this solution still was not accurate enough. What worked great is to calculate the radius of the circle from the linear and angular velocities inputted by user. Using this radius I could calculate circumference of the circle the turtle is going to draw as well as at the same time computing the distance which turtle travelled at each run of the loop and once the turtle crossed the distance of circumference of the circle multiply angular velocity of turtle by -1 and combine this approach with the pose.theta checking (as the circumference check was not accurate enough and the turtle turned slightly before finishing the complete circle) mention above with slightly less accuracy. Combining these two condition made my turtle not skip the turns after finishing drawing the complete circle.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/swim_school1.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/swim_school2.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The second task random_swim_shool.py was very similar to the previous one. The only difference is that the initial position of the turtle should be random as well as linear and angular velocity of the turtle. My results shown again in gifs bellow.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/random_swim_school1.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/random_swim_school2.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the third task back_to_sqaure_one.py the task was again to draw a shape by moving turtle, however this time it was square shape with the lower left corner at position (1,1). Side length of the square should be taken from user’s input in the range between 1 to 5.
+&lt;img src=&quot;/assets/back_to_sqaure_one.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The last problem was to swim to position defined by a user.
+&lt;img src=&quot;/assets/swim_to_goal.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab1-assignment&quot;&gt;F1Tenth Lab1 assignment&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros&quot;&gt;First lab&lt;/a&gt; of the F1Tenth was quite straight forward. The main goal is:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;to understand directory structure and framework of ROS&lt;/li&gt;
+  &lt;li&gt;to understand and be able to implement simple subscribers and publishers&lt;/li&gt;
+  &lt;li&gt;to understand and be able to implement messages&lt;/li&gt;
+  &lt;li&gt;to understand what exactly is in CMakeLists.txt and package.xml&lt;/li&gt;
+  &lt;li&gt;to understand package dependencies&lt;/li&gt;
+  &lt;li&gt;be able to write and to understand launch files&lt;/li&gt;
+  &lt;li&gt;to work with RViz&lt;/li&gt;
+  &lt;li&gt;to understand and work Bag files.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The goal is to implement ROS package with node (either in C++, Python or both) and launch file and custom message, which subscribes to the laser_scan topic and publishes distance to the closest obstacle, farthest obstacle and both of these in one topic. I decided to do the lab in both C++ and Python as I want to practice C++ for later when it will be useful for computer vision as python is known for being quite slow. I didn’t encounter some major problems, only experienced little delay while coding the C++ part as I had to iterate trough the vector of laser_scan message ranges and as it was already more than a year sice I did major project in C++ I had to go back to basic tutorials on iterators in C++. My final package as required in the task is available bellow.&lt;/p&gt;
+
+&lt;p&gt;PDF with theory part of the assignment included in the &lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab1.zip&quot;&gt;zipfile&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Introduction</summary></entry></feed>
