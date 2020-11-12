@@ -22,18 +22,33 @@ title: My F1Tenth journey
 email: karel.smejkal19@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.
-baseurl: "/blog" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://smejkka3.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: KarelSmejkal
 github_username:  smejkka3
 linkedin_username: karel-smejkal
 
 # Build settings
-markdown: kramdown
-permalink: pretty
+theme: minima
+plugins:
+  - jekyll-feed
 
-highlighter: rouge
-kramdown:
-  input: GFM
-  auto_ids: true
-  syntax_highlighter: rouge
+# Exclude from processing.
+# The following items will not be processed, by default.
+# Any item listed under the `exclude:` key here will be automatically added to
+# the internal "default list".
+#
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+#
+# exclude:
+#   - .sass-cache/
+#   - .jekyll-cache/
+#   - gemfiles/
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules/
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
