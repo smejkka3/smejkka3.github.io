@@ -1,0 +1,28 @@
+I"<div class="home">
+
+  <ul class="posts">
+    
+        <span class="post-date">Nov 10, 2020</span>
+        <a class="post-link" href="/2020/11/10/follow_the_gap.html">Follow the Gap</a>
+        abc
+        <br />
+    
+        <span class="post-date">Nov 6, 2020</span>
+        <a class="post-link" href="/2020/11/06/wallfollowing.html">Wallfollowing</a>
+        abc
+        <br />
+    
+        <span class="post-date">Nov 2, 2020</span>
+        <a class="post-link" href="/2020/11/02/aeb.html">Automatic Emergency Braking</a>
+        abc
+        <br />
+    
+        <span class="post-date">Oct 23, 2020</span>
+        <a class="post-link" href="/2020/10/23/Introduction.html">Introduction to Robotic Operating System (ROS)</a>
+        abc
+        <br />
+    
+  </ul>
+
+</div>
+:ET

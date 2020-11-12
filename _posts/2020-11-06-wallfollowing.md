@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Wallfollowing"
+excerpt: "Fist autonomous lap of my F1Tenth car using wallfollowing algorithm."
 ---
 
 ## Introduction

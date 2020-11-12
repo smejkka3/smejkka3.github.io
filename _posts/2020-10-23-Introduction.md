@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Introduction to Robotic Operating System (ROS)"
+excerpt: "My first steps into F1Tenth. Mostly just ROS introduction."
 ---
-
 ## Introduction
 
 To start with F1Tenth, the first lecture covers mostly overview of the whole curse and a brief introduction of autonomous racing. The point of the lecture was mostly to motivate students and set an outline of what to expect during the course.
