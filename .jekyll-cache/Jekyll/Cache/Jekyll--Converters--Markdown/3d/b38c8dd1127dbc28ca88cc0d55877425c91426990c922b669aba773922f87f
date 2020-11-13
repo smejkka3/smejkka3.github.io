@@ -1,0 +1,25 @@
+I"�
+<h2 id="introduction">Introduction</h2>
+<p>Let’s describe alternative approach to wallfollowing, which is just following left or right hand-side boundary of track. The Follow the Gap algorithm instead tracing the boundary is navigating trough the track without colliding to any static obstacle and finding the best path to avoid these obstacles. The wallfollowing is not completely able to solve all challenges coming with having the obstacles in the track, which are different shape. Follow the gap is simple algorithm which doesn’t need a lot fo information about the track before-hand, but using the data acquired right now, known as reactive method. It is able to avoid any obstacles without any prior knowledge about the map.</p>
+
+<h2 id="follow-the-gap">Follow the Gap</h2>
+<h4 id="reactive-navigation">Reactive navigation</h4>
+<p>Reactive navigation is using immediate sensory input to decide the driving steering and velocity commands. This works for statics and in some cases also dynamic obstacles.</p>
+
+<h3 id="gap-finding-intuition">Gap finding intuition</h3>
+<p>As the name of algorithm suggests, the car should be able to find a widest gap in the presence of immediate obstacles and drive into this gap to avoid any immediate collision. Let’s say my lidar is reporting following array of distances [0.2, 6.2, 6.0, 7.0, inf, 3.0, inf, 3.0, inf, 8.0, 1.0, 3.0] you could simply choose the farthest distance obstacle and drive towards it, however this may not be possible as the car would have to pass between too obstacles which range between them is not enough for car to fit in ( there is enough room in between than - this can be computed by computing length of the arc given the angular measurements), or the angle between these obstacles is not physically possible for car to turn - as in my array is case of 7th element. To approach this problem let’s define what a gap is:</p>
+<ul>
+  <li>The gap is series of at least n consecutive hits that pass some distance threshold t.</li>
+</ul>
+
+<p>If we would apply this definition to the array given above with n = 3 and t = 5.0 we would get only one gap: [6.2, 6.0, 7.0, inf]. So we would steer towards the center of this gap.</p>
+
+<h2 id="f1tenth-lab4-assignment">F1Tenth Lab4 assignment</h2>
+<p>My final package as required in the task is available bellow.</p>
+
+<p><a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab4.zip">karel_lab4.zip</a></p>
+
+<p>txt with video links of the assignment included in the zipfile.</p>
+
+<iframe width="800" height="400" src="https://www.youtube.com/embed/pKxiRvM4X6U" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+:ET

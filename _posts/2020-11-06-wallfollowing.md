@@ -116,7 +116,10 @@ Moving on to my implementation of the WallFollow node. The algorithm implemented
  * Step 3. And than alpha and D_t to find the estimated future distance D_t1 to the wall
  * Step 4. Run D_t1 trough the PID algorithm described above ( in assignment) to get a steering angle
 
-I was experimenting for a long time with different values of K<sub>p</sub>,K<sub>d</sub> and K<sub>i</sub>. Using this I was able to find get a more insight what each of these constant is doing. I'm not 100% sure about but I think that lowering K<sub>p</sub> makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K<sub>d</sub> seems to react faster to the growing error but it wasn't completely clear. K<sub>i</sub> didn't seem to do much even at higher values, but according to the research it should make the car more sensitive to error.
+I was experimenting for a long time with different values of K<sub>p</sub>,K<sub>d</sub> and K<sub>i</sub>. Using this I was able to find get a more insight what each of these constant is doing. I'm not 100% sure about, but I think that lowering K<sub>p</sub> makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K<sub>d</sub> seems to react faster to the growing error but it wasn't completely clear to me from simulation. K<sub>i</sub> didn't seem to do much even at higher values, but according to the research it should make the car more sensitive to error.
+
+
+I've found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.
 
 My final package as required in the task is available bellow.
 
