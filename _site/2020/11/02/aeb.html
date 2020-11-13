@@ -81,7 +81,7 @@ information it is gathering from its sensors. It is simple binary classification
 I will have to use in this assignment. Based on the TTC formula above, I’m gonna need <i>float32[] ranges</i> to calculate distance between obstacle and the car, which is numerator in the the TTC formula.
 For denominator (range-rate) I have to use all <i>float32 angle_min, float32 angle_max and float32 angle_increment</i>. That’s because for range-rate computation I need cosine of each beam angle (with these 3 variables
 I can get every single angle of my LaserScan data). Also as mentioned I need to take max of given range-rate of given beam and 0 so meaning if range-range for specific beam is less than 0, assign it 0. In both of my nodes (Python and C++) to avoid division by 0 I set this value very close
-to 0. I was trying to remove 0 from denominator completly together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.</p>
+to 0. I was trying to remove 0 from denominator completely together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.</p>
 
 <p>Another message I need is <i>Odometry</i>, specifically <i>geometry_msgs/TwistWithCovariance twist.linear.x</i>, which is linear speed of my car, used
 again in the range-rate calculation.</p>

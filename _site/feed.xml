@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-12T19:33:14+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Follow the Gap</title><link href="http://localhost:4000/2020/11/10/follow_the_gap.html" rel="alternate" type="text/html" title="Follow the Gap" /><published>2020-11-10T00:00:00+01:00</published><updated>2020-11-10T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/10/follow_the_gap</id><content type="html" xml:base="http://localhost:4000/2020/11/10/follow_the_gap.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-13T11:39:44+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Follow the Gap</title><link href="http://localhost:4000/2020/11/10/follow_the_gap.html" rel="alternate" type="text/html" title="Follow the Gap" /><published>2020-11-10T00:00:00+01:00</published><updated>2020-11-10T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/10/follow_the_gap</id><content type="html" xml:base="http://localhost:4000/2020/11/10/follow_the_gap.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;h2 id=&quot;f1tenth-lab4-assignment&quot;&gt;F1Tenth Lab4 assignment&lt;/h2&gt;
 &lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
 
@@ -10,7 +10,7 @@
 
 &lt;p&gt;Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
 Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
-set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any poistion of word, robot, etc. only makes sense
+set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any position of word, robot, etc. only makes sense
 when we defined the frame in which we are describing the pose. The direction of X,Y, Z axes is defined by right-handed rule, where index finger points in
 X direction, middle finger in y direction and thumb in Z direction. Let’s look more into transformations and frames.&lt;/p&gt;
 
@@ -18,7 +18,7 @@ X direction, middle finger in y direction and thumb in Z direction. Let’s look
 
 &lt;p&gt;Why do we need transformations between different sensors? Each time I get data in sensor frame (for specific sensor) which I want to transform in some unified way.
 For example we can have frame of reference of lidar which we can transform into the frame of reference of robot, which is the center of the rear axle. As example in
-the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain legnth and lidar
+the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain length and lidar
 can be place in the center of the car. Therefore the correct way of stopping before collision should be calculated from the front of the car (or edge of the car), not from the
 position of the lidar. Between frames there will exist transformation that convert measuring from one frame to another.&lt;/p&gt;
 
@@ -38,9 +38,9 @@ position of the lidar. Between frames there will exist transformation that conve
 
 &lt;h3 id=&quot;rigid-body-transfomation&quot;&gt;Rigid Body Transfomation&lt;/h3&gt;
 
-&lt;p&gt;How to transform data and postition between one frame and anohter. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.&lt;/p&gt;
+&lt;p&gt;How to transform data and position between one frame and another. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/frames.png&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/frames.png&quot; alt=&quot;frames&quot; /&gt;
 2 diffrent coordinate frames and point p from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;
   Steps:&lt;/p&gt;
 &lt;ul&gt;
@@ -48,20 +48,20 @@ position of the lidar. Between frames there will exist transformation that conve
   &lt;li&gt;Describe the unit vectors of the second frame of reference in the terms of unit vectors of first frame of reference. As on picture bellow.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/frames2.png&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/frames2.png&quot; alt=&quot;frames2&quot; /&gt;
 Overlapped frames of reference from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;x&lt;sub&gt;2&lt;/sub&gt; = R&lt;sub&gt;11&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + R&lt;sub&gt;21&lt;/sub&gt; y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
 y&lt;sub&gt;2&lt;/sub&gt; = R&lt;sub&gt;12&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + R&lt;sub&gt;22&lt;/sub&gt; y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
 The formula above describes the units vector of new frame of referece as a linear combination of the original frame of reference. (considering only X,Y axis - 2D problem, no Z).
-The formula can be also rewriten as matrix:&lt;/p&gt;
+The formula can be also rewritten as matrix:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix.png&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix.png&quot; alt=&quot;rotation_m1&quot; /&gt;
 Rotation matrix from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Also we define θ as angle between x&lt;sub&gt;1&lt;/sub&gt; and x&lt;sub&gt;2&lt;/sub&gt; as shown on figure bellow. This angle tells us how rotated this frame is.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/theta.png&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/theta.png&quot; alt=&quot;theta&quot; /&gt;
 Overlapped frames of reference with angle theta from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;To get the coefficients R&lt;sub&gt;11&lt;/sub&gt;, R&lt;sub&gt;21&lt;/sub&gt;, R&lt;sub&gt;12&lt;/sub&gt;, R&lt;sub&gt;22&lt;/sub&gt;, along x&lt;sub&gt;2&lt;/sub&gt; unit vector direction, contains the cos unit component of x&lt;sub&gt;1&lt;/sub&gt;
@@ -72,21 +72,59 @@ y&lt;sub&gt;2&lt;/sub&gt; = -sin(θ)x&lt;sub&gt;1&lt;/sub&gt; + cos(θ)y&lt;sub&
 
 &lt;p&gt;Therefore I get:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix2.png&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix2.png&quot; alt=&quot;rotation_m&quot; /&gt;
 Rotation matrix from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;With this we are able to represent unit vectors in the new frame of reference in terms of unit vectors of original frame of reference. Similarly we can express the position of point P in the new frame of reference using the rotation matrix as shown on formulas bellow.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/rotation_p.png&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_p.png&quot; alt=&quot;rotation&quot; /&gt;
 Rotation matrix of point p from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;.
 We can’t forget to apply the translation as well.&lt;/p&gt;
+
+&lt;h4 id=&quot;ros-tftf2-package&quot;&gt;ROS tf/tf2 package&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://wiki.ros.org/tf2&quot;&gt;ROS tf2 package&lt;/a&gt; lets you keep track of multiple coordinate frames over time. And transform points/poses between two coordinates. It broadcast this across ROS so any node can subscribe to it. To get more insight how it works it is very useful to try &lt;a href=&quot;http://wiki.ros.org/tf2/Tutorials&quot;&gt;TF2 Tutorial&lt;/a&gt;, older &lt;a href=&quot;http://wiki.ros.org/tf/Tutorials&quot;&gt;TF Tutorial&lt;/a&gt; and &lt;a href=&quot;http://wiki.ros.org/tf2/Migration&quot;&gt;TF2 Migration&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h4 id=&quot;wallfollowing&quot;&gt;Wallfollowing&lt;/h4&gt;
 &lt;p&gt;The idea is we are trying to compute the error between the future position of the car instead of current error because of constant movement of the car.
 By minimising the future distance from the wall with respect to the optimal trajectory we are able to follow the wall.
-TODO DESCRIBE MY IMPLEMENTATION AS THE ALGORITHM.&lt;/p&gt;
+Lets visualise the algorithm equations with the help from figures bellow. All of them taken from the &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf&quot;&gt;University of Virginia F1/10 Course from
+Madhur Behl&lt;/a&gt;.
+&lt;img src=&quot;/assets/wallfollowing1.png&quot; alt=&quot;wallfollowing1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/wallfollowing2.png&quot; alt=&quot;wallfollowing2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/wallfollowing3.png&quot; alt=&quot;wallfollowing3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If at any given point my car is at point A, the distance to the wall is B, but as already mentioned, I’m not trying to compute the error between B and the desired trajectory of the car visualised on the last figure as vertical green lines. You must project the car forward based on the velocity of the car and minimise the future distance to the wall with respect to the desired trajectory (CD in the case of figure). Using trigonometry the angle α can be computed knowing distances a and b which are the projected distances to the wall by lidar and corresponding angle between a and b called θ. Knowing the angle α I’m able to compute the current distance to the wall as well as future distance CD.&lt;/p&gt;
+
+&lt;h4 id=&quot;pid&quot;&gt;PID&lt;/h4&gt;
+
+&lt;p&gt;Using CD I can compute the error which is just difference between desired trajectory and CD. This error is important because we need it to setup the proportional and derivative controller to correct the steering angle of the car in the PID manner with respect to error.
+ Formula for PID in the figure bellow (again from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf&quot;&gt;UV wallfollowing lecture&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pid.png&quot; alt=&quot;pid&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;V&lt;sub&gt;θ&lt;/sub&gt; being correction in steering, K&lt;sub&gt;p&lt;/sub&gt; is proportion of my error  computed above as desired trajectory - CD. K&lt;sub&gt;d&lt;/sub&gt; is derivative gain and the rate of change of error &lt;sup&gt;de(t)&lt;/sup&gt;⁄&lt;sub&gt;dt&lt;/sub&gt;. This can be simplified by computing previous error - current error. Once I have the error correction in steering, I can update the steering angle angle with the correction. If the PID constants are well tuned, the steering angle should correct itself based on how far the car is from desired trajectory.&lt;/p&gt;
 
 &lt;h2 id=&quot;f1tenth-lab3-assignment&quot;&gt;F1Tenth Lab3 assignment&lt;/h2&gt;
+&lt;p&gt;Moving on to my implementation of the WallFollow node. The algorithm implemented consists of these steps:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Step 1. Obtain two laser scans (distances) a and b, with b taken at 0 degrees and a at an angle theta (0 &amp;lt; theta =&amp;lt; 70),
+    &lt;ul&gt;
+      &lt;li&gt;the 0th angle corresponds to the front of the f1tenth car and the positive angle direction corresponds to the left of the car, therefore choice of 0 degree angle and in my case 60 degree angle corresponds to the left wall following.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Step 2. Use the distances a and b to calculate the angle alpha between the car’s x- axis and the left wall and use alpha to find the current distance D_t to the car,
+    &lt;ul&gt;
+      &lt;li&gt;all of these are calculated using the formulas described in the wallfollowing section.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Step 3. And than alpha and D_t to find the estimated future distance D_t1 to the wall&lt;/li&gt;
+  &lt;li&gt;Step 4. Run D_t1 trough the PID algorithm described above ( in assignment) to get a steering angle&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I was experimenting for a long time with different values of K&lt;sub&gt;p&lt;/sub&gt;,K&lt;sub&gt;d&lt;/sub&gt; and K&lt;sub&gt;i&lt;/sub&gt;. Using this I was able to find get a more insight what each of these constant is doing. I’m not 100% sure about but I think that lowering K&lt;sub&gt;p&lt;/sub&gt; makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K&lt;sub&gt;d&lt;/sub&gt; seems to react faster to the growing error but it wasn’t completely clear. K&lt;sub&gt;i&lt;/sub&gt; didn’t seem to do much even at higher values, but according to the research it should make the car more sensitive to error.&lt;/p&gt;
+
 &lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip&quot;&gt;karel_lab3.zip&lt;/a&gt;&lt;/p&gt;
@@ -127,7 +165,7 @@ information it is gathering from its sensors. It is simple binary classification
 I will have to use in this assignment. Based on the TTC formula above, I’m gonna need &lt;i&gt;float32[] ranges&lt;/i&gt; to calculate distance between obstacle and the car, which is numerator in the the TTC formula.
 For denominator (range-rate) I have to use all &lt;i&gt;float32 angle_min, float32 angle_max and float32 angle_increment&lt;/i&gt;. That’s because for range-rate computation I need cosine of each beam angle (with these 3 variables
 I can get every single angle of my LaserScan data). Also as mentioned I need to take max of given range-rate of given beam and 0 so meaning if range-range for specific beam is less than 0, assign it 0. In both of my nodes (Python and C++) to avoid division by 0 I set this value very close
-to 0. I was trying to remove 0 from denominator completly together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.&lt;/p&gt;
+to 0. I was trying to remove 0 from denominator completely together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.&lt;/p&gt;
 
 &lt;p&gt;Another message I need is &lt;i&gt;Odometry&lt;/i&gt;, specifically &lt;i&gt;geometry_msgs/TwistWithCovariance twist.linear.x&lt;/i&gt;, which is linear speed of my car, used
 again in the range-rate calculation.&lt;/p&gt;
@@ -166,10 +204,9 @@ My final package as required in the task is available bellow.&lt;/p&gt;
   &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/Packages&quot;&gt;Packages&lt;/a&gt; are part of software, which contains one or more nodes.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The ROS Publishers and Subscribers, Messages and topic concept is very well described at
-&lt;a href=&quot;https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html&quot;&gt; mathworks.com&lt;/a&gt; with the following image:&lt;/p&gt;
+&lt;p&gt;The ROS Publishers and Subscribers, Messages and topic concept is very well described at &lt;a href=&quot;https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html&quot;&gt;mathworks.com&lt;/a&gt; with the following image:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png&quot; alt=&quot;mathworks&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The next thing to try for me was to follow the turtlesim tutorial, which is basically “hello world” of ROS. The tutorial is available at &lt;a href=&quot;http://wiki.ros.org/turtlesim/Tutorials&quot;&gt;ROS wiki&lt;/a&gt;.&lt;/p&gt;
 
@@ -181,7 +218,7 @@ My final package as required in the task is available bellow.&lt;/p&gt;
   &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/catkin/package.xml&quot;&gt;Package.xml&lt;/a&gt;: Contains the meta information of a package such as name, description, version, license and dependencies.&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://wiki.ros.org/catkin/CMakeLists.txt&quot;&gt;CMakeLists.txt&lt;/a&gt;: The main CMake file to build the package and calls catkin-specific functions. Example of how should very basic  * CMakeLists.txt look look like is in the following figure (taken from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf&quot;&gt;UV F1/10 lecture&lt;/a&gt;):
 CMakeLists.txt
-&lt;img src=&quot;/assets/CMake.png&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/CMake.png&amp;quot;&quot; alt=&quot;cmake&quot; /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Moving on to the next video and Lecture 3 from the University of Virginia, which talks about one of the most important concepts in ROS and that’s Publishers and Subscribers. This lecture starts with example of &lt;a href=&quot;http://wiki.ros.org/rospy&quot;&gt;rospy client library&lt;/a&gt;, explaining initialisation of ROS Node with&lt;/p&gt;
@@ -201,38 +238,38 @@ CMakeLists.txt
 
 &lt;h4 id=&quot;publisher&quot;&gt;Publisher&lt;/h4&gt;
 &lt;p&gt;&lt;a href=&quot;http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29&quot;&gt;ROS Publisher&lt;/a&gt; is a node which will continually broadcast a message.
-&lt;img src=&quot;/assets/publisher.png&quot; /&gt;
+&lt;img src=&quot;/assets/publisher.png&quot; alt=&quot;publisher&quot; /&gt;
 Example of Publisher Node with explanation of what each line is doing, ref: &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L04-compressed.pdf&quot;&gt;UV F1/10 lecture&lt;/a&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;subscriber&quot;&gt;Subscriber&lt;/h4&gt;
 &lt;p&gt;&lt;a href=&quot;http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29&quot;&gt;ROS Subscriber&lt;/a&gt; tells ROS that you want to receive messages on a given topic.
-&lt;img src=&quot;/assets/subscriber.png&quot; /&gt;
+&lt;img src=&quot;/assets/subscriber.png&quot; alt=&quot;subscriber&quot; /&gt;
 Example of Subscriber Node with explanation of what each line is doing, ref: UV F1/10 lecture
 The next video is hands on ROS commands and exploring the workspace from terminal available here. It is great hands-on experience of all the lectures before and worth trying it and following along.&lt;/p&gt;
 
 &lt;h2 id=&quot;autoturtle-assignment&quot;&gt;Autoturtle assignment&lt;/h2&gt;
 
-&lt;p&gt;Although I completed &lt;a href=&quot;https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros&quot;&gt;Lab1 of F1Tenth&lt;/a&gt; already, I decided to do the &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf&quot;&gt;first assignment&lt;/a&gt; from the F1/10 course from University of Virginia as well to gain very good base knowledge of ROS. There are 4 tasks in total. The first one is to create node swim_shool.py where the turtle from turtlesim tutorial draw figure 8 by doing movement specified by linear and angular velocity defined by user. I’m not uploading the code as it is university course credited assignment but my results are shown in gif bellow. My first idea was to create subscriber in the node which is getting the pose of the turtle and when the pose.theta is very close to 0 (means horizontal to X axis) multiply angular velocity of turtle by -1, which makes the turtle turn the other side to which is turtle currently rotating. However due the slight inaccuracies of the pose.theta and rospy.rate the &lt;a href=&quot;http://docs.ros.org/en/melodic/api/turtlesim/html/msg/Pose.html&quot;&gt; pose.theta &lt;/a&gt; never was exactly 0 or its absolute value was not close enough to accurately follow the 8 figure each round. I partially solved this by increasing queue size and rospy.rate to 1000hz to increase rate of loop which gave me more pose.theta values, however this solution still was not accurate enough. What worked great is to calculate the radius of the circle from the linear and angular velocities inputted by user. Using this radius I could calculate circumference of the circle the turtle is going to draw as well as at the same time computing the distance which turtle travelled at each run of the loop and once the turtle crossed the distance of circumference of the circle multiply angular velocity of turtle by -1 and combine this approach with the pose.theta checking (as the circumference check was not accurate enough and the turtle turned slightly before finishing the complete circle) mention above with slightly less accuracy. Combining these two condition made my turtle not skip the turns after finishing drawing the complete circle.&lt;/p&gt;
+&lt;p&gt;Although I completed &lt;a href=&quot;https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros&quot;&gt;Lab1 of F1Tenth&lt;/a&gt; already, I decided to do the &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf&quot;&gt;first assignment&lt;/a&gt; from the F1/10 course from University of Virginia as well to gain very good base knowledge of ROS. There are 4 tasks in total. The first one is to create node swim_shool.py where the turtle from turtlesim tutorial draw figure 8 by doing movement specified by linear and angular velocity defined by user. I’m not uploading the code as it is university course credited assignment but my results are shown in gif bellow. My first idea was to create subscriber in the node which is getting the pose of the turtle and when the pose.theta is very close to 0 (means horizontal to X axis) multiply angular velocity of turtle by -1, which makes the turtle turn the other side to which is turtle currently rotating. However due the slight inaccuracies of the pose.theta and rospy.rate the &lt;a href=&quot;http://docs.ros.org/en/melodic/api/turtlesim/html/msg/Pose.html&quot;&gt;pose.theta&lt;/a&gt; never was exactly 0 or its absolute value was not close enough to accurately follow the 8 figure each round. I partially solved this by increasing queue size and rospy.rate to 1000hz to increase rate of loop which gave me more pose.theta values, however this solution still was not accurate enough. What worked great is to calculate the radius of the circle from the linear and angular velocities inputted by user. Using this radius I could calculate circumference of the circle the turtle is going to draw as well as at the same time computing the distance which turtle travelled at each run of the loop and once the turtle crossed the distance of circumference of the circle multiply angular velocity of turtle by -1 and combine this approach with the pose.theta checking (as the circumference check was not accurate enough and the turtle turned slightly before finishing the complete circle) mention above with slightly less accuracy. Combining these two condition made my turtle not skip the turns after finishing drawing the complete circle.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/swim_school1.gif&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/swim_school1.gif&quot; alt=&quot;swim_school1&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/swim_school2.gif&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/swim_school2.gif&quot; alt=&quot;swim_school2&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The second task random_swim_shool.py was very similar to the previous one. The only difference is that the initial position of the turtle should be random as well as linear and angular velocity of the turtle. My results shown again in gifs bellow.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/random_swim_school1.gif&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/random_swim_school1.gif&quot; alt=&quot;random_swim_school1&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/random_swim_school2.gif&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/random_swim_school2.gif&quot; alt=&quot;random_swim_school2&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;In the third task back_to_sqaure_one.py the task was again to draw a shape by moving turtle, however this time it was square shape with the lower left corner at position (1,1). Side length of the square should be taken from user’s input in the range between 1 to 5.
-&lt;img src=&quot;/assets/back_to_sqaure_one.gif&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/back_to_sqaure_one.gif&quot; alt=&quot;back_to_sqaure_one&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The last problem was to swim to position defined by a user.
-&lt;img src=&quot;/assets/swim_to_goal.gif&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/swim_to_goal.gif&quot; alt=&quot;swim_to_goal&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;f1tenth-lab1-assignment&quot;&gt;F1Tenth Lab1 assignment&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros&quot;&gt;First lab&lt;/a&gt; of the F1Tenth was quite straight forward. The main goal is:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros&quot;&gt;First Lab&lt;/a&gt; of the F1Tenth was quite straight forward. The main goal is:&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;to understand directory structure and framework of ROS&lt;/li&gt;
   &lt;li&gt;to understand and be able to implement simple subscribers and publishers&lt;/li&gt;
