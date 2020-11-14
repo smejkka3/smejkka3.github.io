@@ -1,0 +1,44 @@
+I"�<h2 id="introduction">Introduction</h2>
+<p>Moving away from reactive methods to different approach to autonomy and that’s utilising mapping information around the car. This method is called Simultaneous Localization and Mapping or for short SLAM. I’m going to describe some building blocks for SLAM such as Occupancy grid maps, it’s relation to Scan matching and also describe some of the basic SLAM algorithms out there and how they work. Localization is problem if we are given the map of environment we should figure out where we are located in the map. Mapping problem is complimentary to localization, knowing the pose of the car we need to build map of environment using the sensors available to us. SLAM is combination of these two to use these data to estimate trajectory of the robot and build the map at the same time. SLAM is way more beneficial over algorithms such as wallfollowing or follow the map because it allow us to plan longterm path of the robot and not only reacting to the momentary information.</p>
+
+<h2 id="occupancy-grid-map">Occupancy Grid Map</h2>
+<p>Occupancy can be though as binary random variable which can take 2 values: Free, Occupied.</p>
+
+<p>Formal definition is:
+m<sub>x,y</sub>:{free, occupied} -&gt; {0, 1}</p>
+
+<p>Grid map is sequence of cell where each cell has occupancy variable, either free or occupied.</p>
+
+<h4 id="occupancy-grid-mapping">Occupancy grid mapping:</h4>
+<p>We want to assign a probability to every cell of the grid if the cell is free or occupied based on the robot’s data. To do this we use Bayesian filtering. Where we look at prior and recursively update the status of probability for each cell. To do so we need to use Bayes rule. We also need information from the measurements of the robot to tell us where is the obstacle located in the frame of reference of the robot. So the measurements for each cell can be reported either free or occupied, so we can think of this as a likelihood of observing certain measurement given what we know about the cells. To describe this formally:</p>
+
+<p>Measurement model:
+p(z|m<sub>x,y</sub>) where z~{0,1}
+probability of z(measurement) conditioned upon what we know about the value of m(occupancy random variable) of the occupancy grid.</p>
+
+<p>we can have these different measurement models only:
+p(z = 1|m<sub>x,y</sub> = 1)-&gt; TRUE occupied measurement,
+p(z = 0|m<sub>x,y</sub> = 1)-&gt; FALSE free measurement,
+p(z = 1|m<sub>x,y</sub> = 0)  -&gt; FALSE occupied measurement,
+p(z = 0|m<sub>x,y</sub> = 0)  -&gt; TRUE free measurement.</p>
+
+<p>So taking all of these together into bayes rule:
+<img src="/assets/bayes.png" alt="bayes" />
+Given a occupancy grid (Prior map), we measure the data from the robot and we have a probability associated with observing 0 or 1 conditioned on state itself (measurement model) and we use this to update our knowledge of the occupancy of the grid cell or computing the posterior map ( the probability of cell being occupied of free conditioned upon what the measurement has reported ). This can be done by applying Bayes rule as shown in figure above (ref <a href="https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf">UV SLAM lecture</a>).</p>
+
+<p>But working with these probabilities can become mathematically inconvenient. Instead it is better to work with Odds.
+<img src="/assets/odd1.png" alt="odd1" />
+So given the formula above ( ref <a href="https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf">UV SLAM lecture</a>) we can see that odd is probability of X happening divided by probability of X not happening so basically ratio of probabilities.
+More specifically the Odd that a certain cell is occupied given z is a probability that the cell is occupied given z divided by probability that cell is not occupied given z as shown in the formula bellow ( ref <a href="https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf">UV SLAM lecture</a>).
+<img src="/assets/odd2.png" alt="odd2" />
+By applying Bayes rule to the numerator:
+<img src="/assets/bayes_odd.png" alt="bayes_odd" />
+As well as by applying Bayes rule to the denominator:
+<img src="/assets/bayes_odd2.png" alt="bayes_odd2" />
+The evidence term p(z) can be eliminated. And on the resulting equation the log can be applied resulting in log in sum of two odds which results in the new log odd being equal to the previous log odd + log odd of the measurement which is easier to compute and which denotes the same thing as non-log version. In formulas shown below ( ref <a href="https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf">UV SLAM lecture</a>):</p>
+
+<p><img src="/assets/odd3.png" alt="odd3" /></p>
+
+<p>SO the measurement model in the log odd version will become:
+<img src="/assets/measurementodd.png" alt="measurementodd" /></p>
+:ET

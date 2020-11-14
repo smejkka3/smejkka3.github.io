@@ -1,0 +1,56 @@
+I"Z<h2 id="introduction">Introduction</h2>
+<p>Moving away from reactive methods to different approach to autonomy and that’s utilising mapping information around the car. This method is called Simultaneous Localization and Mapping or for short SLAM. I’m going to describe some building blocks for SLAM such as Occupancy grid maps, it’s relation to Scan matching and also describe some of the basic SLAM algorithms out there and how they work. Localization is problem if we are given the map of environment we should figure out where we are located in the map. Mapping problem is complimentary to localization, knowing the pose of the car we need to build map of environment using the sensors available to us. SLAM is combination of these two to use these data to estimate trajectory of the robot and build the map at the same time. SLAM is way more beneficial over algorithms such as wallfollowing or follow the map because it allow us to plan longterm path of the robot and not only reacting to the momentary information.</p>
+
+<h2 id="occupancy-grid-map">Occupancy Grid Map</h2>
+<p>Occupancy can be though as binary random variable which can take 2 values: Free, Occupied.</p>
+
+<p>Formal definition is:
+m<sub>x,y</sub>:{free, occupied} -&gt; {0, 1}</p>
+
+<p>Grid map is sequence of cell where each cell has occupancy variable, either free or occupied.</p>
+
+<h4 id="occupancy-grid-mapping">Occupancy grid mapping:</h4>
+<p>We want to assign a probability to every cell of the grid if the cell is free or occupied based on the robot’s data. To do this we use Bayesian filtering. Where we look at prior and recursively update the status of probability for each cell. To do so we need to use Bayes rule. We also need information from the measurements of the robot to tell us where is the obstacle located in the frame of reference of the robot. So the measurements for each cell can be reported either free or occupied, so we can think of this as a likelihood of observing certain measurement given what we know about the cells. To describe this formally:</p>
+
+<p>Measurement model:
+p(z|m<sub>x,y</sub>) where z~{0,1}
+probability of z(measurement) conditioned upon what we know about the value of m(occupancy random variable) of the occupancy grid.</p>
+
+<p>we can have these different measurement models only:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>p(z=1</td>
+      <td>m<sub>x,y</sub> = 1)  -&gt; TRUE occupied measurement</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>p(z = 0</td>
+      <td>m<sub>x,y</sub> = 1)  -&gt; FALSE free measurement</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>p(z = 1</td>
+      <td>m<sub>x,y</sub> = 0)  -&gt; FALSE occupied measurement</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>p(z = 0</td>
+      <td>m<sub>x,y</sub> = 0)  -&gt; TRUE free measurement</td>
+    </tr>
+  </tbody>
+</table>
+:ET

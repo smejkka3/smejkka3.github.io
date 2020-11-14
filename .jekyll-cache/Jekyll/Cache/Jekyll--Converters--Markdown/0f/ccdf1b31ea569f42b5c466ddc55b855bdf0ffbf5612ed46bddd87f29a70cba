@@ -1,0 +1,3 @@
+I"�<h2 id="introduction">Introduction</h2>
+<p>Moving away from reactive methods to different approach to autonomy and that’s utilising mapping information around the car. This method is called Simultaneous Localization and Mapping or for short SLAM. I’m going to describe some building blocks for SLAM such as Occupancy grid maps, it’s relation to Scan matching and also describe some of the basic SLAM algorithms out there and how they works.</p>
+:ET
