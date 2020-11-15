@@ -1,9 +1,0 @@
-I"�<h2 id="introduction">Introduction</h2>
-<p>Moving away from reactive methods to different approach to autonomy and that’s utilising mapping information around the car. This method is called Simultaneous Localization and Mapping or for short SLAM. I’m going to describe some building blocks for SLAM such as Occupancy grid maps, it’s relation to Scan matching and also describe some of the basic SLAM algorithms out there and how they work. Localization is problem if we are given the map of environment we should figure out where we are located in the map. Mapping problem is complimentary to localization, knowing the pose of the car we need to build map of environment using the sensors available to us. SLAM is combination of these two to use these data to estimate trajectory of the robot and build the map at the same time. SLAM is way more beneficial over algorithms such as wallfollowing or follow the map because it allow us to plan longterm path of the robot and not only reacting to the momentary information.</p>
-
-<h2 id="occupancy-grid-map">Occupancy Grid Map</h2>
-<p>Occupancy can be though as binary random variable which can take 2 values: Free, Occupied.</p>
-
-<p>Formal definition is:
-m<sub>x,y</sub>:{free, occupied} -&gt; {0, 1}</p>
-:ET

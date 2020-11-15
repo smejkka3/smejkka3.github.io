@@ -1,4 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-14T20:25:49+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Scan matching I</title><link href="http://localhost:4000/2020/11/14/scan_matching.html" rel="alternate" type="text/html" title="Scan matching I" /><published>2020-11-14T00:00:00+01:00</published><updated>2020-11-14T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/14/scan_matching</id><content type="html" xml:base="http://localhost:4000/2020/11/14/scan_matching.html"></content><author><name></name></author></entry><entry><title type="html">Simultaneous Localization and Mapping - SLAM</title><link href="http://localhost:4000/2020/11/13/slam.html" rel="alternate" type="text/html" title="Simultaneous Localization and Mapping - SLAM" /><published>2020-11-13T00:00:00+01:00</published><updated>2020-11-13T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/13/slam</id><content type="html" xml:base="http://localhost:4000/2020/11/13/slam.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-15T17:20:46+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Scan matching</title><link href="http://localhost:4000/2020/11/14/scan_matching.html" rel="alternate" type="text/html" title="Scan matching" /><published>2020-11-14T00:00:00+01:00</published><updated>2020-11-14T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/14/scan_matching</id><content type="html" xml:base="http://localhost:4000/2020/11/14/scan_matching.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Last post was about SLAM, where I introduced approach to localization, here we are going to look at approach to lacalization using sets of range measurements collected over across time. Going back, localization is state of robot with respect to the environment it find self in. One approach to localization is to use odometry, basically estimating the current pose of the robot from knowing a start position and integration of control and motion measurements. However there is accumulation of very small errors in the position of the robot which becomes issue over some extended period time and the uncertainty of the pose increases. One way to solve this is to use range sensor measurements to localize, also known as scan matching.&lt;/p&gt;
+
+&lt;h2 id=&quot;setting-a-problem&quot;&gt;Setting a Problem&lt;/h2&gt;
+&lt;p&gt;Having a scan from robot of measurements of distances to some landmarks A,B,C in some environment, we call this measurements at t=0 distances in local frame of reference. When we move in unknown direction at time t=1, the distances are obviously going to change. We can measure these distances at time t=1 and we want find transform R which transforms the two set of points to be the closest and this transform represents how much the robot moved. This is visualised on the picture bellow for better intuition ( ref &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;module C, lecture 9 F1Tenth website&lt;/a&gt;)
+&lt;img src=&quot;/assets/problem_scan_matching.png&quot; alt=&quot;problem_scan_matching&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However only from scan readings alone, we can’t know the landmarks A,B,C exactly, therefore we have to assume that the closest points correspond to each other(correspondence match) and than iteratively find the best transform R.&lt;/p&gt;
+
+&lt;h3 id=&quot;iterative-search-for-the-best-transform&quot;&gt;Iterative search for the best transform&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;Make a initial guess of R&lt;/li&gt;
+  &lt;li&gt;For each point in new scan (t=k+1) find closest point in previous set (t=k) -&amp;gt; correspondence search&lt;/li&gt;
+  &lt;li&gt;Make another better guess of R&lt;/li&gt;
+  &lt;li&gt;Set next guess to the current guess (repeat 2-4 until converges)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;For this algorithm (Iterative closest point or ICP) to converge, the choice of initial guess is important. Also ICP can be slow. For this reason PL-ICP was introduced (Point-to-Line Iterative Closest Point).&lt;/p&gt;
+
+&lt;h3 id=&quot;point-to-line-iterative-closest-point&quot;&gt;Point-to-Line Iterative Closest Point&lt;/h3&gt;
+&lt;p&gt;Instead of looking for point to point metric, PL-ICP is looking for point-to-line metric. Point-to-point measures the distances the distance to the nearest point on the segment, while point-to-line measures distance to nearest line containing the segment. Point-to-Line converges faster because the level sets the approximate surface better and therefore results in more accurate approximation or the error. This is achieved by the contours of the level being line and not concentric and centred around the projected point.&lt;/p&gt;
+
+&lt;h4 id=&quot;pl-icl-algorithm&quot;&gt;PL-ICL algorithm&lt;/h4&gt;
+&lt;p&gt;at t=k&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;use previous guess q_k, transform coordinates of current scan into frame of previous scan&lt;/li&gt;
+  &lt;li&gt;For each point, find closest line segment (correspondence search)&lt;/li&gt;
+  &lt;li&gt;Update transform
+  a. formulate point-to-line-error objective
+  b. find transform q&lt;sub&gt;k+1&lt;/sub&gt; that minimizes objective&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;PL-ICL also uses smart “tricks” in correspondence match search. It does local search with early termination and jump table for each scan point.&lt;/p&gt;
+
+&lt;p&gt;TODO DO MORE RESEARCH IN PL-ICL AND DESCRIBE BETTER POSSIBLY AFTER ASSIGNMENT.&lt;/p&gt;
+
+&lt;p&gt;To understand this algorithm better I recommend read trough original paper &lt;a href=&quot;https://censi.science/pub/research/2008-icra-plicp.pdf&quot;&gt;2008 ICRA-PLICP&lt;/a&gt; by Andrea Censi.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab5-assignment&quot;&gt;F1Tenth Lab5 assignment&lt;/h2&gt;
+&lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
+
+&lt;p&gt;TODO&lt;/p&gt;
+
+&lt;p&gt;pdf with theoretical part and txt with video links of the assignment included in the zipfile.&lt;/p&gt;
+
+&lt;p&gt;TODO VIDEO&lt;/p&gt;</content><author><name></name></author><summary type="html">Deeper dive into localization with scan matching.</summary></entry><entry><title type="html">Simultaneous Localization and Mapping - SLAM</title><link href="http://localhost:4000/2020/11/13/slam.html" rel="alternate" type="text/html" title="Simultaneous Localization and Mapping - SLAM" /><published>2020-11-13T00:00:00+01:00</published><updated>2020-11-13T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/13/slam</id><content type="html" xml:base="http://localhost:4000/2020/11/13/slam.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Moving away from reactive methods to different approach to autonomy and that’s utilising mapping information around the car. This method is called Simultaneous Localization and Mapping or for short SLAM. I’m going to describe some building blocks for SLAM such as Occupancy grid maps and also describe some of the basic SLAM algorithms out there and how they work. Localization is problem if we are given the map of environment we should figure out where we are located in the map. Mapping problem is complimentary to localization, knowing the pose of the car we need to build map of environment using the sensors available to us. SLAM is combination of these two to use these data to estimate trajectory of the robot and build the map at the same time. SLAM is way more beneficial over algorithms such as wallfollowing or follow the map because it allow us to plan longterm path of the robot and not only reacting to the momentary information.&lt;/p&gt;
 
 &lt;h2 id=&quot;occupancy-grid-map&quot;&gt;Occupancy Grid Map&lt;/h2&gt;
