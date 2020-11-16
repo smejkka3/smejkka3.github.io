@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Automatic Emergency Braking | My F1Tenth journey</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Automatic Emergency Braking" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Exploring how to stop car autonomously before it hits an obstacle." />
+<meta property="og:description" content="Exploring how to stop car autonomously before it hits an obstacle." />
+<link rel="canonical" href="http://localhost:4000/2020/11/02/aeb.html" />
+<meta property="og:url" content="http://localhost:4000/2020/11/02/aeb.html" />
+<meta property="og:site_name" content="My F1Tenth journey" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-02T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Automatic Emergency Braking" />
+<script type="application/ld+json">
+{"headline":"Automatic Emergency Braking","dateModified":"2020-11-02T00:00:00+01:00","url":"http://localhost:4000/2020/11/02/aeb.html","datePublished":"2020-11-02T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/11/02/aeb.html"},"description":"Exploring how to stop car autonomously before it hits an obstacle.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="My F1Tenth journey" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">My F1Tenth journey</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Automatic Emergency Braking</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-11-02T00:00:00+01:00" itemprop="datePublished">Nov 2, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="introduction">Introduction</h2>
+
+<p>The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
+into nearby objects. This is achieved by computing TTC (Time To Collision) using before mentioned LaserScan message. This assignment
+checks more into the depth the ability work with publishers and subscribe and forces me to explore more Odometry message and
+AckermannDriveStamped message because both of them are used to prevent the collision. But first let’s look at some theory.</p>
+
+<h2 id="aeb-automatic-emergency-braking">AEB (Automatic Emergency Braking)</h2>
+
+<p>AEB is simply forcing stop before expected collision with nearby object. It is a safety reaction of the car based on the
+information it is gathering from its sensors. It is simple binary classification problem which answers question break/not break.</p>
+
+<h4 id="failures">Failures</h4>
+
+<p>The big problem in AEB is false negative. This means the car won’t stop when it is about to collide with an obstacle. As you can imagine no one will deploy a car which can’t avoid collision or even can kill people. Another, but not as serious problem are false positives, when car stops randomly when it should not and there is no danger of colliding.</p>
+
+<h4 id="ttc-time-to-collision">TTC (Time to Collision)</h4>
+
+<p>Let’s explain how TTC is calculated:</p>
+
+<p><img src="/assets/TTC_formula.png" />
+  Time to Collision formula from <a href="https://f1tenth.org/learn.html">lecture 2</a> of F1/10 course</p>
+
+<p>where denominator that’s time derivative of range between vehicle and given obstacle, also called as “range rate” is defined as:</p>
+
+<p><img src="/assets/range_rate.png" />
+  Formula  for range-rate from <a href="https://f1tenth.org/learn.html">lecture 2</a> of F1/10 course</p>
+
+<h4 id="lidar">Lidar</h4>
+
+<p>Although I have worked with lidar in previous assignment, it worths explaining the <a href="http://docs.ros.org/en/api/sensor_msgs/html/msg/LaserScan.htmlLaserScan">LaserScan message data fields</a>
+I will have to use in this assignment. Based on the TTC formula above, I’m gonna need <i>float32[] ranges</i> to calculate distance between obstacle and the car, which is numerator in the the TTC formula.
+For denominator (range-rate) I have to use all <i>float32 angle_min, float32 angle_max and float32 angle_increment</i>. That’s because for range-rate computation I need cosine of each beam angle (with these 3 variables
+I can get every single angle of my LaserScan data). Also as mentioned I need to take max of given range-rate of given beam and 0 so meaning if range-range for specific beam is less than 0, assign it 0. In both of my nodes (Python and C++) to avoid division by 0 I set this value very close
+to 0. I was trying to remove 0 from denominator completely together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.</p>
+
+<p>Another message I need is <i>Odometry</i>, specifically <i>geometry_msgs/TwistWithCovariance twist.linear.x</i>, which is linear speed of my car, used
+again in the range-rate calculation.</p>
+
+<h2 id="f1tenth-lab2-assignment">F1Tenth Lab2 assignment</h2>
+<p>TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.
+My final package as required in the task is available bellow.</p>
+
+<p><a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab2.zip">karel_lab2.zip</a></p>
+
+<p>txt with video links of the assignment included in the zipfile.</p>
+<iframe width="800" height="400" src="https://www.youtube.com/embed/LXWpBoFb4nk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+<iframe width="800" height="400" src="https://www.youtube.com/embed/zna-dPAIdUQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+<p>
+</p>
+
+  </div><a class="u-url" href="/2020/11/02/aeb.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">My F1Tenth journey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">My F1Tenth journey</li><li><a class="u-email" href="mailto:karel.smejkal19@gmail.com">karel.smejkal19@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/smejkka3"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">smejkka3</span></a></li><li><a href="https://www.linkedin.com/in/karel-smejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">karel-smejkal</span></a></li><li><a href="https://www.twitter.com/KarelSmejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">KarelSmejkal</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

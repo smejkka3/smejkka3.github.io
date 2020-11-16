@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Wallfollowing | My F1Tenth journey</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Wallfollowing" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Fist autonomous lap of my F1Tenth car using wallfollowing algorithm." />
+<meta property="og:description" content="Fist autonomous lap of my F1Tenth car using wallfollowing algorithm." />
+<link rel="canonical" href="http://localhost:4000/2020/11/06/wallfollowing.html" />
+<meta property="og:url" content="http://localhost:4000/2020/11/06/wallfollowing.html" />
+<meta property="og:site_name" content="My F1Tenth journey" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-06T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Wallfollowing" />
+<script type="application/ld+json">
+{"headline":"Wallfollowing","dateModified":"2020-11-06T00:00:00+01:00","url":"http://localhost:4000/2020/11/06/wallfollowing.html","datePublished":"2020-11-06T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/11/06/wallfollowing.html"},"description":"Fist autonomous lap of my F1Tenth car using wallfollowing algorithm.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="My F1Tenth journey" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">My F1Tenth journey</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Wallfollowing</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-11-06T00:00:00+01:00" itemprop="datePublished">Nov 6, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="introduction">Introduction</h2>
+
+<p>Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
+Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
+set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any position of word, robot, etc. only makes sense
+when we defined the frame in which we are describing the pose. The direction of X,Y, Z axes is defined by right-handed rule, where index finger points in
+X direction, middle finger in y direction and thumb in Z direction. Let’s look more into transformations and frames.</p>
+
+<h2 id="transfomations-and-frames">Transfomations and Frames</h2>
+
+<p>Why do we need transformations between different sensors? Each time I get data in sensor frame (for specific sensor) which I want to transform in some unified way.
+For example we can have frame of reference of lidar which we can transform into the frame of reference of robot, which is the center of the rear axle. As example in
+the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain length and lidar
+can be place in the center of the car. Therefore the correct way of stopping before collision should be calculated from the front of the car (or edge of the car), not from the
+position of the lidar. Between frames there will exist transformation that convert measuring from one frame to another.</p>
+
+<h2 id="reference-frames-on-f1tenth-car">Reference Frames on F1Tenth car</h2>
+
+<h4 id="map">map</h4>
+<p>The origin set by the user and every other transformation can be measured with respect to the map. Represent the environment where the car will be racing. Can be place arbitrary and typically never moves after its placed.</p>
+
+<h4 id="base_link">base_link</h4>
+<p>Positioned at center of the rear axle of the car. Moves with the car relative to the map frame.</p>
+
+<h4 id="lidar">lidar</h4>
+<p>The frame of reference where lidar scan measurements are taken. Moves with the car relative to the map frame.</p>
+
+<h4 id="odom">odom</h4>
+<p>Typically required by ROS. Usually the initial position of the robot in the map before everything began. Fixed relative to the map.</p>
+
+<h3 id="rigid-body-transfomation">Rigid Body Transfomation</h3>
+
+<p>How to transform data and position between one frame and another. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.</p>
+
+<p><img src="/assets/frames.png" alt="frames" />
+2 diffrent coordinate frames and point p from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a>
+  Steps:</p>
+<ul>
+  <li>Overlap both frames so their origins are at the same point. The reason is that we want to compute how is second frame of reference rotated. (apply rotation)</li>
+  <li>Describe the unit vectors of the second frame of reference in the terms of unit vectors of first frame of reference. As on picture bellow.</li>
+</ul>
+
+<p><img src="/assets/frames2.png" alt="frames2" />
+Overlapped frames of reference from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
+
+<p>x<sub>2</sub> = R<sub>11</sub>x<sub>1</sub> + R<sub>21</sub> y<sub>1</sub><br />
+y<sub>2</sub> = R<sub>12</sub>x<sub>1</sub> + R<sub>22</sub> y<sub>1</sub><br />
+The formula above describes the units vector of new frame of referece as a linear combination of the original frame of reference. (considering only X,Y axis - 2D problem, no Z).
+The formula can be also rewritten as matrix:</p>
+
+<p><img src="/assets/rotation_matrix.png" alt="rotation_m1" />
+Rotation matrix from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
+
+<p>Also we define θ as angle between x<sub>1</sub> and x<sub>2</sub> as shown on figure bellow. This angle tells us how rotated this frame is.</p>
+
+<p><img src="/assets/theta.png" alt="theta" />
+Overlapped frames of reference with angle theta from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
+
+<p>To get the coefficients R<sub>11</sub>, R<sub>21</sub>, R<sub>12</sub>, R<sub>22</sub>, along x<sub>2</sub> unit vector direction, contains the cos unit component of x<sub>1</sub>
+unit vector as well as sin component of y<sub>1</sub> unit vector. Thefore  x<sub>2</sub> and similary y<sub>2</sub> can be written as:</p>
+
+<p>x<sub>2</sub> = cos(θ)x<sub>1</sub> + sin(θ)y<sub>1</sub><br />
+y<sub>2</sub> = -sin(θ)x<sub>1</sub> + cos(θ)y<sub>1</sub><br /></p>
+
+<p>Therefore I get:</p>
+
+<p><img src="/assets/rotation_matrix2.png" alt="rotation_m" />
+Rotation matrix from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
+
+<p>With this we are able to represent unit vectors in the new frame of reference in terms of unit vectors of original frame of reference. Similarly we can express the position of point P in the new frame of reference using the rotation matrix as shown on formulas bellow.</p>
+
+<p><img src="/assets/rotation_p.png" alt="rotation" />
+Rotation matrix of point p from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a>.
+We can’t forget to apply the translation as well.</p>
+
+<h4 id="ros-tftf2-package">ROS tf/tf2 package</h4>
+<p><a href="http://wiki.ros.org/tf2">ROS tf2 package</a> lets you keep track of multiple coordinate frames over time. And transform points/poses between two coordinates. It broadcast this across ROS so any node can subscribe to it. To get more insight how it works it is very useful to try <a href="http://wiki.ros.org/tf2/Tutorials">TF2 Tutorial</a>, older <a href="http://wiki.ros.org/tf/Tutorials">TF Tutorial</a> and <a href="http://wiki.ros.org/tf2/Migration">TF2 Migration</a>.</p>
+
+<h4 id="wallfollowing">Wallfollowing</h4>
+<p>The idea is we are trying to compute the error between the future position of the car instead of current error because of constant movement of the car.
+By minimising the future distance from the wall with respect to the optimal trajectory we are able to follow the wall.
+Lets visualise the algorithm equations with the help from figures bellow. All of them taken from the <a href="https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf">University of Virginia F1/10 Course from
+Madhur Behl</a>.
+<img src="/assets/wallfollowing1.png" alt="wallfollowing1" /></p>
+
+<p><img src="/assets/wallfollowing2.png" alt="wallfollowing2" /></p>
+
+<p><img src="/assets/wallfollowing3.png" alt="wallfollowing3" /></p>
+
+<p>If at any given point my car is at point A, the distance to the wall is B, but as already mentioned, I’m not trying to compute the error between B and the desired trajectory of the car visualised on the last figure as vertical green lines. You must project the car forward based on the velocity of the car and minimise the future distance to the wall with respect to the desired trajectory (CD in the case of figure). Using trigonometry the angle α can be computed knowing distances a and b which are the projected distances to the wall by lidar and corresponding angle between a and b called θ. Knowing the angle α I’m able to compute the current distance to the wall as well as future distance CD.</p>
+
+<h4 id="pid">PID</h4>
+
+<p>Using CD I can compute the error which is just difference between desired trajectory and CD. This error is important because we need it to setup the proportional and derivative controller to correct the steering angle of the car in the PID manner with respect to error.
+ Formula for PID in the figure bellow (again from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf">UV wallfollowing lecture</a>)</p>
+
+<p><img src="/assets/pid.png" alt="pid" /></p>
+
+<p>V<sub>θ</sub> being correction in steering, K<sub>p</sub> is proportion of my error  computed above as desired trajectory - CD. K<sub>d</sub> is derivative gain and the rate of change of error <sup>de(t)</sup>⁄<sub>dt</sub>. This can be simplified by computing previous error - current error. Once I have the error correction in steering, I can update the steering angle angle with the correction. If the PID constants are well tuned, the steering angle should correct itself based on how far the car is from desired trajectory.</p>
+
+<h2 id="f1tenth-lab3-assignment">F1Tenth Lab3 assignment</h2>
+<p>Moving on to my implementation of the WallFollow node. The algorithm implemented consists of these steps:</p>
+<ul>
+  <li>Step 1. Obtain two laser scans (distances) a and b, with b taken at 0 degrees and a at an angle theta (0 &lt; theta =&lt; 70),
+    <ul>
+      <li>the 0th angle corresponds to the front of the f1tenth car and the positive angle direction corresponds to the left of the car, therefore choice of 0 degree angle and in my case 60 degree angle corresponds to the left wall following.</li>
+    </ul>
+  </li>
+  <li>Step 2. Use the distances a and b to calculate the angle alpha between the car’s x- axis and the left wall and use alpha to find the current distance D_t to the car,
+    <ul>
+      <li>all of these are calculated using the formulas described in the wallfollowing section.</li>
+    </ul>
+  </li>
+  <li>Step 3. And than alpha and D_t to find the estimated future distance D_t1 to the wall</li>
+  <li>Step 4. Run D_t1 trough the PID algorithm described above ( in assignment) to get a steering angle</li>
+</ul>
+
+<p>I was experimenting for a long time with different values of K<sub>p</sub>,K<sub>d</sub> and K<sub>i</sub>. Using this I was able to find get a more insight what each of these constant is doing. I’m not 100% sure about, but I think that lowering K<sub>p</sub> makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K<sub>d</sub> seems to react faster to the growing error but it wasn’t completely clear to me from simulation. K<sub>i</sub> didn’t seem to do much even at higher values, but according to the research it should make the car more sensitive to error.</p>
+
+<p>I’ve found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.</p>
+
+<p>My final package as required in the task is available bellow.</p>
+
+<p><a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip">karel_lab3.zip</a></p>
+
+<p>txt with video links of the assignment included in the zipfile.</p>
+
+<iframe width="800" height="400" src="https://www.youtube.com/embed/5nLtlszkRvI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+  </div><a class="u-url" href="/2020/11/06/wallfollowing.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">My F1Tenth journey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">My F1Tenth journey</li><li><a class="u-email" href="mailto:karel.smejkal19@gmail.com">karel.smejkal19@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/smejkka3"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">smejkka3</span></a></li><li><a href="https://www.linkedin.com/in/karel-smejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">karel-smejkal</span></a></li><li><a href="https://www.twitter.com/KarelSmejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">KarelSmejkal</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
