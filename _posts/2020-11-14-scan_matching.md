@@ -22,7 +22,7 @@ However only from scan readings alone, we can't know the landmarks A,B,C exactly
 For this algorithm (Iterative closest point or ICP) to converge, the choice of initial guess is important. Also ICP can be slow. For this reason PL-ICP was introduced (Point-to-Line Iterative Closest Point).
 
 ### Point-to-Line Iterative Closest Point
-Instead of looking for point to point metric, PL-ICP is looking for point-to-line metric. Point-to-point measures the distances the distance to the nearest point on the segment, while point-to-line measures distance to nearest line containing the segment. Point-to-Line converges faster because the level sets the approximate surface better and therefore results in more accurate approximation or the error. This is achieved by the contours of the level being line and not concentric and centred around the projected point.
+Instead of looking for point to point metric, PL-ICP is looking for point-to-line metric. Point-to-point measures the distances the distance to the nearest point on the segment, while point-to-line measures distance to nearest line containing the segment. Point-to-Line converges faster because the level sets the approximate surface better and therefore results in more accurate approximation or the error. This is achieved by the contours of the level being line and not concentric and centred around the projected point and thus giving algorithm quadratic convergence instead of linear convergence.
 
 #### PL-ICL algorithm
 at t=k

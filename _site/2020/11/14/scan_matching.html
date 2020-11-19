@@ -67,7 +67,7 @@
 <p>For this algorithm (Iterative closest point or ICP) to converge, the choice of initial guess is important. Also ICP can be slow. For this reason PL-ICP was introduced (Point-to-Line Iterative Closest Point).</p>
 
 <h3 id="point-to-line-iterative-closest-point">Point-to-Line Iterative Closest Point</h3>
-<p>Instead of looking for point to point metric, PL-ICP is looking for point-to-line metric. Point-to-point measures the distances the distance to the nearest point on the segment, while point-to-line measures distance to nearest line containing the segment. Point-to-Line converges faster because the level sets the approximate surface better and therefore results in more accurate approximation or the error. This is achieved by the contours of the level being line and not concentric and centred around the projected point.</p>
+<p>Instead of looking for point to point metric, PL-ICP is looking for point-to-line metric. Point-to-point measures the distances the distance to the nearest point on the segment, while point-to-line measures distance to nearest line containing the segment. Point-to-Line converges faster because the level sets the approximate surface better and therefore results in more accurate approximation or the error. This is achieved by the contours of the level being line and not concentric and centred around the projected point and thus giving algorithm quadratic convergence instead of linear convergence.</p>
 
 <h4 id="pl-icl-algorithm">PL-ICL algorithm</h4>
 <p>at t=k</p>
