@@ -1,0 +1,6 @@
+I"><h2 id="introduction">Introduction</h2>
+<p>Very effective algorithm all the way from 1992 is based on very simple idea of following a waypoint. It is tracking algorithm with assumption that we already know where the set of waypoints is known both in global and local coordinate. This can be done by cartographer SLAM algorithm for example.</p>
+
+<h3 id="geometric-representation">Geometric representation</h3>
+<p>Starting from car’s local frame (base_link), we need to define so called Lookahead distance L, which is simply radius around the base_link where we are looking for waypoint. Because F1Tenth is nonholonomic robot, to get to the waypoint we need to turn along some arc, it is not possible to move to the waypoint in straight direction. However there can be indefinitely many arcs define to a single point. To solve this, we need to constrain the center of the arc to be on y axes of the car. Using this we can start solving the equations bellow using basic trigonometry. Because we constrained the center on y axis as radius of the arc, r can be computed as r = |y| + d</p>
+:ET
