@@ -32,6 +32,19 @@ The main thing we need to is the lookahead distance L. Smaller L acts same as hi
 5. Update the waypoint on the go
 
 ## F1Tenth Lab6 assignment
+
+### Encountered difficulties
+During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselfs.
+
+1. Cartographer
+TODO  
+2. Switching from Python 3 to Python2.7
+TODO
+3. Waypoint Logger
+TODO
+4. Particle Filter
+TODO
+
 My final package as required in the task is available bellow.
 
 TODO

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-20T17:31:05+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-22T16:24:26+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Very effective algorithm all the way from 1992 is based on very simple idea of following a waypoint. It is tracking algorithm with assumption that we already know where the set of waypoints is known both in global and local coordinate. This can be done by cartographer SLAM algorithm for example.&lt;/p&gt;
 
 &lt;h3 id=&quot;geometric-representation&quot;&gt;Geometric representation&lt;/h3&gt;
@@ -28,6 +28,21 @@ To solve this, we need to constrain the center of the arc to be on y axes of the
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;f1tenth-lab6-assignment&quot;&gt;F1Tenth Lab6 assignment&lt;/h2&gt;
+
+&lt;h3 id=&quot;encountered-difficulties&quot;&gt;Encountered difficulties&lt;/h3&gt;
+&lt;p&gt;During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselfs.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Cartographer
+TODO&lt;/li&gt;
+  &lt;li&gt;Switching from Python 3 to Python2.7
+TODO&lt;/li&gt;
+  &lt;li&gt;Waypoint Logger
+TODO&lt;/li&gt;
+  &lt;li&gt;Particle Filter
+TODO&lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
 
 &lt;p&gt;TODO&lt;/p&gt;
