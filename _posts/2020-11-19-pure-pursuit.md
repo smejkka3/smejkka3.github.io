@@ -31,6 +31,8 @@ The main thing we need to is the lookahead distance L. Smaller L acts same as hi
 4. Set steering angle to track current waypoint
 5. Update the waypoint on the go
 
+THe original paper can be found at [Pure Pursuit implementation](https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf), it's short and well worth reading for understanding this algorithm.
+
 ## F1Tenth Lab6 assignment
 
 ### Encountered difficulties
