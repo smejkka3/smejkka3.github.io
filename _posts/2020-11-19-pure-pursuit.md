@@ -37,17 +37,41 @@ The main thing we need to is the lookahead distance L. Smaller L acts same as hi
 During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselves.
 
 1. Cartographer
-TODO  
+I was able to make cartographer work locally as shown on examples on [https://google-cartographer-ros.readthedocs.io/en/latest/demos.html](https://google-cartographer-ros.readthedocs.io/en/latest/demos.html), after that I moved the files as mentioned in the [pure_pursuit lecture video](https://youtu.be/L51S2RVu-zc?t=4403), I had to change in file F110.xarco line 194 from
+```shell
+>>> <mesh filename="package://racecar_description/meshes/hokuyo.dae"/>
+```   
+
+to
+
+```shell
+>>> <mesh filename="package://f110_description/meshes/hokuyo.dae"/>
+```  
+
+From this I suppose that this should be only related to the real car, as I'm not able to make the model of the car work in the simulation of RVIZ, where RVIZ have problem transforming some parameters related to the car. So instead of running cartographer in unknown map I used one of the map that was saved in f1tenth_simulator package already and run waylogger in this map.
+
 2. Switching from Python 3 to Python2.7
-TODO
+In order to run waylogger I needed to install package with Particle Filter. For this I used [MIT RACE CAR ROS PACKAGE](https://github.com/mit-racecar/particle_filter) as I didn't find this package anywhere in the f110. Up until this point I was using python3 without any problems in the assignments so far however this particle_filter and waylogger package both were using python2.7 so I decided to switch my ROS melodic to python2. However setting .bashrc file to python 2.7 didn't switch my ROS system to python2 and was still using python3. I spent long hours trying to figure this out because I think as I was using anaconda with python3 there were some settings which prevented the any system in my ubuntu from using python2 and even completely reinstalling whole ROS melodic didn't and removing anaconda reference from .bashrc file didn't work. I had to uninstall the anaconda completely as well as uninstall and install back ROS.
 3. Waypoint Logger
-TODO
-4. Particle Filter
-TODO
+After reinstalling my whole ROS the waylogger was finally working, however it needed running particle_filter topic otherwise it didn't log anything. In the above mentioned particle filter for MIT car I had to change [localize.launch](https://github.com/mit-racecar/particle_filter/blob/master/launch/localize.launch), concretely comment line 30
+```shell
+>>> 	<!-- <include file="$(find particle_filter)/launch/map_server.launch"/> -->
+```
+as I was using my own map server for the map from f1tenth_simulator package
+and in line 33 use only /odom topic
+```shell
+>>> 	<arg name="odometry_topic" default="/odom"/>
+``` 	
+4. Launching waylogger and particle_filter
+Strangely enough to get correct coordinates in logfile the particle_filter node needs to be launched as first, before the map and rviz are launched, otherwise the resulting coordinate system is different than the map launched.
+
+After all of this above I was able to generate proper logfile with right coordinates.
+
+Probably most difficulties during the programming of assignment was to correctly transform the global and car correctly otherwise the rest was very straight forward using the formulas from lecture. I expected to have more problems with the visualization, however the ROS Marker tutorial is easy to follow and the visualization was also quickly implement.
 
 My final package as required in the task is available bellow.
 
-TODO
+[karel_lab6.zip](https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab6.zip)
 
 txt with video link of the assignment included in the zipfile.
 <iframe width="800" height="400" src="https://www.youtube.com/embed/sAk8qmBD_LI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
