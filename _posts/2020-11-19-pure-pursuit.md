@@ -10,7 +10,7 @@ Very effective algorithm all the way from 1992 is based on very simple idea of f
 ### Geometric representation
 Starting from car's local frame (base_link), we need to define so called Lookahead distance L, which is simply radius around the base_link where we are looking for waypoint. Because F1Tenth is nonholonomic robot, to get to the waypoint we need to turn along some arc, it is not possible to move to the waypoint in straight direction. However there can be indefinitely many arcs define to a single point as sown on the figure bellow (ref [f1tenth Module D, lecture 13](https://f1tenth.org/learn.html)).
 ![pp](/assets/pure_pursuit_geometric.png)
-To solve this, we need to constrain the center of the arc to be on y axes of the car. Using this we can start solving the equations bellow using basic trigonometry. Because we constrained the center on y axis as radius of the arc, r can be computed as r = |y| + d. We also have right angle triangle therefore d<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup>. Substituting d as the first equation r = |y| + d we get (r - |y|)<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup> and solving this equation we get r<sup>2</sup> + L<sup>2</sup> - 2r|y| = r<sup>2</sup>. The L is again from simple Pythagorean theorem because we know x<sup>2</sup> and y<sup>2</sup> in the triangle we can express L as L<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup> shown on the picture bellow (ref [f1tenth Module D, lecture 13](https://f1tenth.org/learn.html))
+To solve this, we need to constrain the centre of the arc to be on y axes of the car. Using this we can start solving the equations bellow using basic trigonometry. Because we constrained the centre on y axis as radius of the arc, r can be computed as r = |y| + d. We also have right angle triangle therefore d<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup>. Substituting d as the first equation r = |y| + d we get (r - |y|)<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup> and solving this equation we get r<sup>2</sup> + L<sup>2</sup> - 2r|y| = r<sup>2</sup>. The L is again from simple Pythagorean theorem because we know x<sup>2</sup> and y<sup>2</sup> in the triangle we can express L as L<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup> shown on the picture bellow (ref [f1tenth Module D, lecture 13](https://f1tenth.org/learn.html))
 ![pp2](/assets/pp_geometric2.png)
 
 Solving r<sup>2</sup> + L<sup>2</sup> - 2ry = r<sup>2</sup> for r we have r = L<sup>2</sup>/2y. Since we know the radius, we can compute the curvature of arc as inverse of radius &gamma; = 1/r = 2y/L<sup>2</sup>
@@ -41,13 +41,10 @@ I was able to make cartographer work locally as shown on examples on [https://go
 ```shell
 >>> <mesh filename="package://racecar_description/meshes/hokuyo.dae"/>
 ```   
-
 to
-
 ```shell
 >>> <mesh filename="package://f110_description/meshes/hokuyo.dae"/>
 ```  
-
 From this I suppose that this should be only related to the real car, as I'm not able to make the model of the car work in the simulation of RVIZ, where RVIZ have problem transforming some parameters related to the car. So instead of running cartographer in unknown map I used one of the map that was saved in f1tenth_simulator package already and run waylogger in this map.
 
 2. Switching from Python 3 to Python2.7

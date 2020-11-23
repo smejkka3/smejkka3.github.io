@@ -1,59 +1,10 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Pure Pursuit | My F1Tenth journey</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Pure Pursuit" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="First practical experience with Cartographer SLAM package and implementation of trajectory planner called the Pure Pursuit algorithm." />
-<meta property="og:description" content="First practical experience with Cartographer SLAM package and implementation of trajectory planner called the Pure Pursuit algorithm." />
-<link rel="canonical" href="http://localhost:4000/2020/11/19/pure-pursuit.html" />
-<meta property="og:url" content="http://localhost:4000/2020/11/19/pure-pursuit.html" />
-<meta property="og:site_name" content="My F1Tenth journey" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-11-19T00:00:00+01:00" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Pure Pursuit" />
-<script type="application/ld+json">
-{"headline":"Pure Pursuit","dateModified":"2020-11-19T00:00:00+01:00","url":"http://localhost:4000/2020/11/19/pure-pursuit.html","datePublished":"2020-11-19T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/11/19/pure-pursuit.html"},"description":"First practical experience with Cartographer SLAM package and implementation of trajectory planner called the Pure Pursuit algorithm.","@type":"BlogPosting","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="My F1Tenth journey" /></head>
-<body><header class="site-header" role="banner">
-
-  <div class="wrapper"><a class="site-title" rel="author" href="/">My F1Tenth journey</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
-
-        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-
-  <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Pure Pursuit</h1>
-    <p class="post-meta">
-      <time class="dt-published" datetime="2020-11-19T00:00:00+01:00" itemprop="datePublished">Nov 19, 2020
-      </time></p>
-  </header>
-
-  <div class="post-content e-content" itemprop="articleBody">
-    <h2 id="introduction">Introduction</h2>
+I"m#<h2 id="introduction">Introduction</h2>
 <p>Very effective algorithm all the way from 1992 is based on very simple idea of following a waypoint. It is tracking algorithm with assumption that we already know where the set of waypoints is known both in global and local coordinate. This can be done by cartographer SLAM algorithm for example.</p>
 
 <h3 id="geometric-representation">Geometric representation</h3>
 <p>Starting from car’s local frame (base_link), we need to define so called Lookahead distance L, which is simply radius around the base_link where we are looking for waypoint. Because F1Tenth is nonholonomic robot, to get to the waypoint we need to turn along some arc, it is not possible to move to the waypoint in straight direction. However there can be indefinitely many arcs define to a single point as sown on the figure bellow (ref <a href="https://f1tenth.org/learn.html">f1tenth Module D, lecture 13</a>).
 <img src="/assets/pure_pursuit_geometric.png" alt="pp" />
-To solve this, we need to constrain the centre of the arc to be on y axes of the car. Using this we can start solving the equations bellow using basic trigonometry. Because we constrained the centre on y axis as radius of the arc, r can be computed as r = |y| + d. We also have right angle triangle therefore d<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup>. Substituting d as the first equation r = |y| + d we get (r - |y|)<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup> and solving this equation we get r<sup>2</sup> + L<sup>2</sup> - 2r|y| = r<sup>2</sup>. The L is again from simple Pythagorean theorem because we know x<sup>2</sup> and y<sup>2</sup> in the triangle we can express L as L<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup> shown on the picture bellow (ref <a href="https://f1tenth.org/learn.html">f1tenth Module D, lecture 13</a>)
+To solve this, we need to constrain the center of the arc to be on y axes of the car. Using this we can start solving the equations bellow using basic trigonometry. Because we constrained the center on y axis as radius of the arc, r can be computed as r = |y| + d. We also have right angle triangle therefore d<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup>. Substituting d as the first equation r = |y| + d we get (r - |y|)<sup>2</sup> + x<sup>2</sup> = r<sup>2</sup> and solving this equation we get r<sup>2</sup> + L<sup>2</sup> - 2r|y| = r<sup>2</sup>. The L is again from simple Pythagorean theorem because we know x<sup>2</sup> and y<sup>2</sup> in the triangle we can express L as L<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup> shown on the picture bellow (ref <a href="https://f1tenth.org/learn.html">f1tenth Module D, lecture 13</a>)
 <img src="/assets/pp_geometric2.png" alt="pp2" /></p>
 
 <p>Solving r<sup>2</sup> + L<sup>2</sup> - 2ry = r<sup>2</sup> for r we have r = L<sup>2</sup>/2y. Since we know the radius, we can compute the curvature of arc as inverse of radius γ = 1/r = 2y/L<sup>2</sup></p>
@@ -89,8 +40,12 @@ I was able to make cartographer work locally as shown on examples on <a href="ht
     <p>to</p>
     <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> &lt;mesh <span class="nv">filename</span><span class="o">=</span><span class="s2">"package://f110_description/meshes/hokuyo.dae"</span>/&gt;
 </code></pre></div>    </div>
-    <p>From this I suppose that this should be only related to the real car, as I’m not able to make the model of the car work in the simulation of RVIZ, where RVIZ have problem transforming some parameters related to the car. So instead of running cartographer in unknown map I used one of the map that was saved in f1tenth_simulator package already and run waylogger in this map.</p>
   </li>
+</ol>
+
+<p>From this I suppose that this should be only related to the real car, as I’m not able to make the model of the car work in the simulation of RVIZ, where RVIZ have problem transforming some parameters related to the car. So instead of running cartographer in unknown map I used one of the map that was saved in f1tenth_simulator package already and run waylogger in this map.</p>
+
+<ol>
   <li>Switching from Python 3 to Python2.7
 In order to run waylogger I needed to install package with Particle Filter. For this I used <a href="https://github.com/mit-racecar/particle_filter">MIT RACE CAR ROS PACKAGE</a> as I didn’t find this package anywhere in the f110. Up until this point I was using python3 without any problems in the assignments so far however this particle_filter and waylogger package both were using python2.7 so I decided to switch my ROS melodic to python2. However setting .bashrc file to python 2.7 didn’t switch my ROS system to python2 and was still using python3. I spent long hours trying to figure this out because I think as I was using anaconda with python3 there were some settings which prevented the any system in my ubuntu from using python2 and even completely reinstalling whole ROS melodic didn’t and removing anaconda reference from .bashrc file didn’t work. I had to uninstall the anaconda completely as well as uninstall and install back ROS.</li>
   <li>Waypoint Logger
@@ -118,35 +73,4 @@ Strangely enough to get correct coordinates in logfile the particle_filter node 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/sAk8qmBD_LI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/aFKKos5si0Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
-
-  </div><a class="u-url" href="/2020/11/19/pure-pursuit.html" hidden></a>
-</article>
-
-      </div>
-    </main><footer class="site-footer h-card">
-  <data class="u-url" href="/"></data>
-
-  <div class="wrapper">
-
-    <h2 class="footer-heading">My F1Tenth journey</h2>
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">My F1Tenth journey</li><li><a class="u-email" href="mailto:karel.smejkal19@gmail.com">karel.smejkal19@gmail.com</a></li></ul>
-      </div>
-
-      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/smejkka3"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">smejkka3</span></a></li><li><a href="https://www.linkedin.com/in/karel-smejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">karel-smejkal</span></a></li><li><a href="https://www.twitter.com/KarelSmejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">KarelSmejkal</span></a></li></ul>
-</div>
-
-      <div class="footer-col footer-col-3">
-        <p>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</p>
-      </div>
-    </div>
-
-  </div>
-
-</footer>
-</body>
-
-</html>
+:ET
