@@ -34,7 +34,7 @@ The main thing we need to is the lookahead distance L. Smaller L acts same as hi
 ## F1Tenth Lab6 assignment
 
 ### Encountered difficulties
-During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselfs.
+During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselves.
 
 1. Cartographer
 TODO  
