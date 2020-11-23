@@ -51,4 +51,4 @@ TODO
 
 txt with video link of the assignment included in the zipfile.
 
-TODO VIDEO
+<iframe width="800" height="400" src="https://www.youtube.com/embed/aFKKos5si0Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
