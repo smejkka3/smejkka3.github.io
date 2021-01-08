@@ -106,4 +106,4 @@ The last problem was to swim to position defined by a user.
 
 The goal is to implement ROS package with node (either in C++, Python or both) and launch file and custom message, which subscribes to the laser_scan topic and publishes distance to the closest obstacle, farthest obstacle and both of these in one topic. I decided to do the lab in both C++ and Python as I want to practice C++ for later when it will be useful for computer vision as python is known for being quite slow. I didn't encounter some major problems, only experienced little delay while coding the C++ part as I had to iterate trough the vector of laser_scan message ranges and as it was already more than a year sice I did major project in C++ I had to go back to basic tutorials on iterators in C++. My final package as required in the task is available bellow.
 
-PDF with theory part of the assignment included in the [zipfile](https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab1.zip).
+<> PDF with theory part of the assignment included in the [zipfile](https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab1.zip).
