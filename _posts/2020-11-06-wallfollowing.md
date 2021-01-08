@@ -121,10 +121,5 @@ I was experimenting for a long time with different values of K<sub>p</sub>,K<sub
 
 I've found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.
 
-<> My final package as required in the task is available bellow.
-
-<> [karel_lab3.zip](https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip)
-
-<>  txt with video links of the assignment included in the zipfile.
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/5nLtlszkRvI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

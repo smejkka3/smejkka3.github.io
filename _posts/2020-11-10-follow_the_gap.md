@@ -55,10 +55,5 @@ My implementation of FtG algorithm consists of these steps:
  3.  Finding the max gap by finding the longest non-zero consecutive values in the indexes of the processed lidar scan
  4.  Finding the deepest possible scan and steer in the direction of it.
 
-<> My final package as required in the task is available bellow.
-
-<> [karel_lab4.zip](https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab4.zip)
-
-<>  txt with video links of the assignment included in the zipfile.
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/pKxiRvM4X6U" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

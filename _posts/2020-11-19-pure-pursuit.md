@@ -68,11 +68,7 @@ After all of this above I was able to generate proper logfile with right coordin
 
 Probably most difficulties during the programming of assignment was to correctly transform the global and car correctly otherwise the rest was very straight forward using the formulas from lecture. I expected to have more problems with the visualization, however the ROS Marker tutorial is easy to follow and the visualization was also quickly implement.
 
-<>  My final package as required in the task is available bellow.
 
-<>  [karel_lab6.zip](https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab6.zip)
-
-<>  txt with video link of the assignment included in the zipfile.
 <iframe width="800" height="400" src="https://www.youtube.com/embed/sAk8qmBD_LI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/aFKKos5si0Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
