@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-23T18:21:41+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-12T14:30:26+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</title><link href="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html" rel="alternate" type="text/html" title="Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al." /><published>2021-02-12T00:00:00+01:00</published><updated>2021-02-12T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/12/Reading-Wang-et-al</id><content type="html" xml:base="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html"></content><author><name></name></author><summary type="html">The notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang, Ingmar Posner and Paul Newman.</summary></entry><entry><title type="html">F1Tenth Project - Object Tracking</title><link href="http://localhost:4000/2021/02/10/F1Tenth_Project.html" rel="alternate" type="text/html" title="F1Tenth Project - Object Tracking" /><published>2021-02-10T00:00:00+01:00</published><updated>2021-02-10T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/10/F1Tenth_Project</id><content type="html" xml:base="http://localhost:4000/2021/02/10/F1Tenth_Project.html"></content><author><name></name></author><summary type="html">Chose a project to work on in F1Tenth which is a object tracking on the F1Tenth autonomous race- car system and implement and test the proposed system on the F1Tenth vehicle, making use of its onboard 2D LiDAR.</summary></entry><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Very effective algorithm all the way from 1992 is based on very simple idea of following a waypoint. It is tracking algorithm with assumption that we already know where the set of waypoints is known both in global and local coordinate. This can be done by cartographer SLAM algorithm for example.&lt;/p&gt;
 
 &lt;h3 id=&quot;geometric-representation&quot;&gt;Geometric representation&lt;/h3&gt;
@@ -27,13 +27,15 @@ To solve this, we need to constrain the centre of the arc to be on y axes of the
   &lt;li&gt;Update the waypoint on the go&lt;/li&gt;
 &lt;/ol&gt;
 
+&lt;p&gt;The original paper can be found at &lt;a href=&quot;https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf&quot;&gt;Pure Pursuit implementation&lt;/a&gt;, it’s short and well worth reading for understanding this algorithm.&lt;/p&gt;
+
 &lt;h2 id=&quot;f1tenth-lab6-assignment&quot;&gt;F1Tenth Lab6 assignment&lt;/h2&gt;
 
 &lt;h3 id=&quot;encountered-difficulties&quot;&gt;Encountered difficulties&lt;/h3&gt;
 &lt;p&gt;During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselves.&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Cartographer
+  &lt;li&gt;Cartographer:
 I was able to make cartographer work locally as shown on examples on &lt;a href=&quot;https://google-cartographer-ros.readthedocs.io/en/latest/demos.html&quot;&gt;https://google-cartographer-ros.readthedocs.io/en/latest/demos.html&lt;/a&gt;, after that I moved the files as mentioned in the &lt;a href=&quot;https://youtu.be/L51S2RVu-zc?t=4403&quot;&gt;pure_pursuit lecture video&lt;/a&gt;, I had to change in file F110.xarco line 194 from
     &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &amp;lt;mesh &lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;package://racecar_description/meshes/hokuyo.dae&quot;&lt;/span&gt;/&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
@@ -42,9 +44,9 @@ I was able to make cartographer work locally as shown on examples on &lt;a href=
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
     &lt;p&gt;From this I suppose that this should be only related to the real car, as I’m not able to make the model of the car work in the simulation of RVIZ, where RVIZ have problem transforming some parameters related to the car. So instead of running cartographer in unknown map I used one of the map that was saved in f1tenth_simulator package already and run waylogger in this map.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;Switching from Python 3 to Python2.7
+  &lt;li&gt;Switching from Python 3 to Python2.7:
 In order to run waylogger I needed to install package with Particle Filter. For this I used &lt;a href=&quot;https://github.com/mit-racecar/particle_filter&quot;&gt;MIT RACE CAR ROS PACKAGE&lt;/a&gt; as I didn’t find this package anywhere in the f110. Up until this point I was using python3 without any problems in the assignments so far however this particle_filter and waylogger package both were using python2.7 so I decided to switch my ROS melodic to python2. However setting .bashrc file to python 2.7 didn’t switch my ROS system to python2 and was still using python3. I spent long hours trying to figure this out because I think as I was using anaconda with python3 there were some settings which prevented the any system in my ubuntu from using python2 and even completely reinstalling whole ROS melodic didn’t and removing anaconda reference from .bashrc file didn’t work. I had to uninstall the anaconda completely as well as uninstall and install back ROS.&lt;/li&gt;
-  &lt;li&gt;Waypoint Logger
+  &lt;li&gt;Waypoint Logger:
 After reinstalling my whole ROS the waylogger was finally working, however it needed running particle_filter topic otherwise it didn’t log anything. In the above mentioned particle filter for MIT car I had to change &lt;a href=&quot;https://github.com/mit-racecar/particle_filter/blob/master/launch/localize.launch&quot;&gt;localize.launch&lt;/a&gt;, concretely comment line 30
     &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; 	&amp;lt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; &amp;lt;include &lt;span class=&quot;nv&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;find particle_filter&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/launch/map_server.launch&quot;&lt;/span&gt;/&amp;gt; &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
@@ -53,7 +55,7 @@ and in line 33 use only /odom topic&lt;/p&gt;
     &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; 	&amp;lt;arg &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;odometry_topic&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/odom&quot;&lt;/span&gt;/&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
-  &lt;li&gt;Launching waylogger and particle_filter
+  &lt;li&gt;Launching waylogger and particle_filter:
 Strangely enough to get correct coordinates in logfile the particle_filter node needs to be launched as first, before the map and rviz are launched, otherwise the resulting coordinate system is different than the map launched.&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -61,11 +63,6 @@ Strangely enough to get correct coordinates in logfile the particle_filter node 
 
 &lt;p&gt;Probably most difficulties during the programming of assignment was to correctly transform the global and car correctly otherwise the rest was very straight forward using the formulas from lecture. I expected to have more problems with the visualization, however the ROS Marker tutorial is easy to follow and the visualization was also quickly implement.&lt;/p&gt;
 
-&lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab6.zip&quot;&gt;karel_lab6.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;txt with video link of the assignment included in the zipfile.&lt;/p&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/sAk8qmBD_LI&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
 &lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/aFKKos5si0Y&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">First practical experience with Cartographer SLAM package and implementation of trajectory planner called the Pure Pursuit algorithm.</summary></entry><entry><title type="html">Scan matching</title><link href="http://localhost:4000/2020/11/14/scan_matching.html" rel="alternate" type="text/html" title="Scan matching" /><published>2020-11-14T00:00:00+01:00</published><updated>2020-11-14T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/14/scan_matching</id><content type="html" xml:base="http://localhost:4000/2020/11/14/scan_matching.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
@@ -238,12 +235,6 @@ Find the best point among this maximum sequence from previous step.&lt;/li&gt;
   &lt;li&gt;Finding the deepest possible scan and steer in the direction of it.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab4.zip&quot;&gt;karel_lab4.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;txt with video links of the assignment included in the zipfile.&lt;/p&gt;
-
 &lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/pKxiRvM4X6U&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">Addressing the shortcomings of wallfollowing and implementing Follow the Gap algorithm.</summary></entry><entry><title type="html">Wallfollowing</title><link href="http://localhost:4000/2020/11/06/wallfollowing.html" rel="alternate" type="text/html" title="Wallfollowing" /><published>2020-11-06T00:00:00+01:00</published><updated>2020-11-06T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/06/wallfollowing</id><content type="html" xml:base="http://localhost:4000/2020/11/06/wallfollowing.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
@@ -365,12 +356,6 @@ Madhur Behl&lt;/a&gt;.
 
 &lt;p&gt;I’ve found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.&lt;/p&gt;
 
-&lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip&quot;&gt;karel_lab3.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;txt with video links of the assignment included in the zipfile.&lt;/p&gt;
-
 &lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/5nLtlszkRvI&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">Fist autonomous lap of my F1Tenth car using wallfollowing algorithm.</summary></entry><entry><title type="html">Automatic Emergency Braking</title><link href="http://localhost:4000/2020/11/02/aeb.html" rel="alternate" type="text/html" title="Automatic Emergency Braking" /><published>2020-11-02T00:00:00+01:00</published><updated>2020-11-02T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/02/aeb</id><content type="html" xml:base="http://localhost:4000/2020/11/02/aeb.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
@@ -411,12 +396,8 @@ to 0. I was trying to remove 0 from denominator completely together with numerat
 again in the range-rate calculation.&lt;/p&gt;
 
 &lt;h2 id=&quot;f1tenth-lab2-assignment&quot;&gt;F1Tenth Lab2 assignment&lt;/h2&gt;
-&lt;p&gt;TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.
-My final package as required in the task is available bellow.&lt;/p&gt;
+&lt;p&gt;TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab2.zip&quot;&gt;karel_lab2.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;txt with video links of the assignment included in the zipfile.&lt;/p&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/LXWpBoFb4nk&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/zna-dPAIdUQ&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 &lt;p&gt;
@@ -521,6 +502,4 @@ The next video is hands on ROS commands and exploring the workspace from termina
   &lt;li&gt;to understand and work Bag files.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The goal is to implement ROS package with node (either in C++, Python or both) and launch file and custom message, which subscribes to the laser_scan topic and publishes distance to the closest obstacle, farthest obstacle and both of these in one topic. I decided to do the lab in both C++ and Python as I want to practice C++ for later when it will be useful for computer vision as python is known for being quite slow. I didn’t encounter some major problems, only experienced little delay while coding the C++ part as I had to iterate trough the vector of laser_scan message ranges and as it was already more than a year sice I did major project in C++ I had to go back to basic tutorials on iterators in C++. My final package as required in the task is available bellow.&lt;/p&gt;
-
-&lt;p&gt;PDF with theory part of the assignment included in the &lt;a href=&quot;https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab1.zip&quot;&gt;zipfile&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">My first steps into F1Tenth. Mostly just ROS introduction.</summary></entry></feed>
+&lt;p&gt;The goal is to implement ROS package with node (either in C++, Python or both) and launch file and custom message, which subscribes to the laser_scan topic and publishes distance to the closest obstacle, farthest obstacle and both of these in one topic. I decided to do the lab in both C++ and Python as I want to practice C++ for later when it will be useful for computer vision as python is known for being quite slow. I didn’t encounter some major problems, only experienced little delay while coding the C++ part as I had to iterate trough the vector of laser_scan message ranges and as it was already more than a year sice I did major project in C++ I had to go back to basic tutorials on iterators in C++. My final package as required in the task is available bellow.&lt;/p&gt;</content><author><name></name></author><summary type="html">My first steps into F1Tenth. Mostly just ROS introduction.</summary></entry></feed>

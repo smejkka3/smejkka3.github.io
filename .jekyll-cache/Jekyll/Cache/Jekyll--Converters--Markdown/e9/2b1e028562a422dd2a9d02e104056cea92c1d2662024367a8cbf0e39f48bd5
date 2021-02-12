@@ -1,4 +1,4 @@
-I"ÿ<h2 id="introduction">Introduction</h2>
+I"<h2 id="introduction">Introduction</h2>
 
 <p>The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
 into nearby objects. This is achieved by computing TTC (Time To Collision) using before mentioned LaserScan message. This assignment
@@ -38,12 +38,8 @@ to 0. I was trying to remove 0 from denominator completely together with numerat
 again in the range-rate calculation.</p>
 
 <h2 id="f1tenth-lab2-assignment">F1Tenth Lab2 assignment</h2>
-<p>TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.
-My final package as required in the task is available bellow.</p>
+<p>TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.</p>
 
-<p><a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab2.zip">karel_lab2.zip</a></p>
-
-<p>txt with video links of the assignment included in the zipfile.</p>
 <iframe width="800" height="400" src="https://www.youtube.com/embed/LXWpBoFb4nk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 <iframe width="800" height="400" src="https://www.youtube.com/embed/zna-dPAIdUQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 <p>

@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Wallfollowing" />
 <script type="application/ld+json">
-{"headline":"Wallfollowing","dateModified":"2020-11-06T00:00:00+01:00","url":"http://localhost:4000/2020/11/06/wallfollowing.html","datePublished":"2020-11-06T00:00:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/11/06/wallfollowing.html"},"description":"Fist autonomous lap of my F1Tenth car using wallfollowing algorithm.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"datePublished":"2020-11-06T00:00:00+01:00","url":"http://localhost:4000/2020/11/06/wallfollowing.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/11/06/wallfollowing.html"},"dateModified":"2020-11-06T00:00:00+01:00","description":"Fist autonomous lap of my F1Tenth car using wallfollowing algorithm.","@type":"BlogPosting","headline":"Wallfollowing","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="My F1Tenth journey" /></head>
 <body><header class="site-header" role="banner">
@@ -167,12 +167,6 @@ Madhur Behl</a>.
 <p>I was experimenting for a long time with different values of K<sub>p</sub>,K<sub>d</sub> and K<sub>i</sub>. Using this I was able to find get a more insight what each of these constant is doing. I’m not 100% sure about, but I think that lowering K<sub>p</sub> makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K<sub>d</sub> seems to react faster to the growing error but it wasn’t completely clear to me from simulation. K<sub>i</sub> didn’t seem to do much even at higher values, but according to the research it should make the car more sensitive to error.</p>
 
 <p>I’ve found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.</p>
-
-<p>My final package as required in the task is available bellow.</p>
-
-<p><a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip">karel_lab3.zip</a></p>
-
-<p>txt with video links of the assignment included in the zipfile.</p>
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/5nLtlszkRvI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 

@@ -1,4 +1,4 @@
-I":,<h2 id="introduction">Introduction</h2>
+I"7+<h2 id="introduction">Introduction</h2>
 
 <p>Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
 Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
@@ -118,12 +118,6 @@ Madhur Behl</a>.
 <p>I was experimenting for a long time with different values of K<sub>p</sub>,K<sub>d</sub> and K<sub>i</sub>. Using this I was able to find get a more insight what each of these constant is doing. I’m not 100% sure about, but I think that lowering K<sub>p</sub> makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K<sub>d</sub> seems to react faster to the growing error but it wasn’t completely clear to me from simulation. K<sub>i</sub> didn’t seem to do much even at higher values, but according to the research it should make the car more sensitive to error.</p>
 
 <p>I’ve found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.</p>
-
-<p>My final package as required in the task is available bellow.</p>
-
-<p><a href="https://github.com/smejkka3/smejkka3.github.io/raw/master/assets/karel_lab3.zip">karel_lab3.zip</a></p>
-
-<p>txt with video links of the assignment included in the zipfile.</p>
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/5nLtlszkRvI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 :ET

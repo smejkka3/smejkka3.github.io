@@ -1,6 +1,19 @@
-I"ï<div class="home">
+I"ò
+<div class="home">
 
   <ul class="posts">
+    
+        <span class="post-date">Feb 12, 2021</span>
+        <a class="post-link" href="/2021/02/12/Reading-Wang-et-al.html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</a>
+        The notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR
+        <br />
+        <br />
+    
+        <span class="post-date">Feb 10, 2021</span>
+        <a class="post-link" href="/2021/02/10/F1Tenth_Project.html">F1Tenth Project - Object Tracking</a>
+        Chose a project to work on in F1Tenth which is a object tracking on the F1Tenth autonomous race- car system and implement and test the proposed system on the F1Tenth vehicle, making use of its onboard 2D LiDAR.
+        <br />
+        <br />
     
         <span class="post-date">Nov 19, 2020</span>
         <a class="post-link" href="/2020/11/19/pure-pursuit.html">Pure Pursuit</a>
