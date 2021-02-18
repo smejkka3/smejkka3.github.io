@@ -1,4 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-12T14:30:26+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</title><link href="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html" rel="alternate" type="text/html" title="Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al." /><published>2021-02-12T00:00:00+01:00</published><updated>2021-02-12T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/12/Reading-Wang-et-al</id><content type="html" xml:base="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html"></content><author><name></name></author><summary type="html">The notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang, Ingmar Posner and Paul Newman.</summary></entry><entry><title type="html">F1Tenth Project - Object Tracking</title><link href="http://localhost:4000/2021/02/10/F1Tenth_Project.html" rel="alternate" type="text/html" title="F1Tenth Project - Object Tracking" /><published>2021-02-10T00:00:00+01:00</published><updated>2021-02-10T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/10/F1Tenth_Project</id><content type="html" xml:base="http://localhost:4000/2021/02/10/F1Tenth_Project.html"></content><author><name></name></author><summary type="html">Chose a project to work on in F1Tenth which is a object tracking on the F1Tenth autonomous race- car system and implement and test the proposed system on the F1Tenth vehicle, making use of its onboard 2D LiDAR.</summary></entry><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-18T15:29:55+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</title><link href="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html" rel="alternate" type="text/html" title="Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al." /><published>2021-02-12T00:00:00+01:00</published><updated>2021-02-12T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/12/Reading-Wang-et-al</id><content type="html" xml:base="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html"></content><author><name></name></author><summary type="html">The notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang, Ingmar Posner and Paul Newman.</summary></entry><entry><title type="html">F1Tenth Project - Object Tracking</title><link href="http://localhost:4000/2021/02/10/F1Tenth_Project.html" rel="alternate" type="text/html" title="F1Tenth Project - Object Tracking" /><published>2021-02-10T00:00:00+01:00</published><updated>2021-02-10T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/10/F1Tenth_Project</id><content type="html" xml:base="http://localhost:4000/2021/02/10/F1Tenth_Project.html">&lt;p&gt;The project I’m going to be working on is object tracking using LiDAR initially. The algorithm is based on the paper &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt; where the main goal is to implement solution for detection and tracking of moving object using 2D laser scanner.&lt;/p&gt;
+
+&lt;h2 id=&quot;description-of-tasks&quot;&gt;Description of tasks&lt;/h2&gt;
+&lt;p&gt;Robust object tracking and localization is a critical need for autonomous cars, allowing for safe,
+intelligent navigation and planning. Cars must be able to perform this task rapidly and accurately,
+requiring algorithms with high output frequencies and low false-negative and false positive rates.
+While much work has been done on object tracking and localization with full-scale cars, the&lt;/p&gt;
+
+&lt;p&gt;F1Tenth Object Tracking project seeks to implement tracking on the F1Tenth autonomous race-
+car system. Initially, this project will build on the work of Dominic Zeng Wang, who proposed a
+LiDAR-based object tracking system that uses the knowledge of the static local background to help identifying dynamic
+objects from static ones in a principled and straightforward way. This project will
+implement and test her proposed system on the F1Tenth vehicle, making use of its onboard 2D
+LiDAR. Later, I will combine LiDAR-based tracking with visual tracking, in order to increase
+the robustness of the system by increasing the signal-noise ratio from the vehicle’s sensors.
+Given the restrictions posed by the pandemic, this project will heavily leverage virtual
+environments like RViz and the F1Tenth team’s proprietary gym environment. If possible, I will
+attempt to implement my system on the actual F1Tenth car for further real-life testing and
+validation.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-by-step-to-dos&quot;&gt;Step by Step to Dos&lt;/h2&gt;
+&lt;h3 id=&quot;phase-1&quot;&gt;Phase 1:&lt;/h3&gt;
+&lt;p&gt;Get Familiar with F1Tenth – January 25 - February 3 • Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Learn about the ROS framework.&lt;/li&gt;
+  &lt;li&gt;Learn about F1Tenth fundamentals with the labs linked here.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-2-get-familiar-with-fundamentals--february-3--february-14&quot;&gt;Phase 2: Get Familiar with Fundamentals – February 3 – February 14&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Carefully study Wang paper, along with related works.&lt;/li&gt;
+  &lt;li&gt;Learn how to use F1Tenth Gym environment.&lt;/li&gt;
+  &lt;li&gt;Get familiar with fundamentals of Bayes filtering.&lt;/li&gt;
+  &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-3-implementation--february-14--march-14&quot;&gt;Phase 3: Implementation – February 14 – March 14&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Implement virtual sensing system specified in Wang paper on F1Tenth.&lt;/li&gt;
+  &lt;li&gt;Implement data segmentation and association algorithms to read in LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.&lt;/li&gt;
+  &lt;li&gt;Identify areas where visual data can increase robustness of LiDAR system.&lt;/li&gt;
+  &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-4-expansion--march-14--april-11&quot;&gt;Phase 4: Expansion – March 14 – April 11&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Develop pipeline to validate LiDAR tracking hypothesis with camera data, and camera
+hypothesis with LiDAR data&lt;/li&gt;
+  &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-3-wrapping-up-phase--april-11--may-10&quot;&gt;Phase 3: Wrapping up Phase – April 11 – May 10&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Continue working on the previous goals that have not been accomplished.&lt;/li&gt;
+  &lt;li&gt;Documentation for future development (user guide / issues / achievements).&lt;/li&gt;
+  &lt;li&gt;Optional: Demonstrate to potential business partners / investors.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Chose a project to work on in F1Tenth which is a object tracking on the F1Tenth autonomous race- car system and implement and test the proposed system on the F1Tenth vehicle, making use of its onboard 2D LiDAR.</summary></entry><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Very effective algorithm all the way from 1992 is based on very simple idea of following a waypoint. It is tracking algorithm with assumption that we already know where the set of waypoints is known both in global and local coordinate. This can be done by cartographer SLAM algorithm for example.&lt;/p&gt;
 
 &lt;h3 id=&quot;geometric-representation&quot;&gt;Geometric representation&lt;/h3&gt;
