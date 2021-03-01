@@ -29,7 +29,8 @@ validation.
 
 ## Step by Step to Dos
 ### Phase 1:
-Get Familiar with F1Tenth -- January 25 - February 3 • Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.
+Get Familiar with F1Tenth -- January 25 - February 3
+- Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.
 - Learn about the ROS framework.
 - Learn about F1Tenth fundamentals with the labs linked here.
 
@@ -41,7 +42,7 @@ Get Familiar with F1Tenth -- January 25 - February 3 • Learn about the F1Tenth
 
 ### Phase 3: Implementation -- February 14 – March 14
 - Implement virtual sensing system specified in Wang paper on F1Tenth.
-- Implement data segmentation and association algorithms to read in LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.
+- Implement association algorithms for LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.
 - Identify areas where visual data can increase robustness of LiDAR system.
 - Write progress report / documentation as needed.
 
