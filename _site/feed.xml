@@ -1,32 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-18T15:29:55+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</title><link href="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html" rel="alternate" type="text/html" title="Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al." /><published>2021-02-12T00:00:00+01:00</published><updated>2021-02-12T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/12/Reading-Wang-et-al</id><content type="html" xml:base="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html"></content><author><name></name></author><summary type="html">The notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang, Ingmar Posner and Paul Newman.</summary></entry><entry><title type="html">F1Tenth Project - Object Tracking</title><link href="http://localhost:4000/2021/02/10/F1Tenth_Project.html" rel="alternate" type="text/html" title="F1Tenth Project - Object Tracking" /><published>2021-02-10T00:00:00+01:00</published><updated>2021-02-10T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/10/F1Tenth_Project</id><content type="html" xml:base="http://localhost:4000/2021/02/10/F1Tenth_Project.html">&lt;p&gt;The project I’m going to be working on is object tracking using LiDAR initially. The algorithm is based on the paper &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt; where the main goal is to implement solution for detection and tracking of moving object using 2D laser scanner.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-06-02T10:24:22+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Iterative closest point algorithm</title><link href="http://localhost:4000/2021/03/05/ICP.html" rel="alternate" type="text/html" title="Iterative closest point algorithm" /><published>2021-03-05T00:00:00+01:00</published><updated>2021-03-05T00:00:00+01:00</updated><id>http://localhost:4000/2021/03/05/ICP</id><content type="html" xml:base="http://localhost:4000/2021/03/05/ICP.html"></content><author><name></name></author><summary type="html">In this post we are going to have a close look at iterative closest point algorithm (ICP) as it's important part of the implementation of the paper Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang</summary></entry><entry><title type="html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</title><link href="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html" rel="alternate" type="text/html" title="Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al." /><published>2021-02-12T00:00:00+01:00</published><updated>2021-02-12T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/12/Reading-Wang-et-al</id><content type="html" xml:base="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html">&lt;p&gt;Mentioned in post before, the goal of the project is to implement algorithm mentioned in the paper from &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt;. The paper focuses on creating framework that estimates and determines what is static background as well as movement of dynamic objects.&lt;/p&gt;
+
+&lt;p&gt;The algorithm itself can be divided into several parts. Firstly the new laser and odometry measurements coming from car need to be processed. The process of laser measurement consists of first cleaning the states which is mentioned very briefly in the paper and from my understanding, this means that all points from the previous measurement which are no longer in the LiDAR’s field of view, should be dropped. The authors do not provide any reasoning for this but my guess is that it’s due the easing some of the memory requirement as we do not essentially need to work with anything which we can’t see. One of our own modification during cleaning the states is also drop all points in the memory which are beyond certain threshold. This threshold is chosen to maximise the distance to which we want to detect dynamic object, but at the same time minimise the memory requirement as the assumption at the moment is that the whole framework needs to run in real-time to be usable, which can be hard to achieve with too many “memorised” points. This process is followed by forward propagation, where the motion part of all dynamic tracks according to an appropriate motion model is predicted. This motion model is required, due the main objective of the algorithm, to not have any assumption about the object class (therefore it’s expected motion pattern). This steps is followed by association and update of dynamic and static object measurements finalised by merging tracks which correspond to the same class (static or specific dynamic track). The basic idea of the algorithm is outlined in following figure
+&lt;img src=&quot;/assets/wangetal.png&quot; alt=&quot;alg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As mentioned already the main benefit of this approach is that it allows us to track objects without having to know any informations about the object beforehand. Let’s describe each step more into the detail to understand more details about the algorithm.&lt;/p&gt;
+
+&lt;h3 id=&quot;sensor-pose-prediction-on-odometry-measurement&quot;&gt;Sensor pose prediction on odometry measurement&lt;/h3&gt;
+&lt;p&gt;Individual laser scan beams and a set of odometry measurements are used as input to the algorithm. Without odometry information, the system would not be able to distinguish static objects as all motion estimates are relative to the LiDAR sensor. Odometry information provides us with an estimate of speed v of non-holonomic vehicle, mean angle θ of front wheels.&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-object-motion-prediction&quot;&gt;Dynamic object motion prediction&lt;/h3&gt;
+&lt;p&gt;When new measurements are received, currently existing dynamic tracks are predicted forward using generic motion prediction model before they are updated with the newly received scans. We assume a constant velocity model, because we do not know any information about the object and thus it’s motion pattern. This is disadvantage of working with model-free assumption. We also model not only constant linear velocity component, but angular velocity component as well. This should make motion prediction model able to capture a full range of 2D rigid body motions.&lt;/p&gt;
+
+&lt;h3 id=&quot;hierarchical-data-association&quot;&gt;Hierarchical data association&lt;/h3&gt;
+&lt;p&gt;It is not possible to directly observe all state variables in the joint state and for those which we can directly observe, more specifically boundary points belonging to static or dynamic object, it is difficult to tell which one do they belong to or if it is a new boundary point, which haven’t been seen before. Each time we get new set of LiDAR scan, we have to determine following:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;If new measurement is a part static object:
+    &lt;ul&gt;
+      &lt;li&gt;Is it already existing boundary point?&lt;/li&gt;
+      &lt;li&gt;Is it a new boundary point?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;If new measurement is a part of existing dynamic object:
+    &lt;ul&gt;
+      &lt;li&gt;Is it already existing boundary point on the object? If that’s the case it also needs to be determined which specific object this measurement belongs to.&lt;/li&gt;
+      &lt;li&gt;Is it a new boundary point on the object?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Is new measurement part of new, yet unassociated object?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In order to solve data association problem we have to associate the measurements on low and high level. Meaning, on high level we want to firstly create rough associations on coarse scale, where we divide all newly observed measurements into clusters and find out for each cluster if it belongs to already existing static background or dynamic object. If neither is the case than we assign it as a new, yet unobserved object. On low level we create fine associations, where the each measurements within each cluster is either associated to yet exiting boundary point or used to initialized a new point.&lt;/p&gt;
+
+&lt;h4 id=&quot;coarse-level-data-association&quot;&gt;Coarse-level data association&lt;/h4&gt;
+&lt;p&gt;In the previous section we discussed that in order to decide if the new set of measurements belongs to boundaries of already existing objects or if the measurements are new objects, we need to break down the problem into coarse and fine level association. We mentioned as well that in coarse association we want to divide incoming measurements into clusters. More specifically, we divide incoming laser scan data into set of clusters C = {C&lt;sub&gt;1&lt;/sub&gt;, C&lt;sub&gt;2&lt;/sub&gt;, …, C&lt;sub&gt;|C|&lt;/sub&gt;}.&lt;/p&gt;
+
+&lt;p&gt;Using ICP, we align the incoming lidar scan with clusters which already has been associated to static background. After that, we calculate a transformation between the corresponding points: if the transformation (either its translation magnitude or rotation magnitude) is too large, then the association is rejected and the cluster deemed to not be a good match with the candidate object. Associated clusters that are assigned static background are removed from the set of clusters C. Then, we repeat the same procedure on the remaining clusters in C, however this time we are trying to match incoming clusters with already known dynamic objects using ICP.&lt;/p&gt;
+
+&lt;p&gt;The rough coarse association algorithm is visualised in pseudocode bellow.
+&lt;img src=&quot;/assets/coarse_association_alg.png&quot; alt=&quot;coarse_association_alg&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;fine-level-data-association&quot;&gt;Fine-level data association&lt;/h4&gt;
+&lt;p&gt;While coarse-level data association helps us identify which clusters of LiDAR points are associated with which objects (and which ones are possibly of new objects), in order to update the state of our currently tracked objects, we need to perform point-to-point matching. Successfully performing this matching is critical to the entire system, since we use these matches to estimate a transformation that is used to update the state of our tracked objects.&lt;/p&gt;
+
+&lt;h3 id=&quot;track-initialization-and-merging&quot;&gt;Track initialization and merging&lt;/h3&gt;
+&lt;p&gt;During each LiDAR update iteration, we check to determine whether or not any currently tracked object is either part of the static background, or part of another dynamic object. In this, we diverge from original paper and check all objects, rather than just the ones newly initialized. We find experimentally that this allows the algorithm to correct previous mistakes by merging tracks that were previously, and mistakenly, not merged.
+To perform the merging step, we calculate the Mahalanobis distance between each track’s state and the merging target’s state, taking into account the track’s covariance. We first test to see whether or not each track should be merged with the static background by comparing the track’s velocity with a proposed value of 0 (static objects have a velocity of 0). To determine whether or not a track is part of the static background, we compute the Mahalanobis distance between the track’s velocity probability distribution and 0, and compare the distance against a chi squared significance value. If the distance is lower than the chi squared value, then we merge the track with the static background.
+The remaining tracks are then tested against other dynamic tracks to see whether or not they should be merged. The merging procedure works here nearly the same as the procedure for the static background: rather than comparing the track’s velocity, however, we compare the track’s position and velocity against the proposed merge target’s. If the calculated Mahalanobis distance between these two distributions falls below the chi squared significance value, then these tracks are merged.&lt;/p&gt;</content><author><name></name></author><summary type="html">Notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang, Ingmar Posner and Paul Newman.</summary></entry><entry><title type="html">F1Tenth Project - Object Tracking</title><link href="http://localhost:4000/2021/02/10/F1Tenth_Project.html" rel="alternate" type="text/html" title="F1Tenth Project - Object Tracking" /><published>2021-02-10T00:00:00+01:00</published><updated>2021-02-10T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/10/F1Tenth_Project</id><content type="html" xml:base="http://localhost:4000/2021/02/10/F1Tenth_Project.html">&lt;p&gt;The project I’m going to be working on is object tracking using LiDAR initially. The algorithm is based on the paper &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt; where the main goal is to implement solution for detection and tracking of moving object using 2D laser scanner.&lt;/p&gt;
 
 &lt;h2 id=&quot;description-of-tasks&quot;&gt;Description of tasks&lt;/h2&gt;
 &lt;p&gt;Robust object tracking and localization is a critical need for autonomous cars, allowing for safe,
 intelligent navigation and planning. Cars must be able to perform this task rapidly and accurately,
 requiring algorithms with high output frequencies and low false-negative and false positive rates.
-While much work has been done on object tracking and localization with full-scale cars, the&lt;/p&gt;
+While much work has been done on object tracking and localization with full-scale cars, the F1Tenth
+Object Tracking project seeks to implement tracking on the F1Tenth autonomous race
+car system.&lt;/p&gt;
 
-&lt;p&gt;F1Tenth Object Tracking project seeks to implement tracking on the F1Tenth autonomous race-
-car system. Initially, this project will build on the work of Dominic Zeng Wang, who proposed a
+&lt;p&gt;Initially, this project will build on the work of Dominic Zeng Wang, who proposed a
 LiDAR-based object tracking system that uses the knowledge of the static local background to help identifying dynamic
 objects from static ones in a principled and straightforward way. This project will
-implement and test her proposed system on the F1Tenth vehicle, making use of its onboard 2D
+implement and test his proposed system on the F1Tenth vehicle, making use of its onboard 2D
 LiDAR. Later, I will combine LiDAR-based tracking with visual tracking, in order to increase
 the robustness of the system by increasing the signal-noise ratio from the vehicle’s sensors.
 Given the restrictions posed by the pandemic, this project will heavily leverage virtual
-environments like RViz and the F1Tenth team’s proprietary gym environment. If possible, I will
-attempt to implement my system on the actual F1Tenth car for further real-life testing and
+environments like F1Tenth team’s proprietary gym environment. If possible, we will
+attempt to implement the system on the actual F1Tenth car for further real-life testing and
 validation.&lt;/p&gt;
 
 &lt;h2 id=&quot;step-by-step-to-dos&quot;&gt;Step by Step to Dos&lt;/h2&gt;
 &lt;h3 id=&quot;phase-1&quot;&gt;Phase 1:&lt;/h3&gt;
-&lt;p&gt;Get Familiar with F1Tenth – January 25 - February 3 • Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.&lt;/p&gt;
+&lt;p&gt;Get Familiar with F1Tenth – January 25 - February 3&lt;/p&gt;
 &lt;ul&gt;
+  &lt;li&gt;Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.&lt;/li&gt;
   &lt;li&gt;Learn about the ROS framework.&lt;/li&gt;
   &lt;li&gt;Learn about F1Tenth fundamentals with the labs linked here.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;phase-2-get-familiar-with-fundamentals--february-3--february-14&quot;&gt;Phase 2: Get Familiar with Fundamentals – February 3 – February 14&lt;/h3&gt;
+&lt;h3 id=&quot;phase-2-get-familiar-with-fundamentals&quot;&gt;Phase 2: Get Familiar with Fundamentals&lt;/h3&gt;
+&lt;h5 id=&quot;february-3--february-14&quot;&gt;February 3 – February 14&lt;/h5&gt;
 &lt;ul&gt;
   &lt;li&gt;Carefully study Wang paper, along with related works.&lt;/li&gt;
   &lt;li&gt;Learn how to use F1Tenth Gym environment.&lt;/li&gt;
@@ -34,22 +84,25 @@ validation.&lt;/p&gt;
   &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;phase-3-implementation--february-14--march-14&quot;&gt;Phase 3: Implementation – February 14 – March 14&lt;/h3&gt;
+&lt;h3 id=&quot;phase-3-implementation&quot;&gt;Phase 3: Implementation&lt;/h3&gt;
+&lt;h4 id=&quot;february-14--march-14&quot;&gt;February 14 – March 14&lt;/h4&gt;
 &lt;ul&gt;
   &lt;li&gt;Implement virtual sensing system specified in Wang paper on F1Tenth.&lt;/li&gt;
-  &lt;li&gt;Implement data segmentation and association algorithms to read in LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.&lt;/li&gt;
+  &lt;li&gt;Implement association algorithms for LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.&lt;/li&gt;
   &lt;li&gt;Identify areas where visual data can increase robustness of LiDAR system.&lt;/li&gt;
   &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;phase-4-expansion--march-14--april-11&quot;&gt;Phase 4: Expansion – March 14 – April 11&lt;/h3&gt;
+&lt;h3 id=&quot;phase-4-expansion&quot;&gt;Phase 4: Expansion&lt;/h3&gt;
+&lt;h5 id=&quot;march-14--april-11&quot;&gt;March 14 – April 11&lt;/h5&gt;
 &lt;ul&gt;
   &lt;li&gt;Develop pipeline to validate LiDAR tracking hypothesis with camera data, and camera
 hypothesis with LiDAR data&lt;/li&gt;
   &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;phase-3-wrapping-up-phase--april-11--may-10&quot;&gt;Phase 3: Wrapping up Phase – April 11 – May 10&lt;/h3&gt;
+&lt;h3 id=&quot;phase-3-wrapping-up-phase&quot;&gt;Phase 3: Wrapping up Phase&lt;/h3&gt;
+&lt;h5 id=&quot;april-11--may-10&quot;&gt;April 11 – May 10&lt;/h5&gt;
 &lt;ul&gt;
   &lt;li&gt;Continue working on the previous goals that have not been accomplished.&lt;/li&gt;
   &lt;li&gt;Documentation for future development (user guide / issues / achievements).&lt;/li&gt;
