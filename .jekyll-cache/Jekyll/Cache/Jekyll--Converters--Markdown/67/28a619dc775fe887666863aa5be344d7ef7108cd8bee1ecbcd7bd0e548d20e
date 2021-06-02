@@ -1,0 +1,7 @@
+I"�<h3 id="joint-compatibility-branch-and-bound">Joint Compatibility Branch and Bound</h3>
+<p>While coarse-level data association helps us identify which clusters of LiDAR points are associated with which objects (and which ones are possibly of new objects), in order to update the state of our currently tracked objects, we need to perform point-to-point matching. Successfully performing this matching is critical to the entire system, since we use these matches to estimate a transformation that is used to update the state of our tracked objects.</p>
+
+<p>In fine-level data association, we perform such matching. The core algorithm in this stage is the Joint Compatibility Branch and Bound (JCBB) algorithm, a common algorithm used for MOT (multi-object tracking) data association. In the JCBB algorithm, we run a depth first search to find a joint data association that minimizes jNIS (the joint normalized innovation squared).
+The formula for jNIS is as follows. Say we have a set of measurements zˆσ that we propose are associated with a set of currently estimated boundary points h<sub>γ</sub>. The joint pairing has an innovation covariance of:
+…</p>
+:ET
