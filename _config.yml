@@ -3,7 +3,7 @@ email: karel.smejkal19@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://smejkka3.github.io/blog" # the base hostname & protocol for your site, e.g. http://example.com
+url: "http://smejkka3.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: KarelSmejkal
 github_username:  smejkka3
 linkedin_username: karel-smejkal
