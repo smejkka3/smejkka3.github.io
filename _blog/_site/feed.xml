@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-12-30T15:15:20+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My F1Tenth journey</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.</subtitle><entry><title type="html">Joint Compatibility Branch and Bound algorithm</title><link href="http://localhost:4000/2021/04/07/JCBB.html" rel="alternate" type="text/html" title="Joint Compatibility Branch and Bound algorithm" /><published>2021-04-07T00:00:00+02:00</published><updated>2021-04-07T00:00:00+02:00</updated><id>http://localhost:4000/2021/04/07/JCBB</id><content type="html" xml:base="http://localhost:4000/2021/04/07/JCBB.html">&lt;h3 id=&quot;joint-compatibility-branch-and-bound&quot;&gt;Joint Compatibility Branch and Bound&lt;/h3&gt;
+&lt;p&gt;While coarse-level data association helps us identify which clusters of LiDAR points are associated with which objects (and which ones are possibly of new objects), in order to update the state of our currently tracked objects, we need to perform point-to-point matching. Successfully performing this matching is critical to the entire system, since we use these matches to estimate a transformation that is used to update the state of our tracked objects.&lt;/p&gt;
+
+&lt;p&gt;In fine-level data association, we perform such matching. The core algorithm in this stage is the Joint Compatibility Branch and Bound (JCBB) algorithm, a common algorithm used for MOT (multi-object tracking) data association. In the JCBB algorithm, we run a depth first search to find a joint data association that minimizes jNIS (the joint normalized innovation squared).
+The formula for jNIS is as follows. Say we have a set of measurements z&lt;sub&gt;σ&lt;/sub&gt; that we propose are associated with a set of currently estimated boundary points h&lt;sub&gt;σ&lt;/sub&gt;. The joint pairing has an innovation covariance of:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/join_paring_covariance.png&quot; alt=&quot;join_paring_covariance&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Where P is the covariance of the track, R is the expected measurement noise of the LiDAR, and Hσ is the Jacobian of the measurement model of the boundary points. Then, the jNIS is:&lt;/p&gt;
+
+&lt;p&gt;jNIS = (z&lt;sub&gt;σ&lt;/sub&gt; - h&lt;sub&gt;σ&lt;/sub&gt;)&lt;sup&gt;T&lt;/sup&gt; S&lt;sup&gt;-1&lt;/sup&gt;&lt;sub&gt;σ&lt;/sub&gt;(z&lt;sub&gt;σ&lt;/sub&gt; - h&lt;sub&gt;σ&lt;/sub&gt;)&lt;/p&gt;
+
+&lt;p&gt;This formula is similar to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Mahalanobis_distance&quot;&gt;Mahalanobis distance&lt;/a&gt;, which measures the distance between two probability distributions.&lt;/p&gt;
+
+&lt;h4 id=&quot;implementation&quot;&gt;Implementation&lt;/h4&gt;
+&lt;p&gt;The JCBB fine association algorithm is comprised of three parts. First, we construct an initial association based on the output of coarse association– scan points and estimated boundary points that are sent into an array to form our initial association.
+Individual Association: For every scan point, and every estimated boundary point, we then compute their potential individual compatibility. This allows the later Depth First Search to operate efficiently, by pre-rejecting incompatible points (typically ones that are far away from each other). The initial association is then pruned based on these individual compatibilities.
+Prune Association: We also wish that our output association has a one-to-one pairing between bound- ary points and scan points. That is, each scan point can only be paired to at once one boundary point, and each boundary point can only be paired to at once one scan point. Thus, the initial association is further refined to remove double-pairing – in cases where two scan points are paired to one boundary point (or vice versa), we simply clear the association for both points.&lt;/p&gt;
+
+&lt;p&gt;Minimal Association: Then, we run through the association, and iteratively remove pairs from the association to yield the largest jNIS decrease. We continue doing this until the total jNIS of the association falls below the chi squared significance value. In practice, this operation is computationally expensive (it requires lots of iterations), so we cut this portion of the algorithm off if the number of iterations exceeds a max iteration parameter.&lt;/p&gt;
+
+&lt;h5 id=&quot;depth-first-search&quot;&gt;Depth First Search:&lt;/h5&gt;
+&lt;p&gt;With our minimal association, we begin adding points to the association to generate a valid association (one whose jNIS falls below the chi squared significance value) with the maximum number of pairs. If there are multiple associations with the same number of pairs, we choose the one with the lowest jNIS value.
+In practice, we implement this portion of the algorithm as a depth first search. A diagram of a sample search tree is shown below. As can be seen, each level of the tree refers to a scan point – as we go through the tree, we search through sets of boundary points that are associated with our scan points. Every level of the tree has an option for its scan point to be associated with no boundary points, in which case it becomes associated with a ”nAn” (the red circles in the below plot). At every point in the tree, we recalculate the jNIS of the proposed association thus far.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/tree_structure.png&quot; alt=&quot;tree_structure&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To improve the efficiency of the DFS search, we prune portions of the tree. jNIS is a monotonically increasing function – as we increase the number of pairs in our association, the jNIS will always increase. As such, if, while going down a branch of the tree, we see that our jNIS is higher than the chi squared significance value, we cut off the remainder of the branch.
+We further prune our search tree by maintaining the best jNIS and highest number of associations as class variables. As such, once again, if we see that our jNIS is higher than the best recorded jNIS, we cut off the search of that particular branch.
+Polar to Cartesian: The original paper recommends calculating jNIS based on polar coordinates; as such, the distance between points is measured as the distance between their r and θ values in a polar graph. However, we find that calculating jNIS in Cartesian coordinates yields far better associations, due to the fact that when the measured points are far away from the ego vehicle, differences that seem small in Polar space are actually large in Cartesian space. This is shown in the following figure.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jcbb_matches.png&quot; alt=&quot;jcbb_matches&quot; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;speed-improvements&quot;&gt;Speed Improvements:&lt;/h5&gt;
+&lt;p&gt;The JCBB is the slowest part of the system by far. As such, we experimented with a number of methods to increase its speed.
+In practice, the DFS is the most time-consuming part of JCBB, as the search space of the DFS (even with pruning) can increasing dramatically if the number of scan points or boundary points is high. As such, we limit the number of recursions through the DFS– if we hit this limit, we simply return the best association generated thus far.
+One of the most time-consuming parts of the DFS is the repeated recalculation of the jNIS. This recal- culation involves the inversion of the covariance matrix Sσ, which can get computationally expensive if Sσ is large.
+To help speed up this calculation, we take advantage of the fact that the jNIS can be calculated in triangular form. Instead of inverting Sσ each time we run through the DFS, we instead invert a covariance matrix S with all the boundary points and all the scan points at the very beginning of the algorithm (during the individual compatibility step). Then, we take its cholesky and store it as a class variable.
+Sσ can be approximated by taking individual rows and columns from the stored cholesky matrix. We can then solve for the jNIS via the following algorithm:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jnis.png&quot; alt=&quot;jnis&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While the resulting jNIS is not completely accurate, as the inverse of portions of the matrix S cannot be completely accurately determined by taking rows and columns from its cholesky, we find that the speed increase (around 10x) yielded by using this approximation exceeds the resulting loss of accuracy.
+To further improve the speed of JCBB, we wrote a version of it using Numba. We find that this sped up the implementation by around 1.5x ˆahowever, on certain frames, the algorithm can slow down quite a bit. Below is a plot of the loop run times taken from the two systems (the non-Numba JCBB, and the numba JCBB):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jcbb_runtime.png&quot; alt=&quot;jcbb_runtime&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lastly, we attempted to remove the JCBB entirely from the algorithm, by replacing it with a simple algorithm that minimizes the joint distance between two sets of points, and rejects pairings that are too far apart. In practice, we find that this implementation does not generate good associations, causing rapid divergence in the algorithm output.&lt;/p&gt;
+
+&lt;h3 id=&quot;transformation-estimation&quot;&gt;Transformation Estimation&lt;/h3&gt;
+&lt;p&gt;Fine association outputs a set of paired scan points and currently estimated boundary points. These pairs are used to update the hidden state of our tracks.
+To do this, we diverge from the paper, and use these pair points to estimate a transformation T between the estimated boundary points and scan points. Given that we know the timestep between observations, we can use T to create a fictious measurement of the track’s position, orientation, and velocity.
+A rigid body transformation is appropriate in this use-case, as we are designing this system for F1Tenth racing, where the only tracks we will likely encounter are other cars, walls, or cones, all relatively rigid objects. This assumption, however, may not be appropriate if this system were deployed on a vehicle that may observe non-rigid objects like humans or animals.
+As we are estimating a 2D rigid body transformation, T will simply be a 3x3 matrix that encodes the SE(2) transformation that best maps our scan points to our estimated boundary points. To best estimate this transformation, we can either estimate a least squares solution to calculate the transformation matrix between the entire set of pairs via the Kabsch algorithm, or as a cheaper alternative which performs better when the number of pairs is high, run RANSAC, and compute the transformation matrix for a minibatch of pairs (via Kabsch), keeping the transformation that generates the highest number of inliers on the entire set of pairs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/ransac.png&quot; alt=&quot;RANSAC&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once the transformation matrix is estimated, it can be used to approximate the fictious measurement by assuming that the transformation occurred as the track was moving with a constant linear and angular velocity.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/transformation_estimation.png&quot; alt=&quot;transformation_estimation&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;measurement-model&quot;&gt;Measurement Model&lt;/h3&gt;
+&lt;p&gt;Our “fictious” measurements can be thought of direct observations of the position, velocity, and orientation of tracked objects. These measurements, however, are quite noisy, as data association and transformation estimation both are inherently noisy processes. As such, our measurement model can be thought of as following the below equation, where R is a diagonal noise covariance matrix. In particular, the terms in R associated with velocity (angular and linear) have noise terms that are larger than those associated with position, as velocity estimation is likely to be more noisy that position estimation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/measurement_model.png&quot; alt=&quot;measurement_model&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A more robust treatment of the problem may involve looking at the correlation between velocity and position measurements, thus making placing off-diagonal elements in R. Experimentally, however, we find that treating R as a diagonal matrix generates sufficiently accurate tracking.&lt;/p&gt;</content><author><name></name></author><summary type="html">In this post we are going to have a close look at Joint Compatibility Branch and Bound (JCBB) as it's important part of the implementation of fine association of the paper Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang</summary></entry><entry><title type="html">Iterative closest point algorithm</title><link href="http://localhost:4000/2021/03/05/ICP.html" rel="alternate" type="text/html" title="Iterative closest point algorithm" /><published>2021-03-05T00:00:00+01:00</published><updated>2021-03-05T00:00:00+01:00</updated><id>http://localhost:4000/2021/03/05/ICP</id><content type="html" xml:base="http://localhost:4000/2021/03/05/ICP.html">&lt;h3 id=&quot;coarse-association-and-icp&quot;&gt;Coarse Association and ICP&lt;/h3&gt;
+&lt;p&gt;As already mentioned, the purpose of coarse association is for algorithm to get and idea which objects in the current LiDAR scan belongs to already existing objects and static background. It is based on modified version &lt;a href=&quot;https://ieeexplore.ieee.org/document/121791&quot;&gt;Iterative Closest Point Algorithm (ICP)&lt;/a&gt;, which we are going to describe more closely in this section.
+ICP is efficient algorithm for minimizing the difference between two clusters of points. In robotics it is mainly used for reconstructing 2D or 3D surfaces from different scans, to localize robots and achieve optimal path planning. In our work we use it to align two clusters within certain distance threshold and compute rough guess of the rigid transformation between target and source clusters. If both translation and rotation between these two clusters are lower than very small, fixed threshold within multiple iteration, we say the the target cluster is corresponding to the source cluster. ICP can be very slow if we have big initial misalignment between target and source, however with scanning frequency of out LiDAR 40Hz we are making sure that the distance and misalignment between two objects can’t be so high that ICP would fail to converge quickly, given our prediction model is correct as the ICP is run right after the prediction step. &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt; recommends to estimate association validity based on an ICP procedure that involves a nearest neighbor estimation. This simple nearest neighbor procedure means that for many shapes, all points in one object are associated with a single point in another. This yields bad transformation estimation. This can be seen on the following figure.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/icp_problem.png&quot; alt=&quot;icp_problem&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The problem using nearest neighbour in ICP, as it can generate 1-n association of points, which leads to bad transformation estimation between objects. In this case point 106 in the blue object is assigned as the closest point to every point in the green object, this leads to wrong calculation of transformation between these 2 objects.&lt;/p&gt;
+
+&lt;h4 id=&quot;changes-to-original-icp&quot;&gt;Changes to original ICP&lt;/h4&gt;
+&lt;p&gt;We propose a new estimation based on minimizing the total distance between a group of pairs, where we make sure that if we assign point from one object to point in another object, these points are not considered again as candidates for another point pair. Using this approach, we have seen significant improvement compared to the [5] not only in terms of precision, but speed of convergence of ICP as well.&lt;/p&gt;
+
+&lt;p&gt;With this version of ICP, we align the incoming lidar scan with clusters which already has been associated to static background. After that, we calculate a transformation between the corresponding points: if the transformation (either its translation magnitude or rotation magnitude) is too large, then the association is rejected and the cluster deemed to not be a good match with the candidate object.&lt;/p&gt;
+
+&lt;p&gt;The resulting transformation between found point pairs from target and source cluster is done by scikit-image library using Euclidean Transformation. The result of our associations computed by ICP on clusters from figure 4 is shown figures 5.
+&lt;img src=&quot;/assets/coarse_association_results.png&quot; alt=&quot;coarse_association_results&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">In this post we are going to have a close look at iterative closest point algorithm (ICP) as it's important part of the implementation of the paper Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang</summary></entry><entry><title type="html">Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al.</title><link href="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html" rel="alternate" type="text/html" title="Reading notes: Model-free detection and tracking of dynamic objects with 2D lidar, Wang et al." /><published>2021-02-12T00:00:00+01:00</published><updated>2021-02-12T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/12/Reading-Wang-et-al</id><content type="html" xml:base="http://localhost:4000/2021/02/12/Reading-Wang-et-al.html">&lt;p&gt;Mentioned in post before, the goal of the project is to implement algorithm mentioned in the paper from &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt;. The paper focuses on creating framework that estimates and determines what is static background as well as movement of dynamic objects.&lt;/p&gt;
+
+&lt;p&gt;The algorithm itself can be divided into several parts. Firstly the new laser and odometry measurements coming from car need to be processed. The process of laser measurement consists of first cleaning the states which is mentioned very briefly in the paper and from my understanding, this means that all points from the previous measurement which are no longer in the LiDAR’s field of view, should be dropped. The authors do not provide any reasoning for this but my guess is that it’s due the easing some of the memory requirement as we do not essentially need to work with anything which we can’t see. One of our own modification during cleaning the states is also drop all points in the memory which are beyond certain threshold. This threshold is chosen to maximise the distance to which we want to detect dynamic object, but at the same time minimise the memory requirement as the assumption at the moment is that the whole framework needs to run in real-time to be usable, which can be hard to achieve with too many “memorised” points. This process is followed by forward propagation, where the motion part of all dynamic tracks according to an appropriate motion model is predicted. This motion model is required, due the main objective of the algorithm, to not have any assumption about the object class (therefore it’s expected motion pattern). This steps is followed by association and update of dynamic and static object measurements finalised by merging tracks which correspond to the same class (static or specific dynamic track). The basic idea of the algorithm is outlined in following figure
+&lt;img src=&quot;/assets/wangetal.png&quot; alt=&quot;alg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As mentioned already the main benefit of this approach is that it allows us to track objects without having to know any informations about the object beforehand. Let’s describe each step more into the detail to understand more details about the algorithm.&lt;/p&gt;
+
+&lt;h3 id=&quot;sensor-pose-prediction-on-odometry-measurement&quot;&gt;Sensor pose prediction on odometry measurement&lt;/h3&gt;
+&lt;p&gt;Individual laser scan beams and a set of odometry measurements are used as input to the algorithm. Without odometry information, the system would not be able to distinguish static objects as all motion estimates are relative to the LiDAR sensor. Odometry information provides us with an estimate of speed v of non-holonomic vehicle, mean angle θ of front wheels.&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-object-motion-prediction&quot;&gt;Dynamic object motion prediction&lt;/h3&gt;
+&lt;p&gt;When new measurements are received, currently existing dynamic tracks are predicted forward using generic motion prediction model before they are updated with the newly received scans. We assume a constant velocity model, because we do not know any information about the object and thus it’s motion pattern. This is disadvantage of working with model-free assumption. We also model not only constant linear velocity component, but angular velocity component as well. This should make motion prediction model able to capture a full range of 2D rigid body motions.&lt;/p&gt;
+
+&lt;h3 id=&quot;hierarchical-data-association&quot;&gt;Hierarchical data association&lt;/h3&gt;
+&lt;p&gt;It is not possible to directly observe all state variables in the joint state and for those which we can directly observe, more specifically boundary points belonging to static or dynamic object, it is difficult to tell which one do they belong to or if it is a new boundary point, which haven’t been seen before. Each time we get new set of LiDAR scan, we have to determine following:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;If new measurement is a part static object:
+    &lt;ul&gt;
+      &lt;li&gt;Is it already existing boundary point?&lt;/li&gt;
+      &lt;li&gt;Is it a new boundary point?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;If new measurement is a part of existing dynamic object:
+    &lt;ul&gt;
+      &lt;li&gt;Is it already existing boundary point on the object? If that’s the case it also needs to be determined which specific object this measurement belongs to.&lt;/li&gt;
+      &lt;li&gt;Is it a new boundary point on the object?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Is new measurement part of new, yet unassociated object?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In order to solve data association problem we have to associate the measurements on low and high level. Meaning, on high level we want to firstly create rough associations on coarse scale, where we divide all newly observed measurements into clusters and find out for each cluster if it belongs to already existing static background or dynamic object. If neither is the case than we assign it as a new, yet unobserved object. On low level we create fine associations, where the each measurements within each cluster is either associated to yet exiting boundary point or used to initialized a new point.&lt;/p&gt;
+
+&lt;h4 id=&quot;coarse-level-data-association&quot;&gt;Coarse-level data association&lt;/h4&gt;
+&lt;p&gt;In the previous section we discussed that in order to decide if the new set of measurements belongs to boundaries of already existing objects or if the measurements are new objects, we need to break down the problem into coarse and fine level association. We mentioned as well that in coarse association we want to divide incoming measurements into clusters. More specifically, we divide incoming laser scan data into set of clusters C = {C&lt;sub&gt;1&lt;/sub&gt;, C&lt;sub&gt;2&lt;/sub&gt;, …, C&lt;sub&gt;|C|&lt;/sub&gt;}.&lt;/p&gt;
+
+&lt;p&gt;Using ICP, we align the incoming lidar scan with clusters which already has been associated to static background. After that, we calculate a transformation between the corresponding points: if the transformation (either its translation magnitude or rotation magnitude) is too large, then the association is rejected and the cluster deemed to not be a good match with the candidate object. Associated clusters that are assigned static background are removed from the set of clusters C. Then, we repeat the same procedure on the remaining clusters in C, however this time we are trying to match incoming clusters with already known dynamic objects using ICP.&lt;/p&gt;
+
+&lt;p&gt;The rough coarse association algorithm is visualised in pseudocode bellow.
+&lt;img src=&quot;/assets/coarse_association_alg.png&quot; alt=&quot;coarse_association_alg&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;fine-level-data-association&quot;&gt;Fine-level data association&lt;/h4&gt;
+&lt;p&gt;While coarse-level data association helps us identify which clusters of LiDAR points are associated with which objects (and which ones are possibly of new objects), in order to update the state of our currently tracked objects, we need to perform point-to-point matching. Successfully performing this matching is critical to the entire system, since we use these matches to estimate a transformation that is used to update the state of our tracked objects.&lt;/p&gt;
+
+&lt;h3 id=&quot;track-initialization-and-merging&quot;&gt;Track initialization and merging&lt;/h3&gt;
+&lt;p&gt;During each LiDAR update iteration, we check to determine whether or not any currently tracked object is either part of the static background, or part of another dynamic object. In this, we diverge from original paper and check all objects, rather than just the ones newly initialized. We find experimentally that this allows the algorithm to correct previous mistakes by merging tracks that were previously, and mistakenly, not merged.
+To perform the merging step, we calculate the Mahalanobis distance between each track’s state and the merging target’s state, taking into account the track’s covariance. We first test to see whether or not each track should be merged with the static background by comparing the track’s velocity with a proposed value of 0 (static objects have a velocity of 0). To determine whether or not a track is part of the static background, we compute the Mahalanobis distance between the track’s velocity probability distribution and 0, and compare the distance against a chi squared significance value. If the distance is lower than the chi squared value, then we merge the track with the static background.
+The remaining tracks are then tested against other dynamic tracks to see whether or not they should be merged. The merging procedure works here nearly the same as the procedure for the static background: rather than comparing the track’s velocity, however, we compare the track’s position and velocity against the proposed merge target’s. If the calculated Mahalanobis distance between these two distributions falls below the chi squared significance value, then these tracks are merged.&lt;/p&gt;</content><author><name></name></author><summary type="html">Notes from paper for Model-Free Detection and Tracking of Dynamic Objects with 2D LiDAR by Dominic Zeng Wang, Ingmar Posner and Paul Newman.</summary></entry><entry><title type="html">F1Tenth Project - Object Tracking</title><link href="http://localhost:4000/2021/02/10/F1Tenth_Project.html" rel="alternate" type="text/html" title="F1Tenth Project - Object Tracking" /><published>2021-02-10T00:00:00+01:00</published><updated>2021-02-10T00:00:00+01:00</updated><id>http://localhost:4000/2021/02/10/F1Tenth_Project</id><content type="html" xml:base="http://localhost:4000/2021/02/10/F1Tenth_Project.html">&lt;p&gt;The project I’m going to be working on is object tracking using LiDAR initially. The algorithm is based on the paper &lt;a href=&quot;https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf&quot;&gt;Wang et. al&lt;/a&gt; where the main goal is to implement solution for detection and tracking of moving object using 2D laser scanner.&lt;/p&gt;
+
+&lt;h2 id=&quot;description-of-tasks&quot;&gt;Description of tasks&lt;/h2&gt;
+&lt;p&gt;Robust object tracking and localization is a critical need for autonomous cars, allowing for safe,
+intelligent navigation and planning. Cars must be able to perform this task rapidly and accurately,
+requiring algorithms with high output frequencies and low false-negative and false positive rates.
+While much work has been done on object tracking and localization with full-scale cars, the F1Tenth
+Object Tracking project seeks to implement tracking on the F1Tenth autonomous race
+car system.&lt;/p&gt;
+
+&lt;p&gt;Initially, this project will build on the work of Dominic Zeng Wang, who proposed a
+LiDAR-based object tracking system that uses the knowledge of the static local background to help identifying dynamic
+objects from static ones in a principled and straightforward way. This project will
+implement and test his proposed system on the F1Tenth vehicle, making use of its onboard 2D
+LiDAR. Later, I will combine LiDAR-based tracking with visual tracking, in order to increase
+the robustness of the system by increasing the signal-noise ratio from the vehicle’s sensors.
+Given the restrictions posed by the pandemic, this project will heavily leverage virtual
+environments like F1Tenth team’s proprietary gym environment. If possible, we will
+attempt to implement the system on the actual F1Tenth car for further real-life testing and
+validation.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-by-step-to-dos&quot;&gt;Step by Step to Dos&lt;/h2&gt;
+&lt;h3 id=&quot;phase-1&quot;&gt;Phase 1:&lt;/h3&gt;
+&lt;p&gt;Get Familiar with F1Tenth – January 25 - February 3&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.&lt;/li&gt;
+  &lt;li&gt;Learn about the ROS framework.&lt;/li&gt;
+  &lt;li&gt;Learn about F1Tenth fundamentals with the labs linked here.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-2-get-familiar-with-fundamentals&quot;&gt;Phase 2: Get Familiar with Fundamentals&lt;/h3&gt;
+&lt;h5 id=&quot;february-3--february-14&quot;&gt;February 3 – February 14&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;Carefully study Wang paper, along with related works.&lt;/li&gt;
+  &lt;li&gt;Learn how to use F1Tenth Gym environment.&lt;/li&gt;
+  &lt;li&gt;Get familiar with fundamentals of Bayes filtering.&lt;/li&gt;
+  &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-3-implementation&quot;&gt;Phase 3: Implementation&lt;/h3&gt;
+&lt;h4 id=&quot;february-14--march-14&quot;&gt;February 14 – March 14&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;Implement virtual sensing system specified in Wang paper on F1Tenth.&lt;/li&gt;
+  &lt;li&gt;Implement association algorithms for LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.&lt;/li&gt;
+  &lt;li&gt;Identify areas where visual data can increase robustness of LiDAR system.&lt;/li&gt;
+  &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-4-expansion&quot;&gt;Phase 4: Expansion&lt;/h3&gt;
+&lt;h5 id=&quot;march-14--april-11&quot;&gt;March 14 – April 11&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;Develop pipeline to validate LiDAR tracking hypothesis with camera data, and camera
+hypothesis with LiDAR data&lt;/li&gt;
+  &lt;li&gt;Write progress report / documentation as needed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;phase-3-wrapping-up-phase&quot;&gt;Phase 3: Wrapping up Phase&lt;/h3&gt;
+&lt;h5 id=&quot;april-11--may-10&quot;&gt;April 11 – May 10&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;Continue working on the previous goals that have not been accomplished.&lt;/li&gt;
+  &lt;li&gt;Documentation for future development (user guide / issues / achievements).&lt;/li&gt;
+  &lt;li&gt;Optional: Demonstrate to potential business partners / investors.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Chose a project to work on in F1Tenth which is a object tracking on the F1Tenth autonomous race- car system and implement and test the proposed system on the F1Tenth vehicle, making use of its onboard 2D LiDAR.</summary></entry><entry><title type="html">Pure Pursuit</title><link href="http://localhost:4000/2020/11/19/pure-pursuit.html" rel="alternate" type="text/html" title="Pure Pursuit" /><published>2020-11-19T00:00:00+01:00</published><updated>2020-11-19T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/19/pure-pursuit</id><content type="html" xml:base="http://localhost:4000/2020/11/19/pure-pursuit.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Very effective algorithm all the way from 1992 is based on very simple idea of following a waypoint. It is tracking algorithm with assumption that we already know where the set of waypoints is known both in global and local coordinate. This can be done by cartographer SLAM algorithm for example.&lt;/p&gt;
+
+&lt;h3 id=&quot;geometric-representation&quot;&gt;Geometric representation&lt;/h3&gt;
+&lt;p&gt;Starting from car’s local frame (base_link), we need to define so called Lookahead distance L, which is simply radius around the base_link where we are looking for waypoint. Because F1Tenth is nonholonomic robot, to get to the waypoint we need to turn along some arc, it is not possible to move to the waypoint in straight direction. However there can be indefinitely many arcs define to a single point as sown on the figure bellow (ref &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;f1tenth Module D, lecture 13&lt;/a&gt;).
+&lt;img src=&quot;/assets/pure_pursuit_geometric.png&quot; alt=&quot;pp&quot; /&gt;
+To solve this, we need to constrain the centre of the arc to be on y axes of the car. Using this we can start solving the equations bellow using basic trigonometry. Because we constrained the centre on y axis as radius of the arc, r can be computed as r = |y| + d. We also have right angle triangle therefore d&lt;sup&gt;2&lt;/sup&gt; + x&lt;sup&gt;2&lt;/sup&gt; = r&lt;sup&gt;2&lt;/sup&gt;. Substituting d as the first equation r = |y| + d we get (r - |y|)&lt;sup&gt;2&lt;/sup&gt; + x&lt;sup&gt;2&lt;/sup&gt; = r&lt;sup&gt;2&lt;/sup&gt; and solving this equation we get r&lt;sup&gt;2&lt;/sup&gt; + L&lt;sup&gt;2&lt;/sup&gt; - 2r|y| = r&lt;sup&gt;2&lt;/sup&gt;. The L is again from simple Pythagorean theorem because we know x&lt;sup&gt;2&lt;/sup&gt; and y&lt;sup&gt;2&lt;/sup&gt; in the triangle we can express L as L&lt;sup&gt;2&lt;/sup&gt; = x&lt;sup&gt;2&lt;/sup&gt; + y&lt;sup&gt;2&lt;/sup&gt; shown on the picture bellow (ref &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;f1tenth Module D, lecture 13&lt;/a&gt;)
+&lt;img src=&quot;/assets/pp_geometric2.png&quot; alt=&quot;pp2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Solving r&lt;sup&gt;2&lt;/sup&gt; + L&lt;sup&gt;2&lt;/sup&gt; - 2ry = r&lt;sup&gt;2&lt;/sup&gt; for r we have r = L&lt;sup&gt;2&lt;/sup&gt;/2y. Since we know the radius, we can compute the curvature of arc as inverse of radius γ = 1/r = 2y/L&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;picking-a-goal-point&quot;&gt;Picking a goal point&lt;/h3&gt;
+&lt;p&gt;There is many choices of how to pick a waypoint in the lookahead radius L, the simplest one is probably either choice the farthest waypoint the the L circle or closest outside of circle. Another example could be get both the closest point outside of circle and farthest point inside of circle, connect them and set a waypoint to the intersection of this connection and circle of lookahead distance. Visualised on figure bellow (ref &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;f1tenth Module D, lecture 13&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pp_waypoint.png&quot; alt=&quot;waypoint&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;tuning&quot;&gt;Tuning&lt;/h3&gt;
+&lt;p&gt;The main thing we need to is the lookahead distance L. Smaller L acts same as higher Kp in PID control where the car is gonna be more aggressive and do higher curvatures and oscillations, with higher L is the opposite, the trajectory will be smoother, but the tracking error will be higher.&lt;/p&gt;
+
+&lt;h3 id=&quot;pipeline&quot;&gt;Pipeline&lt;/h3&gt;
+&lt;p&gt;(ref &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;f1tenth Module D, lecture 13&lt;/a&gt;)&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Create a map using Cartographer&lt;/li&gt;
+  &lt;li&gt;Create a set of waypoints using global planner (e.g. by driving by teleop)&lt;/li&gt;
+  &lt;li&gt;Pick waypoints to track at each frame&lt;/li&gt;
+  &lt;li&gt;Set steering angle to track current waypoint&lt;/li&gt;
+  &lt;li&gt;Update the waypoint on the go&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The original paper can be found at &lt;a href=&quot;https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf&quot;&gt;Pure Pursuit implementation&lt;/a&gt;, it’s short and well worth reading for understanding this algorithm.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab6-assignment&quot;&gt;F1Tenth Lab6 assignment&lt;/h2&gt;
+
+&lt;h3 id=&quot;encountered-difficulties&quot;&gt;Encountered difficulties&lt;/h3&gt;
+&lt;p&gt;During this assignment for the first time I experienced some longer sessions on front of monitor to resolve some of the issues I had, as well as had problems with my programmings skills themselves.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Cartographer:
+I was able to make cartographer work locally as shown on examples on &lt;a href=&quot;https://google-cartographer-ros.readthedocs.io/en/latest/demos.html&quot;&gt;https://google-cartographer-ros.readthedocs.io/en/latest/demos.html&lt;/a&gt;, after that I moved the files as mentioned in the &lt;a href=&quot;https://youtu.be/L51S2RVu-zc?t=4403&quot;&gt;pure_pursuit lecture video&lt;/a&gt;, I had to change in file F110.xarco line 194 from
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &amp;lt;mesh &lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;package://racecar_description/meshes/hokuyo.dae&quot;&lt;/span&gt;/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;to&lt;/p&gt;
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &amp;lt;mesh &lt;span class=&quot;nv&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;package://f110_description/meshes/hokuyo.dae&quot;&lt;/span&gt;/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;From this I suppose that this should be only related to the real car, as I’m not able to make the model of the car work in the simulation of RVIZ, where RVIZ have problem transforming some parameters related to the car. So instead of running cartographer in unknown map I used one of the map that was saved in f1tenth_simulator package already and run waylogger in this map.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Switching from Python 3 to Python2.7:
+In order to run waylogger I needed to install package with Particle Filter. For this I used &lt;a href=&quot;https://github.com/mit-racecar/particle_filter&quot;&gt;MIT RACE CAR ROS PACKAGE&lt;/a&gt; as I didn’t find this package anywhere in the f110. Up until this point I was using python3 without any problems in the assignments so far however this particle_filter and waylogger package both were using python2.7 so I decided to switch my ROS melodic to python2. However setting .bashrc file to python 2.7 didn’t switch my ROS system to python2 and was still using python3. I spent long hours trying to figure this out because I think as I was using anaconda with python3 there were some settings which prevented the any system in my ubuntu from using python2 and even completely reinstalling whole ROS melodic didn’t and removing anaconda reference from .bashrc file didn’t work. I had to uninstall the anaconda completely as well as uninstall and install back ROS.&lt;/li&gt;
+  &lt;li&gt;Waypoint Logger:
+After reinstalling my whole ROS the waylogger was finally working, however it needed running particle_filter topic otherwise it didn’t log anything. In the above mentioned particle filter for MIT car I had to change &lt;a href=&quot;https://github.com/mit-racecar/particle_filter/blob/master/launch/localize.launch&quot;&gt;localize.launch&lt;/a&gt;, concretely comment line 30
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; 	&amp;lt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; &amp;lt;include &lt;span class=&quot;nv&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;find particle_filter&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/launch/map_server.launch&quot;&lt;/span&gt;/&amp;gt; &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;as I was using my own map server for the map from f1tenth_simulator package
+and in line 33 use only /odom topic&lt;/p&gt;
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; 	&amp;lt;arg &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;odometry_topic&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/odom&quot;&lt;/span&gt;/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Launching waylogger and particle_filter:
+Strangely enough to get correct coordinates in logfile the particle_filter node needs to be launched as first, before the map and rviz are launched, otherwise the resulting coordinate system is different than the map launched.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;After all of this above I was able to generate proper logfile with right coordinates.&lt;/p&gt;
+
+&lt;p&gt;Probably most difficulties during the programming of assignment was to correctly transform the global and car correctly otherwise the rest was very straight forward using the formulas from lecture. I expected to have more problems with the visualization, however the ROS Marker tutorial is easy to follow and the visualization was also quickly implement.&lt;/p&gt;
+
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/sAk8qmBD_LI&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/aFKKos5si0Y&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">First practical experience with Cartographer SLAM package and implementation of trajectory planner called the Pure Pursuit algorithm.</summary></entry><entry><title type="html">Scan matching</title><link href="http://localhost:4000/2020/11/14/scan_matching.html" rel="alternate" type="text/html" title="Scan matching" /><published>2020-11-14T00:00:00+01:00</published><updated>2020-11-14T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/14/scan_matching</id><content type="html" xml:base="http://localhost:4000/2020/11/14/scan_matching.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Last post was about SLAM, where I introduced approach to localization, here we are going to look at approach to lacalization using sets of range measurements collected over across time. Going back, localization is state of robot with respect to the environment it find self in. One approach to localization is to use odometry, basically estimating the current pose of the robot from knowing a start position and integration of control and motion measurements. However there is accumulation of very small errors in the position of the robot which becomes issue over some extended period time and the uncertainty of the pose increases. One way to solve this is to use range sensor measurements to localize, also known as scan matching.&lt;/p&gt;
+
+&lt;h2 id=&quot;setting-a-problem&quot;&gt;Setting a Problem&lt;/h2&gt;
+&lt;p&gt;Having a scan from robot of measurements of distances to some landmarks A,B,C in some environment, we call this measurements at t=0 distances in local frame of reference. When we move in unknown direction at time t=1, the distances are obviously going to change. We can measure these distances at time t=1 and we want find transform R which transforms the two set of points to be the closest and this transform represents how much the robot moved. This is visualised on the picture bellow for better intuition ( ref &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;module C, lecture 9 F1Tenth website&lt;/a&gt;)
+&lt;img src=&quot;/assets/problem_scan_matching.png&quot; alt=&quot;problem_scan_matching&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However only from scan readings alone, we can’t know the landmarks A,B,C exactly, therefore we have to assume that the closest points correspond to each other(correspondence match) and than iteratively find the best transform R.&lt;/p&gt;
+
+&lt;h3 id=&quot;iterative-search-for-the-best-transform&quot;&gt;Iterative search for the best transform&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;Make a initial guess of R&lt;/li&gt;
+  &lt;li&gt;For each point in new scan (t=k+1) find closest point in previous set (t=k) -&amp;gt; correspondence search&lt;/li&gt;
+  &lt;li&gt;Make another better guess of R&lt;/li&gt;
+  &lt;li&gt;Set next guess to the current guess (repeat 2-4 until converges)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;For this algorithm (Iterative closest point or ICP) to converge, the choice of initial guess is important. Also ICP can be slow. For this reason PL-ICP was introduced (Point-to-Line Iterative Closest Point).&lt;/p&gt;
+
+&lt;h3 id=&quot;point-to-line-iterative-closest-point&quot;&gt;Point-to-Line Iterative Closest Point&lt;/h3&gt;
+&lt;p&gt;Instead of looking for point to point metric, PL-ICP is looking for point-to-line metric. Point-to-point measures the distances the distance to the nearest point on the segment, while point-to-line measures distance to nearest line containing the segment. Point-to-Line converges faster because the level sets the approximate surface better and therefore results in more accurate approximation or the error. This is achieved by the contours of the level being line and not concentric and centred around the projected point and thus giving algorithm quadratic convergence instead of linear convergence.&lt;/p&gt;
+
+&lt;h4 id=&quot;pl-icl-algorithm&quot;&gt;PL-ICL algorithm&lt;/h4&gt;
+&lt;p&gt;at t=k&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;use previous guess q_k, transform coordinates of current scan into frame of previous scan&lt;/li&gt;
+  &lt;li&gt;For each point, find closest line segment (correspondence search)&lt;/li&gt;
+  &lt;li&gt;Update transform
+  a. formulate point-to-line-error objective
+  b. find transform q&lt;sub&gt;k+1&lt;/sub&gt; that minimizes objective&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;PL-ICL also uses smart “tricks” in correspondence match search. It does local search with early termination and jump table for each scan point.&lt;/p&gt;
+
+&lt;p&gt;TODO DO MORE RESEARCH IN PL-ICL AND DESCRIBE BETTER POSSIBLY AFTER ASSIGNMENT.&lt;/p&gt;
+
+&lt;p&gt;To understand this algorithm better I recommend read trough original paper &lt;a href=&quot;https://censi.science/pub/research/2008-icra-plicp.pdf&quot;&gt;2008 ICRA-PLICP&lt;/a&gt; by Andrea Censi.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab5-assignment&quot;&gt;F1Tenth Lab5 assignment&lt;/h2&gt;
+&lt;p&gt;My final package as required in the task is available bellow.&lt;/p&gt;
+
+&lt;p&gt;TODO&lt;/p&gt;
+
+&lt;p&gt;pdf with theoretical part and txt with video links of the assignment included in the zipfile.&lt;/p&gt;
+
+&lt;p&gt;TODO VIDEO&lt;/p&gt;</content><author><name></name></author><summary type="html">Deeper dive into localization with scan matching.</summary></entry><entry><title type="html">Simultaneous Localization and Mapping - SLAM</title><link href="http://localhost:4000/2020/11/13/slam.html" rel="alternate" type="text/html" title="Simultaneous Localization and Mapping - SLAM" /><published>2020-11-13T00:00:00+01:00</published><updated>2020-11-13T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/13/slam</id><content type="html" xml:base="http://localhost:4000/2020/11/13/slam.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Moving away from reactive methods to different approach to autonomy and that’s utilising mapping information around the car. This method is called Simultaneous Localization and Mapping or for short SLAM. I’m going to describe some building blocks for SLAM such as Occupancy grid maps and also describe some of the basic SLAM algorithms out there and how they work. Localization is problem if we are given the map of environment we should figure out where we are located in the map. Mapping problem is complimentary to localization, knowing the pose of the car we need to build map of environment using the sensors available to us. SLAM is combination of these two to use these data to estimate trajectory of the robot and build the map at the same time. SLAM is way more beneficial over algorithms such as wallfollowing or follow the map because it allow us to plan longterm path of the robot and not only reacting to the momentary information.&lt;/p&gt;
+
+&lt;h2 id=&quot;occupancy-grid-map&quot;&gt;Occupancy Grid Map&lt;/h2&gt;
+&lt;p&gt;Occupancy can be though as binary random variable which can take 2 values: Free, Occupied.&lt;/p&gt;
+
+&lt;p&gt;Formal definition is:
+m&lt;sub&gt;x,y&lt;/sub&gt;:{free, occupied} -&amp;gt; {0, 1}&lt;/p&gt;
+
+&lt;p&gt;Grid map is sequence of cell where each cell has occupancy variable, either free or occupied.&lt;/p&gt;
+
+&lt;h4 id=&quot;occupancy-grid-mapping&quot;&gt;Occupancy grid mapping:&lt;/h4&gt;
+&lt;p&gt;We want to assign a probability to every cell of the grid if the cell is free or occupied based on the robot’s data. To do this we use Bayesian filtering. Where we look at prior and recursively update the status of probability for each cell. To do so we need to use Bayes rule. We also need information from the measurements of the robot to tell us where is the obstacle located in the frame of reference of the robot. So the measurements for each cell can be reported either free or occupied, so we can think of this as a likelihood of observing certain measurement given what we know about the cells. To describe this formally:&lt;/p&gt;
+
+&lt;p&gt;Measurement model:
+p(z|m&lt;sub&gt;x,y&lt;/sub&gt;) where z~{0,1}
+probability of z(measurement) conditioned upon what we know about the value of m(occupancy random variable) of the occupancy grid.&lt;/p&gt;
+
+&lt;p&gt;we can have these different measurement models only:
+p(z = 1|m&lt;sub&gt;x,y&lt;/sub&gt; = 1)-&amp;gt; TRUE occupied measurement,
+p(z = 0|m&lt;sub&gt;x,y&lt;/sub&gt; = 1)-&amp;gt; FALSE free measurement,
+p(z = 1|m&lt;sub&gt;x,y&lt;/sub&gt; = 0)  -&amp;gt; FALSE occupied measurement,
+p(z = 0|m&lt;sub&gt;x,y&lt;/sub&gt; = 0)  -&amp;gt; TRUE free measurement.&lt;/p&gt;
+
+&lt;p&gt;So taking all of these together into bayes rule:
+&lt;img src=&quot;/assets/bayes.png&quot; alt=&quot;bayes&quot; /&gt;
+Given a occupancy grid (Prior map), we measure the data from the robot and we have a probability associated with observing 0 or 1 conditioned on state itself (measurement model) and we use this to update our knowledge of the occupancy of the grid cell or computing the posterior map ( the probability of cell being occupied of free conditioned upon what the measurement has reported ). This can be done by applying Bayes rule as shown in figure above (ref &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf&quot;&gt;UV SLAM lecture&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;But working with these probabilities can become mathematically inconvenient. Instead it is better to work with Odds.
+&lt;img src=&quot;/assets/odd1.png&quot; alt=&quot;odd1&quot; /&gt;
+So given the formula above ( ref &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf&quot;&gt;UV SLAM lecture&lt;/a&gt;) we can see that odd is probability of X happening divided by probability of X not happening so basically ratio of probabilities.
+More specifically the Odd that a certain cell is occupied given z is a probability that the cell is occupied given z divided by probability that cell is not occupied given z as shown in the formula bellow ( ref &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf&quot;&gt;UV SLAM lecture&lt;/a&gt;).
+&lt;img src=&quot;/assets/odd2.png&quot; alt=&quot;odd2&quot; /&gt;
+By applying Bayes rule to the numerator:
+&lt;img src=&quot;/assets/bayes_odd.png&quot; alt=&quot;bayes_odd&quot; /&gt;
+As well as by applying Bayes rule to the denominator:
+&lt;img src=&quot;/assets/bayes_odd2.png&quot; alt=&quot;bayes_odd2&quot; /&gt;
+The evidence term p(z) can be eliminated. And on the resulting equation the log can be applied resulting in log in sum of two odds which results in the new log odd being equal to the previous log odd + log odd of the measurement which is easier to compute and which denotes the same thing as non-log version. In formulas shown below ( ref &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf&quot;&gt;UV SLAM lecture&lt;/a&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/odd3.png&quot; alt=&quot;odd3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So the measurement model in the log odd version will become:
+&lt;img src=&quot;/assets/measurementodd.png&quot; alt=&quot;measurementodd&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Do not forget that every grid cell is updated at each point in time. Also we haven’t explore where is the robot in the map. As well as the description above is considering only one single lidar beam scan. Let’s explore this further. If you haven’t check the previous post on ROS transformations, because it is needed to understand the next section.&lt;/p&gt;
+
+&lt;h3 id=&quot;range-measurement-on-the-grid&quot;&gt;Range measurement on the Grid&lt;/h3&gt;
+&lt;p&gt;Having map frame and base_link frame, we assume that we get measurement along primary x1 direction d distance from the abse link of the robot.At any given time we know the pose of the robot. We can use this information to find out that the reported occupied cell is d distance away from the base link of the robot and we can figure out coordinates of this point and express it in the global frame of reference using rigid body transformation equation shown bellow described in the previous post.
+&lt;img src=&quot;/assets/tf.png&quot; alt=&quot;tf&quot; /&gt;
+All this was done in continuous space. To convert it to grid space we have to know the resolution of the grid r and than we can  simply put the point in grid i where i = ceil(x/r), of course because we have x&lt;sub&gt;1&lt;/sub&gt; and x&lt;sub&gt;2&lt;/sub&gt; we have to calculate both i&lt;sub&gt;1&lt;/sub&gt; and i&lt;sub&gt;2&lt;/sub&gt;. Of course the robot is giving us a lot of measurements at any given time, not only one. In this case we have to also account for α&lt;sub&gt;k&lt;/sub&gt;, which stands for single lidar beam of the robot. All of what I described is much better shown on the image bellow ( ref &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/SLAM.pdf&quot;&gt;UV SLAM lecture&lt;/a&gt;).
+&lt;img src=&quot;/assets/tf2.png&quot; alt=&quot;tf2&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;google-cartographer&quot;&gt;Google cartographer&lt;/h2&gt;
+&lt;p&gt;This algorithm is very effective in the part of SLAM called loop closure, it reduce computational requirements of loop closure.&lt;/p&gt;
+
+&lt;h3 id=&quot;loop-closure&quot;&gt;Loop closure&lt;/h3&gt;
+&lt;p&gt;We know that there are errors accumulating over time as the robot is updating the grid map measurement so it can happen that the map can start shifting from the actual word. If I revisit a place on map which I have visited before we can correct all this accumulated error. Basically we can overlap regions of map which are found to be the same based on this point of map where we know we have already been. Here is very nice video of showing this in action:&lt;/p&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;443&quot; src=&quot;https://www.youtube.com/embed/-EQAJOoRqEQ&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Moreover google cartographer is divided into two sub-system.&lt;/p&gt;
+
+&lt;h4 id=&quot;local-slam&quot;&gt;Local SLAM&lt;/h4&gt;
+&lt;p&gt;The job of local SLAM is generate good submaps. Submap is defined by how much data the robot received within a threshold. Submap must be small enough so the uncertainty of localization  is bellow the resolution of occupancy grid, so they are locally correct. However at the same time they have to be large enough to be different enough for the loop closure work correctly.&lt;/p&gt;
+
+&lt;h4 id=&quot;global-slam&quot;&gt;Global SLAM&lt;/h4&gt;
+&lt;p&gt;The job of local SLAM is to tie submaps consistently together as well as loop closure.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://google-cartographer.readthedocs.io/en/latest/&quot;&gt;The Google cartogpraher documentation&lt;/a&gt; is great resource to find out more details about this very important and used algorithm in ROS and whole robotic.&lt;/p&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+&lt;p&gt;SLAM is probably one of the most important concept in robotics, so it is definitely worth of post by itself. I described what is occupancy grid map, how to update it cells by Bayesian filtering, log odds to update the probability of cell being free or occupied and briefly looked at Google cartographer. There is no assignment in the post as there is more I need to study before I start on the assignment on scan matching in lab5.&lt;/p&gt;</content><author><name></name></author><summary type="html">Looking into algorithm which should solve the chicken-and-egg problem of an autonomous agent localising itself in an unknown environment while mapping this environment at the same time.</summary></entry><entry><title type="html">Follow the Gap</title><link href="http://localhost:4000/2020/11/10/follow_the_gap.html" rel="alternate" type="text/html" title="Follow the Gap" /><published>2020-11-10T00:00:00+01:00</published><updated>2020-11-10T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/10/follow_the_gap</id><content type="html" xml:base="http://localhost:4000/2020/11/10/follow_the_gap.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Let’s describe alternative approach to wallfollowing, which is just following left or right hand-side boundary of track. The Follow the Gap algorithm instead tracing the boundary is navigating trough the track without colliding to any static obstacle and finding the best path to avoid these obstacles. The wallfollowing is not completely able to solve all challenges coming with having the obstacles in the track, which are different shape. Follow the gap is simple algorithm which doesn’t need a lot fo information about the track before-hand, but using the data acquired right now, known as reactive method. It is able to avoid any obstacles without any prior knowledge about the map.&lt;/p&gt;
+
+&lt;h2 id=&quot;follow-the-gap&quot;&gt;Follow the Gap&lt;/h2&gt;
+&lt;h4 id=&quot;reactive-navigation&quot;&gt;Reactive navigation&lt;/h4&gt;
+&lt;p&gt;Reactive navigation is using immediate sensory input to decide the driving steering and velocity commands. This works for statics and in some cases also dynamic obstacles.&lt;/p&gt;
+
+&lt;h3 id=&quot;gap-finding-intuition&quot;&gt;Gap finding intuition&lt;/h3&gt;
+&lt;p&gt;As the name of algorithm suggests, the car should be able to find a widest gap in the presence of immediate obstacles and drive into this gap to avoid any immediate collision. Let’s say my lidar is reporting following array of distances [0.2, 6.2, 6.0, 7.0, inf, 3.0, inf, 3.0, inf, 8.0, 1.0, 3.0] you could simply choose the farthest distance obstacle and drive towards it, however this may not be possible as the car would have to pass between too obstacles which range between them is not enough for car to fit in ( there is enough room in between than - this can be computed by computing length of the arc given the angular measurements), or the angle between these obstacles is not physically possible for car to turn - as in my array is case of 7th element. To approach this problem let’s define what a gap is:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The gap is series of at least n consecutive hits that pass some distance threshold t.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If we would apply this definition to the array given above with n = 3 and t = 5.0 we would get only one gap: [6.2, 6.0, 7.0, inf]. So we would steer towards the center of this gap.&lt;/p&gt;
+
+&lt;p&gt;Problems with this approach is that purely following the deepest gap allows the car pass between the obstacles as the car might not fit in between them. To address this challenge we can use approach use in all of robotics.&lt;/p&gt;
+
+&lt;h4 id=&quot;point-robot-approach&quot;&gt;Point Robot Approach&lt;/h4&gt;
+&lt;p&gt;We can assume that the robot is circular. With this assumption we can inflate the  the obstacles with the radius of robot. So if I want the robot go between the obstacles I can always represent the robot as point object and still assure that the robot will fit between the two obstacles as I’m clearing the obstacles by at least the radius of robot itself. This is better dhown on figure bellow (source: &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf&quot;&gt;UV lecture follow the gap&lt;/a&gt;):
+&lt;img src=&quot;/assets/PRA.png&quot; alt=&quot;PRA&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;disparity&quot;&gt;Disparity&lt;/h4&gt;
+&lt;p&gt;Looking trough the lidar readings for consecutive readings that differ by an amount over some threshold, than we mask these readings  to appear closer to the lidar. The reminding points which are farther than the mask are the actual points where the car can fit and drive trough. This concept is nicely visualised on the following figure from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf&quot;&gt;UV lecture follow the gap&lt;/a&gt;
+&lt;img src=&quot;/assets/ftg1.png&quot; height=&quot;500&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;follow-the-gap-algorithm&quot;&gt;Follow the gap algorithm&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;step 1:
+Find the nearest LIDAR point and pit safety bubble around it of radius rb&lt;/li&gt;
+  &lt;li&gt;step 2:
+Set all points inside bubble to distance 0. This can be achieved by computing the length of the arc and than determine which points falls into the radius of buble rb. All of these points are than set to 0.&lt;/li&gt;
+  &lt;li&gt;step 3:
+Find maximum sequence of consecutive non-zeros among the free-space points. This is the maximum gap where the car can drive.&lt;/li&gt;
+  &lt;li&gt;step 4:
+Find the best point among this maximum sequence from previous step.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To make this as fast as possible, I should be looking from farther ranges for these obstacles, because doing sharp turns results in slower velocity, which can be achieved by turning earlier in less sharp angle.&lt;/p&gt;
+
+&lt;h4 id=&quot;disadvantages&quot;&gt;Disadvantages&lt;/h4&gt;
+&lt;p&gt;There is risk of doing U turns if he car is going too fast and it has to do 90 degrees turn which it can’t currently see as at particular point it will see the point on the opposite side of track, rather than the turn itself. This is shown on the figure bellow for better intuition.
+&lt;img src=&quot;/assets/ftg_fail.png&quot; height=&quot;500&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is also shown in the nice follow the gap practical demonstration in video bellow.&lt;/p&gt;
+&lt;iframe width=&quot;700&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/ctTJHueaTcY&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&quot;f1tenth-lab4-assignment&quot;&gt;F1Tenth Lab4 assignment&lt;/h2&gt;
+&lt;p&gt;My implementation of FtG algorithm consists of these steps:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Process each LiDAR scan by considering only field of view of 90 (45 to left and 45 to right as the 0th degree is exactly infront of the car) degrees, setting each value to the running mean of window 7 by convolution and clipping all values over 3m to 3m&lt;/li&gt;
+  &lt;li&gt;Find the closest obstacle and set all points in bubble around it in certain radius 0. This bubble is computed by computing arc of proportion of radius and closest point and computing all angles inside this bubble. Ranges corresponding to the indexes of angles which are in the bubble are than set to 0.&lt;/li&gt;
+  &lt;li&gt;Finding the max gap by finding the longest non-zero consecutive values in the indexes of the processed lidar scan&lt;/li&gt;
+  &lt;li&gt;Finding the deepest possible scan and steer in the direction of it.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/pKxiRvM4X6U&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">Addressing the shortcomings of wallfollowing and implementing Follow the Gap algorithm.</summary></entry><entry><title type="html">Wallfollowing</title><link href="http://localhost:4000/2020/11/06/wallfollowing.html" rel="alternate" type="text/html" title="Wallfollowing" /><published>2020-11-06T00:00:00+01:00</published><updated>2020-11-06T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/06/wallfollowing</id><content type="html" xml:base="http://localhost:4000/2020/11/06/wallfollowing.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
+Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
+set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any position of word, robot, etc. only makes sense
+when we defined the frame in which we are describing the pose. The direction of X,Y, Z axes is defined by right-handed rule, where index finger points in
+X direction, middle finger in y direction and thumb in Z direction. Let’s look more into transformations and frames.&lt;/p&gt;
+
+&lt;h2 id=&quot;transfomations-and-frames&quot;&gt;Transfomations and Frames&lt;/h2&gt;
+
+&lt;p&gt;Why do we need transformations between different sensors? Each time I get data in sensor frame (for specific sensor) which I want to transform in some unified way.
+For example we can have frame of reference of lidar which we can transform into the frame of reference of robot, which is the center of the rear axle. As example in
+the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain length and lidar
+can be place in the center of the car. Therefore the correct way of stopping before collision should be calculated from the front of the car (or edge of the car), not from the
+position of the lidar. Between frames there will exist transformation that convert measuring from one frame to another.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference-frames-on-f1tenth-car&quot;&gt;Reference Frames on F1Tenth car&lt;/h2&gt;
+
+&lt;h4 id=&quot;map&quot;&gt;map&lt;/h4&gt;
+&lt;p&gt;The origin set by the user and every other transformation can be measured with respect to the map. Represent the environment where the car will be racing. Can be place arbitrary and typically never moves after its placed.&lt;/p&gt;
+
+&lt;h4 id=&quot;base_link&quot;&gt;base_link&lt;/h4&gt;
+&lt;p&gt;Positioned at center of the rear axle of the car. Moves with the car relative to the map frame.&lt;/p&gt;
+
+&lt;h4 id=&quot;lidar&quot;&gt;lidar&lt;/h4&gt;
+&lt;p&gt;The frame of reference where lidar scan measurements are taken. Moves with the car relative to the map frame.&lt;/p&gt;
+
+&lt;h4 id=&quot;odom&quot;&gt;odom&lt;/h4&gt;
+&lt;p&gt;Typically required by ROS. Usually the initial position of the robot in the map before everything began. Fixed relative to the map.&lt;/p&gt;
+
+&lt;h3 id=&quot;rigid-body-transfomation&quot;&gt;Rigid Body Transfomation&lt;/h3&gt;
+
+&lt;p&gt;How to transform data and position between one frame and another. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/frames.png&quot; alt=&quot;frames&quot; /&gt;
+2 diffrent coordinate frames and point p from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;
+  Steps:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Overlap both frames so their origins are at the same point. The reason is that we want to compute how is second frame of reference rotated. (apply rotation)&lt;/li&gt;
+  &lt;li&gt;Describe the unit vectors of the second frame of reference in the terms of unit vectors of first frame of reference. As on picture bellow.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/frames2.png&quot; alt=&quot;frames2&quot; /&gt;
+Overlapped frames of reference from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;x&lt;sub&gt;2&lt;/sub&gt; = R&lt;sub&gt;11&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + R&lt;sub&gt;21&lt;/sub&gt; y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
+y&lt;sub&gt;2&lt;/sub&gt; = R&lt;sub&gt;12&lt;/sub&gt;x&lt;sub&gt;1&lt;/sub&gt; + R&lt;sub&gt;22&lt;/sub&gt; y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
+The formula above describes the units vector of new frame of referece as a linear combination of the original frame of reference. (considering only X,Y axis - 2D problem, no Z).
+The formula can be also rewritten as matrix:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix.png&quot; alt=&quot;rotation_m1&quot; /&gt;
+Rotation matrix from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Also we define θ as angle between x&lt;sub&gt;1&lt;/sub&gt; and x&lt;sub&gt;2&lt;/sub&gt; as shown on figure bellow. This angle tells us how rotated this frame is.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/theta.png&quot; alt=&quot;theta&quot; /&gt;
+Overlapped frames of reference with angle theta from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;To get the coefficients R&lt;sub&gt;11&lt;/sub&gt;, R&lt;sub&gt;21&lt;/sub&gt;, R&lt;sub&gt;12&lt;/sub&gt;, R&lt;sub&gt;22&lt;/sub&gt;, along x&lt;sub&gt;2&lt;/sub&gt; unit vector direction, contains the cos unit component of x&lt;sub&gt;1&lt;/sub&gt;
+unit vector as well as sin component of y&lt;sub&gt;1&lt;/sub&gt; unit vector. Thefore  x&lt;sub&gt;2&lt;/sub&gt; and similary y&lt;sub&gt;2&lt;/sub&gt; can be written as:&lt;/p&gt;
+
+&lt;p&gt;x&lt;sub&gt;2&lt;/sub&gt; = cos(θ)x&lt;sub&gt;1&lt;/sub&gt; + sin(θ)y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;
+y&lt;sub&gt;2&lt;/sub&gt; = -sin(θ)x&lt;sub&gt;1&lt;/sub&gt; + cos(θ)y&lt;sub&gt;1&lt;/sub&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Therefore I get:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_matrix2.png&quot; alt=&quot;rotation_m&quot; /&gt;
+Rotation matrix from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;With this we are able to represent unit vectors in the new frame of reference in terms of unit vectors of original frame of reference. Similarly we can express the position of point P in the new frame of reference using the rotation matrix as shown on formulas bellow.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/rotation_p.png&quot; alt=&quot;rotation&quot; /&gt;
+Rotation matrix of point p from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf&quot;&gt;UV F1/10 course&lt;/a&gt;.
+We can’t forget to apply the translation as well.&lt;/p&gt;
+
+&lt;h4 id=&quot;ros-tftf2-package&quot;&gt;ROS tf/tf2 package&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://wiki.ros.org/tf2&quot;&gt;ROS tf2 package&lt;/a&gt; lets you keep track of multiple coordinate frames over time. And transform points/poses between two coordinates. It broadcast this across ROS so any node can subscribe to it. To get more insight how it works it is very useful to try &lt;a href=&quot;http://wiki.ros.org/tf2/Tutorials&quot;&gt;TF2 Tutorial&lt;/a&gt;, older &lt;a href=&quot;http://wiki.ros.org/tf/Tutorials&quot;&gt;TF Tutorial&lt;/a&gt; and &lt;a href=&quot;http://wiki.ros.org/tf2/Migration&quot;&gt;TF2 Migration&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;wallfollowing&quot;&gt;Wallfollowing&lt;/h4&gt;
+&lt;p&gt;The idea is we are trying to compute the error between the future position of the car instead of current error because of constant movement of the car.
+By minimising the future distance from the wall with respect to the optimal trajectory we are able to follow the wall.
+Lets visualise the algorithm equations with the help from figures bellow. All of them taken from the &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf&quot;&gt;University of Virginia F1/10 Course from
+Madhur Behl&lt;/a&gt;.
+&lt;img src=&quot;/assets/wallfollowing1.png&quot; alt=&quot;wallfollowing1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/wallfollowing2.png&quot; alt=&quot;wallfollowing2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/wallfollowing3.png&quot; alt=&quot;wallfollowing3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If at any given point my car is at point A, the distance to the wall is B, but as already mentioned, I’m not trying to compute the error between B and the desired trajectory of the car visualised on the last figure as vertical green lines. You must project the car forward based on the velocity of the car and minimise the future distance to the wall with respect to the desired trajectory (CD in the case of figure). Using trigonometry the angle α can be computed knowing distances a and b which are the projected distances to the wall by lidar and corresponding angle between a and b called θ. Knowing the angle α I’m able to compute the current distance to the wall as well as future distance CD.&lt;/p&gt;
+
+&lt;h4 id=&quot;pid&quot;&gt;PID&lt;/h4&gt;
+
+&lt;p&gt;Using CD I can compute the error which is just difference between desired trajectory and CD. This error is important because we need it to setup the proportional and derivative controller to correct the steering angle of the car in the PID manner with respect to error.
+ Formula for PID in the figure bellow (again from &lt;a href=&quot;https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf&quot;&gt;UV wallfollowing lecture&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/pid.png&quot; alt=&quot;pid&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;V&lt;sub&gt;θ&lt;/sub&gt; being correction in steering, K&lt;sub&gt;p&lt;/sub&gt; is proportion of my error  computed above as desired trajectory - CD. K&lt;sub&gt;d&lt;/sub&gt; is derivative gain and the rate of change of error &lt;sup&gt;de(t)&lt;/sup&gt;⁄&lt;sub&gt;dt&lt;/sub&gt;. This can be simplified by computing previous error - current error. Once I have the error correction in steering, I can update the steering angle angle with the correction. If the PID constants are well tuned, the steering angle should correct itself based on how far the car is from desired trajectory.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab3-assignment&quot;&gt;F1Tenth Lab3 assignment&lt;/h2&gt;
+&lt;p&gt;Moving on to my implementation of the WallFollow node. The algorithm implemented consists of these steps:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Step 1. Obtain two laser scans (distances) a and b, with b taken at 0 degrees and a at an angle theta (0 &amp;lt; theta =&amp;lt; 70),
+    &lt;ul&gt;
+      &lt;li&gt;the 0th angle corresponds to the front of the f1tenth car and the positive angle direction corresponds to the left of the car, therefore choice of 0 degree angle and in my case 60 degree angle corresponds to the left wall following.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Step 2. Use the distances a and b to calculate the angle alpha between the car’s x- axis and the left wall and use alpha to find the current distance D_t to the car,
+    &lt;ul&gt;
+      &lt;li&gt;all of these are calculated using the formulas described in the wallfollowing section.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Step 3. And than alpha and D_t to find the estimated future distance D_t1 to the wall&lt;/li&gt;
+  &lt;li&gt;Step 4. Run D_t1 trough the PID algorithm described above ( in assignment) to get a steering angle&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I was experimenting for a long time with different values of K&lt;sub&gt;p&lt;/sub&gt;,K&lt;sub&gt;d&lt;/sub&gt; and K&lt;sub&gt;i&lt;/sub&gt;. Using this I was able to find get a more insight what each of these constant is doing. I’m not 100% sure about, but I think that lowering K&lt;sub&gt;p&lt;/sub&gt; makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K&lt;sub&gt;d&lt;/sub&gt; seems to react faster to the growing error but it wasn’t completely clear to me from simulation. K&lt;sub&gt;i&lt;/sub&gt; didn’t seem to do much even at higher values, but according to the research it should make the car more sensitive to error.&lt;/p&gt;
+
+&lt;p&gt;I’ve found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.&lt;/p&gt;
+
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/5nLtlszkRvI&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name></name></author><summary type="html">Fist autonomous lap of my F1Tenth car using wallfollowing algorithm.</summary></entry><entry><title type="html">Automatic Emergency Braking</title><link href="http://localhost:4000/2020/11/02/aeb.html" rel="alternate" type="text/html" title="Automatic Emergency Braking" /><published>2020-11-02T00:00:00+01:00</published><updated>2020-11-02T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/02/aeb</id><content type="html" xml:base="http://localhost:4000/2020/11/02/aeb.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;The next assignment after the ROS introductory is create a node which uses laser_scan data and prevents the car from collision
+into nearby objects. This is achieved by computing TTC (Time To Collision) using before mentioned LaserScan message. This assignment
+checks more into the depth the ability work with publishers and subscribe and forces me to explore more Odometry message and
+AckermannDriveStamped message because both of them are used to prevent the collision. But first let’s look at some theory.&lt;/p&gt;
+
+&lt;h2 id=&quot;aeb-automatic-emergency-braking&quot;&gt;AEB (Automatic Emergency Braking)&lt;/h2&gt;
+
+&lt;p&gt;AEB is simply forcing stop before expected collision with nearby object. It is a safety reaction of the car based on the
+information it is gathering from its sensors. It is simple binary classification problem which answers question break/not break.&lt;/p&gt;
+
+&lt;h4 id=&quot;failures&quot;&gt;Failures&lt;/h4&gt;
+
+&lt;p&gt;The big problem in AEB is false negative. This means the car won’t stop when it is about to collide with an obstacle. As you can imagine no one will deploy a car which can’t avoid collision or even can kill people. Another, but not as serious problem are false positives, when car stops randomly when it should not and there is no danger of colliding.&lt;/p&gt;
+
+&lt;h4 id=&quot;ttc-time-to-collision&quot;&gt;TTC (Time to Collision)&lt;/h4&gt;
+
+&lt;p&gt;Let’s explain how TTC is calculated:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/TTC_formula.png&quot; /&gt;
+  Time to Collision formula from &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;lecture 2&lt;/a&gt; of F1/10 course&lt;/p&gt;
+
+&lt;p&gt;where denominator that’s time derivative of range between vehicle and given obstacle, also called as “range rate” is defined as:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/range_rate.png&quot; /&gt;
+  Formula  for range-rate from &lt;a href=&quot;https://f1tenth.org/learn.html&quot;&gt;lecture 2&lt;/a&gt; of F1/10 course&lt;/p&gt;
+
+&lt;h4 id=&quot;lidar&quot;&gt;Lidar&lt;/h4&gt;
+
+&lt;p&gt;Although I have worked with lidar in previous assignment, it worths explaining the &lt;a href=&quot;http://docs.ros.org/en/api/sensor_msgs/html/msg/LaserScan.htmlLaserScan&quot;&gt;LaserScan message data fields&lt;/a&gt;
+I will have to use in this assignment. Based on the TTC formula above, I’m gonna need &lt;i&gt;float32[] ranges&lt;/i&gt; to calculate distance between obstacle and the car, which is numerator in the the TTC formula.
+For denominator (range-rate) I have to use all &lt;i&gt;float32 angle_min, float32 angle_max and float32 angle_increment&lt;/i&gt;. That’s because for range-rate computation I need cosine of each beam angle (with these 3 variables
+I can get every single angle of my LaserScan data). Also as mentioned I need to take max of given range-rate of given beam and 0 so meaning if range-range for specific beam is less than 0, assign it 0. In both of my nodes (Python and C++) to avoid division by 0 I set this value very close
+to 0. I was trying to remove 0 from denominator completely together with numerator at the same index (same LaserScan angle), however this caused lot of false negatives.&lt;/p&gt;
+
+&lt;p&gt;Another message I need is &lt;i&gt;Odometry&lt;/i&gt;, specifically &lt;i&gt;geometry_msgs/TwistWithCovariance twist.linear.x&lt;/i&gt;, which is linear speed of my car, used
+again in the range-rate calculation.&lt;/p&gt;
+
+&lt;h2 id=&quot;f1tenth-lab2-assignment&quot;&gt;F1Tenth Lab2 assignment&lt;/h2&gt;
+&lt;p&gt;TTC threshold for braking was set to 0.3 according to my own experimentation on the RViz simulator. When TTC is less than this threshold, the brake is applied.&lt;/p&gt;
+
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/LXWpBoFb4nk&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;400&quot; src=&quot;https://www.youtube.com/embed/zna-dPAIdUQ&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;
+&lt;/p&gt;</content><author><name></name></author><summary type="html">Exploring how to stop car autonomously before it hits an obstacle.</summary></entry></feed>
