@@ -1,7 +1,7 @@
-title: My F1Tenth journey
-email: karel.smejkal19@gmail.com
+title: My Blog
+email: mail@karelsmejkal.com
 description: >- # this means to ignore newlines until "baseurl:"
-  My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing.
+  My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing and Master Thesis Project of end-to-end autonomous parking at TU Berlin with colaboration of DAI-Labor.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://smejkka3.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: KarelSmejkal
