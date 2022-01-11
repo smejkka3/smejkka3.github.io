@@ -1,0 +1,64 @@
+I"n<p>The project I’m going to be working on is object tracking using LiDAR initially. The algorithm is based on the paper <a href="https://www.robots.ox.ac.uk/~mobile/Papers/2015IJRR_wang.pdf">Wang et. al</a> where the main goal is to implement solution for detection and tracking of moving object using 2D laser scanner.</p>
+
+<h2 id="description-of-tasks">Description of tasks</h2>
+<p>Robust object tracking and localization is a critical need for autonomous cars, allowing for safe,
+intelligent navigation and planning. Cars must be able to perform this task rapidly and accurately,
+requiring algorithms with high output frequencies and low false-negative and false positive rates.
+While much work has been done on object tracking and localization with full-scale cars, the F1Tenth
+Object Tracking project seeks to implement tracking on the F1Tenth autonomous race
+car system.</p>
+
+<p>Initially, this project will build on the work of Dominic Zeng Wang, who proposed a
+LiDAR-based object tracking system that uses the knowledge of the static local background to help identifying dynamic
+objects from static ones in a principled and straightforward way. This project will
+implement and test his proposed system on the F1Tenth vehicle, making use of its onboard 2D
+LiDAR. Later, I will combine LiDAR-based tracking with visual tracking, in order to increase
+the robustness of the system by increasing the signal-noise ratio from the vehicle’s sensors.
+Given the restrictions posed by the pandemic, this project will heavily leverage virtual
+environments like F1Tenth team’s proprietary gym environment. If possible, we will
+attempt to implement the system on the actual F1Tenth car for further real-life testing and
+validation.</p>
+
+<h2 id="step-by-step-to-dos">Step by Step to Dos</h2>
+<h3 id="phase-1">Phase 1:</h3>
+<p>Get Familiar with F1Tenth – January 25 - February 3</p>
+<ul>
+  <li>Learn about the F1Tenth car, the F1Tenth System, and the F1Tenth Simulator.</li>
+  <li>Learn about the ROS framework.</li>
+  <li>Learn about F1Tenth fundamentals with the labs linked here.</li>
+</ul>
+
+<h3 id="phase-2-get-familiar-with-fundamentals">Phase 2: Get Familiar with Fundamentals</h3>
+<h5 id="february-3--february-14">February 3 – February 14</h5>
+<ul>
+  <li>Carefully study Wang paper, along with related works.</li>
+  <li>Learn how to use F1Tenth Gym environment.</li>
+  <li>Get familiar with fundamentals of Bayes filtering.</li>
+  <li>Write progress report / documentation as needed.</li>
+</ul>
+
+<h3 id="phase-3-implementation">Phase 3: Implementation</h3>
+<h4 id="february-14--march-14">February 14 – March 14</h4>
+<ul>
+  <li>Implement virtual sensing system specified in Wang paper on F1Tenth.</li>
+  <li>Implement association algorithms for LiDAR data, divide it into meaningful pieces, and associate those pieces with tracked vehicles on F1Tenth.</li>
+  <li>Identify areas where visual data can increase robustness of LiDAR system.</li>
+  <li>Write progress report / documentation as needed.</li>
+</ul>
+
+<h3 id="phase-4-expansion">Phase 4: Expansion</h3>
+<h5 id="march-14--april-11">March 14 – April 11</h5>
+<ul>
+  <li>Develop pipeline to validate LiDAR tracking hypothesis with camera data, and camera
+hypothesis with LiDAR data</li>
+  <li>Write progress report / documentation as needed.</li>
+</ul>
+
+<h3 id="phase-3-wrapping-up-phase">Phase 3: Wrapping up Phase</h3>
+<h5 id="april-11--may-10">April 11 – May 10</h5>
+<ul>
+  <li>Continue working on the previous goals that have not been accomplished.</li>
+  <li>Documentation for future development (user guide / issues / achievements).</li>
+  <li>Optional: Demonstrate to potential business partners / investors.</li>
+</ul>
+:ET

@@ -1,0 +1,54 @@
+I"><p><img src="https://www.japanautomotivedaily.com/wp-content/uploads/sites/17/2017/12/201712171206_denso-1-1024x512.jpg" alt="parking" /></p>
+
+<p class="mycenter"><em>source <a href="https://www.japanautomotivedaily.com/2017/12/08/denso-begin-verification-testing-entry-automated-parking/">japanautomotivedaily</a></em></p>
+
+<p>Summary of main ideas and points from some of the reading of research papers needed to implement parking system of autonomous cars using deep learining while fusing several different sensors on the car. This is project in colaboration with <a href="https://dai-labor.de/en/home/">DAI-LABOR</a> and <a href="https://be-intelli.com/">be-intelli</a> which goal is to build end to end system for autonomous parking or build deep learning system for sensor fusion.</p>
+
+<p>One of the final goals before formulation the exact proposal of the project is to run demo og Autonomous Valet parking using <a href="https://docs.ros.org/en/foxy/index.html">ROS2</a> and <a href="https://autowarefoundation.gitlab.io/autoware.auto/AutowareAuto/">Autoware.auto</a> and <a href="https://www.svlsimulator.com">LGSVL simulator</a>.</p>
+
+<h3 id="deep-multi-modal-object-detection-and-semantic-segmentation-for-autonomous-driving-datasets-methods-and-challenges-di-feng-et-al">Deep Multi-modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges. Di Feng et al.</h3>
+<h4 id="brief-overview">Brief overview</h4>
+<p>The aim of this paper is to provide short summary of existing methods and corresponding challenges which needs to be addressed when developing autonomous driving system. It provides a short description of the most important concepts for begginers to start in the topic of autonomous driving. The main contribution is in my view their interactive online platform availible at <a href="https://boschresearch.github.io/multimodalperception/">https://boschresearch.github.io/multimodalperception/</a></p>
+
+<h4 id="background">Background</h4>
+<p>There is a high requirement for realible autonomous system as these vehicles are critical to fight with traffic congestion, and reduce current transportation carbon footprint. This is a very diffuclt task for several reasons. In order for a vehicle to operate driveless it needs to be able to perfectly percieve, predict and execute all its decision in noisy, highly unpredictible and real enviroment. Even the smallest errors can have catastrophical consequences and therefore minimizing any errors in multimodal autonomous systems is crucial.</p>
+
+<h4 id="existing-datasets">Existing datasets</h4>
+
+<h4 id="problems-in-autonomous-driving">Problems in Autonomous Driving</h4>
+
+<h4 id="implementation">Implementation</h4>
+
+<h4 id="challenges">Challenges</h4>
+
+<h3 id="multi-view-3d-object-detection-network-for-autonomous-driving-xiaozhi-chen-et-al">Multi-View 3D Object Detection Network for Autonomous Driving. Xiaozhi Chen et al.</h3>
+<p>todo</p>
+
+<h3 id="joint-3d-proposal-generation-and-object-detection-from-view-aggregation-et-al">Joint 3D Proposal Generation and Object Detection from View Aggregation et al.</h3>
+<p>todo</p>
+
+<h3 id="nvidia-conference-developing-automated-parking-technologies-atousa-torabi">NVIDIA CONFERENCE: DEVELOPING AUTOMATED PARKING TECHNOLOGIES, Atousa Torabi</h3>
+<p>todo</p>
+
+<h3 id="master-general-parking-skill-via-deep-learning-y-lin">Master general parking skill via deep learning, Y. Lin</h3>
+<p>todo</p>
+
+<h3 id="assistive-parking-systems-knowledge-transfer-to-end-to-end-deep-learning-for-autonomous-parking-o-gamal-et-al">Assistive Parking Systems Knowledge Transfer to End-to-End Deep Learning for Autonomous Parking. O. Gamal et al.</h3>
+<p>todo</p>
+
+<h3 id="fisheyemultinet-real-time-multi-task-learning-architecture-for-surround-view-automated-parking-system-pullarao-maddu-et-al">FisheyeMultiNet: Real-time Multi-task Learning Architecture for Surround-view Automated Parking System. Pullarao Maddu et al.</h3>
+<p>todo</p>
+
+<h3 id="computer-vision-in-automated-parking-systems-design-implementation-and-challenges-markus-heimberger-et-al">Computer vision in automated parking systems: Design, implementation and challenges. Markus Heimberger et al.</h3>
+<p>todo</p>
+
+<h3 id="autowareauto-autonomous-valet-parking-demonstration">Autoware.Auto Autonomous Valet Parking Demonstration</h3>
+<p>todo</p>
+
+<style>
+.mycenter {
+    text-align:center;
+}
+</style>
+
+:ET
