@@ -1,0 +1,13 @@
+I"�	<p>Short summary of the main points from reference reading for Master Thesis Topic for chair of Computer Vision and Remote Sensing at TU Berlin of topic of self-supervised learining for semantic segmentation on remote sensing imagery.</p>
+
+<h2 id="about-the-topic">About the topic</h2>
+<p>The one dominating factor for the success of Deep Learning (DL) is that it is based on superior features, i.e. features that are directly learned from the data instead of being manually designed and therefore being optimal for a given task. The more sophisticated the features need to be to solve a given classification task, the deeper the corresponding networks have usually to be to be able to compute them. However, the deeper a network is, the more training data is required to be successfully train it without overfitting. Thus, if a sufficient amount of training data is available, highly sophisticated and informative features can be learned directly. However, in many applications the amount of training data i.e. image data with the corresponding reference data (e.g. semantic annotations) is very limited as it is costly to obtain. One such an application is Remote Sensing in general and (Pol)SAR data in particular. One of the most successful approaches to deal with small amounts of training data is pre-training the deep network on a proxy task that is loosely connected to the target task but for which a large amount of data is available. The learned features can then be used to solve the target task. As this provides a good initialization, it limits the amount of parameters that need to be adjusted and therefore the amount of necessary training data.</p>
+
+<h2 id="self-supervised-visual-feature-learning-with-deep-neural-networks-a-survey-l-jing-y-tian">“Self-supervised Visual Feature Learning with Deep Neural Networks: A Survey”, L. Jing, Y. Tian</h2>
+
+<h2 id="self-supervised-feature-learning-by-learning-to-spot-artifacts-s-jenni-p-favaro">“Self-Supervised Feature Learning by Learning to Spot Artifacts”, S. Jenni, P. Favaro</h2>
+
+<h2 id="self-supervised-feature-learning-for-semantic-segmentation-of-overhead-imagery-s-singh-et-al">“Self-Supervised Feature Learning for Semantic Segmentation of Overhead Imagery”, S. Singh et al</h2>
+
+<h2 id="exploiting-gan-based-sar-to-optical-image-transcoding-for-improved-classification-via-deep-learning-a-ley-et-al">“Exploiting GAN-Based SAR to Optical Image Transcoding for Improved Classification via Deep Learning”, A. Ley et al</h2>
+:ET

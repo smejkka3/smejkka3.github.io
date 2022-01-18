@@ -1,4 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-01-11T17:06:37+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My Blog</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing and Master Thesis Project of end-to-end autonomous parking at TU Berlin with colaboration of DAI-Labor.</subtitle><entry><title type="html">End to End Deep Learning for Autonomous Parking</title><link href="http://localhost:4000/2021/12/30/DMOSS.html" rel="alternate" type="text/html" title="End to End Deep Learning for Autonomous Parking" /><published>2021-12-30T00:00:00+01:00</published><updated>2021-12-30T00:00:00+01:00</updated><id>http://localhost:4000/2021/12/30/DMOSS</id><content type="html" xml:base="http://localhost:4000/2021/12/30/DMOSS.html"><![CDATA[<p><img src="https://www.japanautomotivedaily.com/wp-content/uploads/sites/17/2017/12/201712171206_denso-1-1024x512.jpg" alt="parking" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-01-14T10:51:30+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">My Blog</title><subtitle>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing and Master Thesis Project of end-to-end autonomous parking at TU Berlin with colaboration of DAI-Labor.</subtitle><entry><title type="html">PEAK, The New Science of Athletic Performance That is Revolutionizing Sports, Dr. Marc Bubbs</title><link href="http://localhost:4000/2022/01/13/Peak.html" rel="alternate" type="text/html" title="PEAK, The New Science of Athletic Performance That is Revolutionizing Sports, Dr. Marc Bubbs" /><published>2022-01-13T00:00:00+01:00</published><updated>2022-01-13T00:00:00+01:00</updated><id>http://localhost:4000/2022/01/13/Peak</id><content type="html" xml:base="http://localhost:4000/2022/01/13/Peak.html"><![CDATA[]]></content><author><name></name></author><summary type="html"><![CDATA[Notes from book of sience backed evidence of how to improve performance in athletic disciplies. As the CrossFit open coming up I went trough this book again and decided to post notes in order to have better overview of the most important things in this book.]]></summary></entry><entry><title type="html">Self-supervised learning for Semantic Segmentation</title><link href="http://localhost:4000/2022/01/12/CV.html" rel="alternate" type="text/html" title="Self-supervised learning for Semantic Segmentation" /><published>2022-01-12T00:00:00+01:00</published><updated>2022-01-12T00:00:00+01:00</updated><id>http://localhost:4000/2022/01/12/CV</id><content type="html" xml:base="http://localhost:4000/2022/01/12/CV.html"><![CDATA[<p>Short summary of the main points from reference reading for Master Thesis Topic for chair of Computer Vision and Remote Sensing at TU Berlin of topic of self-supervised learining for semantic segmentation on remote sensing imagery.</p>
+
+<h2 id="about-the-topic">About the topic</h2>
+
+<p>The one dominating factor for the success of Deep Learning (DL) is that it is based on superior features, i.e. features that are directly learned from the data instead of being manually designed and therefore being optimal for a given task. The more sophisticated the features need to be to solve a given classification task, the deeper the corresponding networks have usually to be to be able to compute them. However, the deeper a network is, the more training data is required to be successfully train it without overfitting. Thus, if a sufficient amount of training data is available, highly sophisticated and informative features can be learned directly. However, in many applications the amount of training data i.e. image data with the corresponding reference data (e.g. semantic annotations) is very limited as it is costly to obtain. One such an application is Remote Sensing in general and (Pol)SAR data in particular. One of the most successful approaches to deal with small amounts of training data is pre-training the deep network on a proxy task that is loosely connected to the target task but for which a large amount of data is available. The learned features can then be used to solve the target task. As this provides a good initialization, it limits the amount of parameters that need to be adjusted and therefore the amount of necessary training data.</p>
+
+<h2 id="self-supervised-visual-feature-learning-with-deep-neural-networks-a-survey-l-jing-y-tian">“Self-supervised Visual Feature Learning with Deep Neural Networks: A Survey”, L. Jing, Y. Tian</h2>
+
+<h2 id="self-supervised-feature-learning-by-learning-to-spot-artifacts-s-jenni-p-favaro">“Self-Supervised Feature Learning by Learning to Spot Artifacts”, S. Jenni, P. Favaro</h2>
+
+<h2 id="self-supervised-feature-learning-for-semantic-segmentation-of-overhead-imagery-s-singh-et-al">“Self-Supervised Feature Learning for Semantic Segmentation of Overhead Imagery”, S. Singh et al</h2>
+
+<h2 id="exploiting-gan-based-sar-to-optical-image-transcoding-for-improved-classification-via-deep-learning-a-ley-et-al">“Exploiting GAN-Based SAR to Optical Image Transcoding for Improved Classification via Deep Learning”, A. Ley et al</h2>]]></content><author><name></name></author><summary type="html"><![CDATA[Notes from reference papers for project of implementing Self-supervised ML learning system for Semantic Segmentation.]]></summary></entry><entry><title type="html">End to End Deep Learning for Autonomous Parking</title><link href="http://localhost:4000/2021/12/30/DAI.html" rel="alternate" type="text/html" title="End to End Deep Learning for Autonomous Parking" /><published>2021-12-30T00:00:00+01:00</published><updated>2021-12-30T00:00:00+01:00</updated><id>http://localhost:4000/2021/12/30/DAI</id><content type="html" xml:base="http://localhost:4000/2021/12/30/DAI.html"><![CDATA[<p><img src="https://www.japanautomotivedaily.com/wp-content/uploads/sites/17/2017/12/201712171206_denso-1-1024x512.jpg" alt="parking" /></p>
 
 <p class="mycenter"><em>source <a href="https://www.japanautomotivedaily.com/2017/12/08/denso-begin-verification-testing-entry-automated-parking/">japanautomotivedaily</a></em></p>
 
@@ -6,14 +18,18 @@
 
 <p>One of the final goals before formulation the exact proposal of the project is to run demo og Autonomous Valet parking using <a href="https://docs.ros.org/en/foxy/index.html">ROS2</a> and <a href="https://autowarefoundation.gitlab.io/autoware.auto/AutowareAuto/">Autoware.auto</a> and <a href="https://www.svlsimulator.com">LGSVL simulator</a>.</p>
 
-<h3 id="deep-multi-modal-object-detection-and-semantic-segmentation-for-autonomous-driving-datasets-methods-and-challenges-di-feng-et-al">Deep Multi-modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges. Di Feng et al.</h3>
+<h3 id="deep-multi-modal-object-detection-and-semantic-segmentation-for-autonomous-driving-datasets-methods-and-challenges-di-feng-et-al">Deep Multi-modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges. Di Feng et al</h3>
+
 <h4 id="brief-overview">Brief overview</h4>
+
 <p>The aim of this paper is to provide short summary of existing methods and corresponding challenges which needs to be addressed when developing autonomous driving system. It provides a short description of the most important concepts for begginers to start in the topic of autonomous driving. The main contribution is in my view their interactive online platform availible at <a href="https://boschresearch.github.io/multimodalperception/">https://boschresearch.github.io/multimodalperception/</a></p>
 
 <h4 id="background">Background</h4>
+
 <p>There is a high requirement for realible autonomous system as these vehicles are critical to fight with traffic congestion, and reduce current transportation carbon footprint. This is a very diffuclt task for several reasons. In order for a vehicle to operate driveless it needs to be able to perfectly percieve, predict and execute all its decision in noisy, highly unpredictible and real enviroment. Even the smallest errors can have catastrophical consequences and therefore minimizing any errors in multimodal autonomous systems is crucial.</p>
 
 <p>The paper introduces main requirements for such a system as follow:</p>
+
 <ol>
   <li>accurate</li>
   <li>robust</li>
@@ -23,6 +39,7 @@
 <p>In next the paper is docusing on deep leraning methods for object detection and semantic segmentation, called deep multi-modal perception. The as well sumarize all topics related to developing autonomous systems such as typical automotive sensors, research purposes and some existing vehicles for testing these systems. The paper is also very useful tool of comprehensive overview of each mentioned topic and corresponding research to each of these topics.</p>
 
 <p>There are 6 main sensing modalities in autonomous systems and each of them has its own advantages and shortcommings:</p>
+
 <ol>
   <li>Visual and Thermal Cameras
     <ul>
@@ -64,23 +81,26 @@
 
 <p>The paper mention some of the peineering vehicles in the autonomous driving domain and it sensors with which it was able to achieve these impressive results. The first mentioned is “Boss” that won famos DARPA challenge in 2007 with camera and several Radars and LiDAR sensors. More leading companies in autonomous space are Google (Waymo), BMW, Daimler.</p>
 
-<p>Next comes summary of main methods for perception based system. The paper speaks about deep object detection, which is a task of localization and rocognition of objects in the image. Usually these are recognized by it’s category probability and localizaed by bounding boxes. The best approach to solve object detection to date is deep learning algorithms, which set benchmarks on popular datasets such as PASCAL VOC and COCO. There are two approaches to deep object detection networks:</p>
-<ol>
-  <li>Two-stage detection - In first stage, regions of interest (ROI) are extracted from the image, then these candidates are verified, classified and refined based on classification scores and locations. Exaples of such a system: OverFeat, R-CNN, SPPnet, Fast-RCNN (VGG. ResNet, GoogLeNet)
-    <ul>
-      <li>pros: better accuracy</li>
-      <li>cons: higher inference time and more time needed for training</li>
-    </ul>
-  </li>
-  <li>One-stage detection - maps feature maps directly to bounding boxes and classification via single-stage, unified CNN model. As example authors metioned MultiBox, YOLO, SSD
-    <ul>
-      <li>pros: faster, easier to optimize</li>
-      <li>cons: underperform in terms of accuracy to two-stage detectors</li>
-    </ul>
-  </li>
-</ol>
+<p>Next comes summary of main methods for perception based system. The paper speaks about deep object detection, which is a task of localization and rocognition of objects in the image. Usually these are recognized by it’s category probability and localizaed by bounding boxes. The best approach to solve object detection to date is deep learning algorithms, which set benchmarks on popular datasets such as PASCAL VOC and COCO. There are two approaches to deep object detection networks:
+1.
+Two-stage detection - In first stage, regions of interest (ROI) are extracted from the image, then these candidates are verified, classified and refined based on classification scores and locations. Exaples of such a system: OverFeat, R-CNN, SPPnet, Fast-RCNN (VGG. ResNet, GoogLeNet)</p>
 
-<p>Authors also give good overview of availible datasets used in</p>
+<ul>
+  <li>pros: better accuracy</li>
+  <li>cons: higher inference time and more time needed for training</li>
+</ul>
+
+<p>2.
+One-stage detection - maps feature maps directly to bounding boxes and classification via single-stage, unified CNN model. As example authors metioned MultiBox, YOLO, SSD</p>
+
+<ul>
+  <li>pros: faster, easier to optimize</li>
+  <li>cons: underperform in terms of accuracy to two-stage detectors</li>
+</ul>
+
+<p>Another approach to obejct detection is deep semantic segmentation. Here the goal is to partition the scene into separate parts/object by labeling each pixel in the image with semantics or detecting objects and at the same time …..</p>
+
+<p>Authors also give good overview of availible datasets used in ….</p>
 
 <h4 id="existing-datasets">Existing datasets</h4>
 
@@ -90,28 +110,36 @@
 
 <h4 id="challenges">Challenges</h4>
 
-<h3 id="multi-view-3d-object-detection-network-for-autonomous-driving-xiaozhi-chen-et-al">Multi-View 3D Object Detection Network for Autonomous Driving. Xiaozhi Chen et al.</h3>
+<h3 id="multi-view-3d-object-detection-network-for-autonomous-driving-xiaozhi-chen-et-al">Multi-View 3D Object Detection Network for Autonomous Driving. Xiaozhi Chen et al</h3>
+
 <p>todo</p>
 
-<h3 id="joint-3d-proposal-generation-and-object-detection-from-view-aggregation-et-al">Joint 3D Proposal Generation and Object Detection from View Aggregation et al.</h3>
+<h3 id="joint-3d-proposal-generation-and-object-detection-from-view-aggregation-et-al">Joint 3D Proposal Generation and Object Detection from View Aggregation et al</h3>
+
 <p>todo</p>
 
 <h3 id="nvidia-conference-developing-automated-parking-technologies-atousa-torabi">NVIDIA CONFERENCE: DEVELOPING AUTOMATED PARKING TECHNOLOGIES, Atousa Torabi</h3>
+
 <p>todo</p>
 
 <h3 id="master-general-parking-skill-via-deep-learning-y-lin">Master general parking skill via deep learning, Y. Lin</h3>
+
 <p>todo</p>
 
-<h3 id="assistive-parking-systems-knowledge-transfer-to-end-to-end-deep-learning-for-autonomous-parking-o-gamal-et-al">Assistive Parking Systems Knowledge Transfer to End-to-End Deep Learning for Autonomous Parking. O. Gamal et al.</h3>
+<h3 id="assistive-parking-systems-knowledge-transfer-to-end-to-end-deep-learning-for-autonomous-parking-o-gamal-et-al">Assistive Parking Systems Knowledge Transfer to End-to-End Deep Learning for Autonomous Parking. O. Gamal et al</h3>
+
 <p>todo</p>
 
-<h3 id="fisheyemultinet-real-time-multi-task-learning-architecture-for-surround-view-automated-parking-system-pullarao-maddu-et-al">FisheyeMultiNet: Real-time Multi-task Learning Architecture for Surround-view Automated Parking System. Pullarao Maddu et al.</h3>
+<h3 id="fisheyemultinet-real-time-multi-task-learning-architecture-for-surround-view-automated-parking-system-pullarao-maddu-et-al">FisheyeMultiNet: Real-time Multi-task Learning Architecture for Surround-view Automated Parking System. Pullarao Maddu et al</h3>
+
 <p>todo</p>
 
-<h3 id="computer-vision-in-automated-parking-systems-design-implementation-and-challenges-markus-heimberger-et-al">Computer vision in automated parking systems: Design, implementation and challenges. Markus Heimberger et al.</h3>
+<h3 id="computer-vision-in-automated-parking-systems-design-implementation-and-challenges-markus-heimberger-et-al">Computer vision in automated parking systems: Design, implementation and challenges. Markus Heimberger et al</h3>
+
 <p>todo</p>
 
 <h3 id="autowareauto-autonomous-valet-parking-demonstration">Autoware.Auto Autonomous Valet Parking Demonstration</h3>
+
 <p>todo</p>
 
 <style>
@@ -489,180 +517,4 @@ All this was done in continuous space. To convert it to grid space we have to kn
 <p><a href="https://google-cartographer.readthedocs.io/en/latest/">The Google cartogpraher documentation</a> is great resource to find out more details about this very important and used algorithm in ROS and whole robotic.</p>
 
 <h2 id="summary">Summary</h2>
-<p>SLAM is probably one of the most important concept in robotics, so it is definitely worth of post by itself. I described what is occupancy grid map, how to update it cells by Bayesian filtering, log odds to update the probability of cell being free or occupied and briefly looked at Google cartographer. There is no assignment in the post as there is more I need to study before I start on the assignment on scan matching in lab5.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Looking into algorithm which should solve the chicken-and-egg problem of an autonomous agent localising itself in an unknown environment while mapping this environment at the same time.]]></summary></entry><entry><title type="html">Follow the Gap</title><link href="http://localhost:4000/2020/11/10/follow_the_gap.html" rel="alternate" type="text/html" title="Follow the Gap" /><published>2020-11-10T00:00:00+01:00</published><updated>2020-11-10T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/10/follow_the_gap</id><content type="html" xml:base="http://localhost:4000/2020/11/10/follow_the_gap.html"><![CDATA[<h2 id="introduction">Introduction</h2>
-<p>Let’s describe alternative approach to wallfollowing, which is just following left or right hand-side boundary of track. The Follow the Gap algorithm instead tracing the boundary is navigating trough the track without colliding to any static obstacle and finding the best path to avoid these obstacles. The wallfollowing is not completely able to solve all challenges coming with having the obstacles in the track, which are different shape. Follow the gap is simple algorithm which doesn’t need a lot fo information about the track before-hand, but using the data acquired right now, known as reactive method. It is able to avoid any obstacles without any prior knowledge about the map.</p>
-
-<h2 id="follow-the-gap">Follow the Gap</h2>
-<h4 id="reactive-navigation">Reactive navigation</h4>
-<p>Reactive navigation is using immediate sensory input to decide the driving steering and velocity commands. This works for statics and in some cases also dynamic obstacles.</p>
-
-<h3 id="gap-finding-intuition">Gap finding intuition</h3>
-<p>As the name of algorithm suggests, the car should be able to find a widest gap in the presence of immediate obstacles and drive into this gap to avoid any immediate collision. Let’s say my lidar is reporting following array of distances [0.2, 6.2, 6.0, 7.0, inf, 3.0, inf, 3.0, inf, 8.0, 1.0, 3.0] you could simply choose the farthest distance obstacle and drive towards it, however this may not be possible as the car would have to pass between too obstacles which range between them is not enough for car to fit in ( there is enough room in between than - this can be computed by computing length of the arc given the angular measurements), or the angle between these obstacles is not physically possible for car to turn - as in my array is case of 7th element. To approach this problem let’s define what a gap is:</p>
-<ul>
-  <li>The gap is series of at least n consecutive hits that pass some distance threshold t.</li>
-</ul>
-
-<p>If we would apply this definition to the array given above with n = 3 and t = 5.0 we would get only one gap: [6.2, 6.0, 7.0, inf]. So we would steer towards the center of this gap.</p>
-
-<p>Problems with this approach is that purely following the deepest gap allows the car pass between the obstacles as the car might not fit in between them. To address this challenge we can use approach use in all of robotics.</p>
-
-<h4 id="point-robot-approach">Point Robot Approach</h4>
-<p>We can assume that the robot is circular. With this assumption we can inflate the  the obstacles with the radius of robot. So if I want the robot go between the obstacles I can always represent the robot as point object and still assure that the robot will fit between the two obstacles as I’m clearing the obstacles by at least the radius of robot itself. This is better dhown on figure bellow (source: <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf">UV lecture follow the gap</a>):
-<img src="/assets/PRA.png" alt="PRA" /></p>
-
-<h4 id="disparity">Disparity</h4>
-<p>Looking trough the lidar readings for consecutive readings that differ by an amount over some threshold, than we mask these readings  to appear closer to the lidar. The reminding points which are farther than the mask are the actual points where the car can fit and drive trough. This concept is nicely visualised on the following figure from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf">UV lecture follow the gap</a>
-<img src="/assets/ftg1.png" height="500" /></p>
-
-<h3 id="follow-the-gap-algorithm">Follow the gap algorithm</h3>
-<ul>
-  <li>step 1:
-Find the nearest LIDAR point and pit safety bubble around it of radius rb</li>
-  <li>step 2:
-Set all points inside bubble to distance 0. This can be achieved by computing the length of the arc and than determine which points falls into the radius of buble rb. All of these points are than set to 0.</li>
-  <li>step 3:
-Find maximum sequence of consecutive non-zeros among the free-space points. This is the maximum gap where the car can drive.</li>
-  <li>step 4:
-Find the best point among this maximum sequence from previous step.</li>
-</ul>
-
-<p>To make this as fast as possible, I should be looking from farther ranges for these obstacles, because doing sharp turns results in slower velocity, which can be achieved by turning earlier in less sharp angle.</p>
-
-<h4 id="disadvantages">Disadvantages</h4>
-<p>There is risk of doing U turns if he car is going too fast and it has to do 90 degrees turn which it can’t currently see as at particular point it will see the point on the opposite side of track, rather than the turn itself. This is shown on the figure bellow for better intuition.
-<img src="/assets/ftg_fail.png" height="500" /></p>
-
-<p>It is also shown in the nice follow the gap practical demonstration in video bellow.</p>
-<iframe width="700" height="400" src="https://www.youtube.com/embed/ctTJHueaTcY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
-
-<h2 id="f1tenth-lab4-assignment">F1Tenth Lab4 assignment</h2>
-<p>My implementation of FtG algorithm consists of these steps:</p>
-<ol>
-  <li>Process each LiDAR scan by considering only field of view of 90 (45 to left and 45 to right as the 0th degree is exactly infront of the car) degrees, setting each value to the running mean of window 7 by convolution and clipping all values over 3m to 3m</li>
-  <li>Find the closest obstacle and set all points in bubble around it in certain radius 0. This bubble is computed by computing arc of proportion of radius and closest point and computing all angles inside this bubble. Ranges corresponding to the indexes of angles which are in the bubble are than set to 0.</li>
-  <li>Finding the max gap by finding the longest non-zero consecutive values in the indexes of the processed lidar scan</li>
-  <li>Finding the deepest possible scan and steer in the direction of it.</li>
-</ol>
-
-<iframe width="800" height="400" src="https://www.youtube.com/embed/pKxiRvM4X6U" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>]]></content><author><name></name></author><summary type="html"><![CDATA[Addressing the shortcomings of wallfollowing and implementing Follow the Gap algorithm.]]></summary></entry><entry><title type="html">Wallfollowing</title><link href="http://localhost:4000/2020/11/06/wallfollowing.html" rel="alternate" type="text/html" title="Wallfollowing" /><published>2020-11-06T00:00:00+01:00</published><updated>2020-11-06T00:00:00+01:00</updated><id>http://localhost:4000/2020/11/06/wallfollowing</id><content type="html" xml:base="http://localhost:4000/2020/11/06/wallfollowing.html"><![CDATA[<h2 id="introduction">Introduction</h2>
-
-<p>Lecture 3 as prerequisite for wallfollowing algorithm covers one of the last ROS introductory topic as that are Rigid Body Transformation.
-Coordinate frames in ros such as map frame, lidar frame and other sensors provide informations specific to that sensor. Coordinate frame is
-set of 3 orthogonal axes for X,Y and Z direction with a position where this frame is placed. Any position of word, robot, etc. only makes sense
-when we defined the frame in which we are describing the pose. The direction of X,Y, Z axes is defined by right-handed rule, where index finger points in
-X direction, middle finger in y direction and thumb in Z direction. Let’s look more into transformations and frames.</p>
-
-<h2 id="transfomations-and-frames">Transfomations and Frames</h2>
-
-<p>Why do we need transformations between different sensors? Each time I get data in sensor frame (for specific sensor) which I want to transform in some unified way.
-For example we can have frame of reference of lidar which we can transform into the frame of reference of robot, which is the center of the rear axle. As example in
-the last assignment we only take in account the frame of reference of lidar and stopped the car based on position of the lidar. However car have certain length and lidar
-can be place in the center of the car. Therefore the correct way of stopping before collision should be calculated from the front of the car (or edge of the car), not from the
-position of the lidar. Between frames there will exist transformation that convert measuring from one frame to another.</p>
-
-<h2 id="reference-frames-on-f1tenth-car">Reference Frames on F1Tenth car</h2>
-
-<h4 id="map">map</h4>
-<p>The origin set by the user and every other transformation can be measured with respect to the map. Represent the environment where the car will be racing. Can be place arbitrary and typically never moves after its placed.</p>
-
-<h4 id="base_link">base_link</h4>
-<p>Positioned at center of the rear axle of the car. Moves with the car relative to the map frame.</p>
-
-<h4 id="lidar">lidar</h4>
-<p>The frame of reference where lidar scan measurements are taken. Moves with the car relative to the map frame.</p>
-
-<h4 id="odom">odom</h4>
-<p>Typically required by ROS. Usually the initial position of the robot in the map before everything began. Fixed relative to the map.</p>
-
-<h3 id="rigid-body-transfomation">Rigid Body Transfomation</h3>
-
-<p>How to transform data and position between one frame and another. As on figure bellow, we want the coordinate of point p in frame 2, given the coordinate of point p in frame 1.</p>
-
-<p><img src="/assets/frames.png" alt="frames" />
-2 diffrent coordinate frames and point p from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a>
-  Steps:</p>
-<ul>
-  <li>Overlap both frames so their origins are at the same point. The reason is that we want to compute how is second frame of reference rotated. (apply rotation)</li>
-  <li>Describe the unit vectors of the second frame of reference in the terms of unit vectors of first frame of reference. As on picture bellow.</li>
-</ul>
-
-<p><img src="/assets/frames2.png" alt="frames2" />
-Overlapped frames of reference from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
-
-<p>x<sub>2</sub> = R<sub>11</sub>x<sub>1</sub> + R<sub>21</sub> y<sub>1</sub><br />
-y<sub>2</sub> = R<sub>12</sub>x<sub>1</sub> + R<sub>22</sub> y<sub>1</sub><br />
-The formula above describes the units vector of new frame of referece as a linear combination of the original frame of reference. (considering only X,Y axis - 2D problem, no Z).
-The formula can be also rewritten as matrix:</p>
-
-<p><img src="/assets/rotation_matrix.png" alt="rotation_m1" />
-Rotation matrix from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
-
-<p>Also we define θ as angle between x<sub>1</sub> and x<sub>2</sub> as shown on figure bellow. This angle tells us how rotated this frame is.</p>
-
-<p><img src="/assets/theta.png" alt="theta" />
-Overlapped frames of reference with angle theta from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
-
-<p>To get the coefficients R<sub>11</sub>, R<sub>21</sub>, R<sub>12</sub>, R<sub>22</sub>, along x<sub>2</sub> unit vector direction, contains the cos unit component of x<sub>1</sub>
-unit vector as well as sin component of y<sub>1</sub> unit vector. Thefore  x<sub>2</sub> and similary y<sub>2</sub> can be written as:</p>
-
-<p>x<sub>2</sub> = cos(θ)x<sub>1</sub> + sin(θ)y<sub>1</sub><br />
-y<sub>2</sub> = -sin(θ)x<sub>1</sub> + cos(θ)y<sub>1</sub><br /></p>
-
-<p>Therefore I get:</p>
-
-<p><img src="/assets/rotation_matrix2.png" alt="rotation_m" />
-Rotation matrix from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a></p>
-
-<p>With this we are able to represent unit vectors in the new frame of reference in terms of unit vectors of original frame of reference. Similarly we can express the position of point P in the new frame of reference using the rotation matrix as shown on formulas bellow.</p>
-
-<p><img src="/assets/rotation_p.png" alt="rotation" />
-Rotation matrix of point p from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf">UV F1/10 course</a>.
-We can’t forget to apply the translation as well.</p>
-
-<h4 id="ros-tftf2-package">ROS tf/tf2 package</h4>
-<p><a href="http://wiki.ros.org/tf2">ROS tf2 package</a> lets you keep track of multiple coordinate frames over time. And transform points/poses between two coordinates. It broadcast this across ROS so any node can subscribe to it. To get more insight how it works it is very useful to try <a href="http://wiki.ros.org/tf2/Tutorials">TF2 Tutorial</a>, older <a href="http://wiki.ros.org/tf/Tutorials">TF Tutorial</a> and <a href="http://wiki.ros.org/tf2/Migration">TF2 Migration</a>.</p>
-
-<h4 id="wallfollowing">Wallfollowing</h4>
-<p>The idea is we are trying to compute the error between the future position of the car instead of current error because of constant movement of the car.
-By minimising the future distance from the wall with respect to the optimal trajectory we are able to follow the wall.
-Lets visualise the algorithm equations with the help from figures bellow. All of them taken from the <a href="https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf">University of Virginia F1/10 Course from
-Madhur Behl</a>.
-<img src="/assets/wallfollowing1.png" alt="wallfollowing1" /></p>
-
-<p><img src="/assets/wallfollowing2.png" alt="wallfollowing2" /></p>
-
-<p><img src="/assets/wallfollowing3.png" alt="wallfollowing3" /></p>
-
-<p>If at any given point my car is at point A, the distance to the wall is B, but as already mentioned, I’m not trying to compute the error between B and the desired trajectory of the car visualised on the last figure as vertical green lines. You must project the car forward based on the velocity of the car and minimise the future distance to the wall with respect to the desired trajectory (CD in the case of figure). Using trigonometry the angle α can be computed knowing distances a and b which are the projected distances to the wall by lidar and corresponding angle between a and b called θ. Knowing the angle α I’m able to compute the current distance to the wall as well as future distance CD.</p>
-
-<h4 id="pid">PID</h4>
-
-<p>Using CD I can compute the error which is just difference between desired trajectory and CD. This error is important because we need it to setup the proportional and derivative controller to correct the steering angle of the car in the PID manner with respect to error.
- Formula for PID in the figure bellow (again from <a href="https://linklab-uva.github.io/autonomousracing/assets/files/Wall_Following.pdf">UV wallfollowing lecture</a>)</p>
-
-<p><img src="/assets/pid.png" alt="pid" /></p>
-
-<p>V<sub>θ</sub> being correction in steering, K<sub>p</sub> is proportion of my error  computed above as desired trajectory - CD. K<sub>d</sub> is derivative gain and the rate of change of error <sup>de(t)</sup>⁄<sub>dt</sub>. This can be simplified by computing previous error - current error. Once I have the error correction in steering, I can update the steering angle angle with the correction. If the PID constants are well tuned, the steering angle should correct itself based on how far the car is from desired trajectory.</p>
-
-<h2 id="f1tenth-lab3-assignment">F1Tenth Lab3 assignment</h2>
-<p>Moving on to my implementation of the WallFollow node. The algorithm implemented consists of these steps:</p>
-<ul>
-  <li>Step 1. Obtain two laser scans (distances) a and b, with b taken at 0 degrees and a at an angle theta (0 &lt; theta =&lt; 70),
-    <ul>
-      <li>the 0th angle corresponds to the front of the f1tenth car and the positive angle direction corresponds to the left of the car, therefore choice of 0 degree angle and in my case 60 degree angle corresponds to the left wall following.</li>
-    </ul>
-  </li>
-  <li>Step 2. Use the distances a and b to calculate the angle alpha between the car’s x- axis and the left wall and use alpha to find the current distance D_t to the car,
-    <ul>
-      <li>all of these are calculated using the formulas described in the wallfollowing section.</li>
-    </ul>
-  </li>
-  <li>Step 3. And than alpha and D_t to find the estimated future distance D_t1 to the wall</li>
-  <li>Step 4. Run D_t1 trough the PID algorithm described above ( in assignment) to get a steering angle</li>
-</ul>
-
-<p>I was experimenting for a long time with different values of K<sub>p</sub>,K<sub>d</sub> and K<sub>i</sub>. Using this I was able to find get a more insight what each of these constant is doing. I’m not 100% sure about, but I think that lowering K<sub>p</sub> makes the car less responsive to the error magnitude, as increasing this constant makes car move move with a twisting motion, K<sub>d</sub> seems to react faster to the growing error but it wasn’t completely clear to me from simulation. K<sub>i</sub> didn’t seem to do much even at higher values, but according to the research it should make the car more sensitive to error.</p>
-
-<p>I’ve found that setting the right theta had probably biggest impact on the car ability to follow the wall without bouncing to the corners. Also one additional thing while filtering nan and inf values from the scan reading, I also removed the readings that are higher angle that the lidar sensor on real car is able to read, which is apparently 270 degrees. The car in the simulation has no problem reading in 360 dergees so there are none infinite or nan values in simulation.</p>
-
-<iframe width="800" height="400" src="https://www.youtube.com/embed/5nLtlszkRvI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>]]></content><author><name></name></author><summary type="html"><![CDATA[Fist autonomous lap of my F1Tenth car using wallfollowing algorithm.]]></summary></entry></feed>
+<p>SLAM is probably one of the most important concept in robotics, so it is definitely worth of post by itself. I described what is occupancy grid map, how to update it cells by Bayesian filtering, log odds to update the probability of cell being free or occupied and briefly looked at Google cartographer. There is no assignment in the post as there is more I need to study before I start on the assignment on scan matching in lab5.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Looking into algorithm which should solve the chicken-and-egg problem of an autonomous agent localising itself in an unknown environment while mapping this environment at the same time.]]></summary></entry></feed>
