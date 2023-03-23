@@ -1,16 +1,16 @@
-I"-<div class="home">
+I"~<div class="home">
 
   <ul class="posts">
+    
+        <span class="post-date">Jan 27, 2022</span>
+        <a class="post-link" href="/2022/01/27/Combining-ML-with-Reasoning.html">Combining Machine Learning with Reasoning</a>
+        Notes from reference papers for project of implementing graph knowledge embeding systems which combine machine learning with reasoning as part of project for DIMA group of TU Berlin/
+        <br />
+        <br />
     
         <span class="post-date">Jan 13, 2022</span>
         <a class="post-link" href="/2022/01/13/Peak.html">PEAK, The New Science of Athletic Performance That is Revolutionizing Sports, Dr. Marc Bubbs</a>
         Notes from book of sience backed evidence of how to improve performance in athletic disciplies. As the CrossFit open coming up I went trough this book again and decided to post notes in order to have better overview of the most important things in this book.
-        <br />
-        <br />
-    
-        <span class="post-date">Jan 12, 2022</span>
-        <a class="post-link" href="/2022/01/12/CV.html">Self-supervised learning for Semantic Segmentation</a>
-        Notes from reference papers for project of implementing Self-supervised ML learning system for Semantic Segmentation.
         <br />
         <br />
     

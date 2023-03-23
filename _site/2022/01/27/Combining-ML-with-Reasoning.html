@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Combining Machine Learning with Reasoning | My Blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Combining Machine Learning with Reasoning" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes from reference papers for project of implementing graph knowledge embeding systems which combine machine learning with reasoning as part of project for DIMA group of TU Berlin/" />
+<meta property="og:description" content="Notes from reference papers for project of implementing graph knowledge embeding systems which combine machine learning with reasoning as part of project for DIMA group of TU Berlin/" />
+<link rel="canonical" href="http://localhost:4000/2022/01/27/Combining-ML-with-Reasoning.html" />
+<meta property="og:url" content="http://localhost:4000/2022/01/27/Combining-ML-with-Reasoning.html" />
+<meta property="og:site_name" content="My Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-27T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Combining Machine Learning with Reasoning" />
+<script type="application/ld+json">
+{"dateModified":"2022-01-27T00:00:00+01:00","datePublished":"2022-01-27T00:00:00+01:00","url":"http://localhost:4000/2022/01/27/Combining-ML-with-Reasoning.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2022/01/27/Combining-ML-with-Reasoning.html"},"description":"Notes from reference papers for project of implementing graph knowledge embeding systems which combine machine learning with reasoning as part of project for DIMA group of TU Berlin/","headline":"Combining Machine Learning with Reasoning","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="My Blog" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">My Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Combining Machine Learning with Reasoning</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-01-27T00:00:00+01:00" itemprop="datePublished">Jan 27, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>In this post are described main ideas from several papers which helped me understand the topic of the project “Combining Machine Learning with Reasoning”. The purpose of reading all these appers is mainly to get idea what exactly knowledge graph embeding (KGE) is, logical reasoning and datasets created and evaluated on for (KGE).</p>
+
+<h1 id="description-of-the-topic">Description of the topic:</h1>
+<p>“Knowledge graphs are extensively used in many application domains, such as search engines, product recommendation, and bioinformatics. Knowledge graph completion (a.k.a. link prediction) refers to the task of inferring missing information, such as links. To achieve link prediction, knowledge graph embeddings (KGE) <a href="#translating-embeddings-for-modeling-multi-relational-data">1</a> <a href="#complex-embeddings-for-simple-link-prediction">2</a> are gaining popularity. However, KGE are data-driven and do not perform well for sparse entities <a href="#popularity-agnostic-evaluation-of-knowledge-graph-embeddings">3</a>. An alternative is to employ rule-based approaches, which learn rules from a knowledge graph (e.g., <a href="#amie-association-rule-mining-under-incomplete-evidence-in-ontological-knowledge-bases">4</a>), and then applies them to infer the missing links. However, this approach is also data-driven and one cannot learn rules when there is insufficient evidence. Hence, to overcome these problems, we seek to develop a novel approach that combines knowledge graph embeddings with rule-based reasoning, where the rules are based on ontologies, determined by domain experts, or specified by entailment regimes (e.g., RDFS, OWL2).” 
+<em>source <a href="https://www.dima.tu-berlin.de/fileadmin/fg131_dima-theses/DIMA_Theses__AY_2021-2022__V1.1.pdf">dima_topics</a></em></p>
+
+<h1 id="translating-embeddings-for-modeling-multi-relational-data">Translating Embeddings for Modeling Multi relational Data</h1>
+
+<h4 id="introduction">Introduction</h4>
+
+<h4 id="todo">TODO</h4>
+
+<h4 id="todo-1">TODO</h4>
+
+<h4 id="conclusion">Conclusion</h4>
+
+<h1 id="complex-embeddings-for-simple-link-prediction">Complex Embeddings for Simple Link Prediction</h1>
+
+<h4 id="introduction-1">Introduction</h4>
+
+<h4 id="todo-2">TODO</h4>
+
+<h4 id="todo-3">TODO</h4>
+
+<h4 id="conclusion-1">Conclusion</h4>
+
+<h1 id="popularity-agnostic-evaluation-of-knowledge-graph-embeddings">Popularity Agnostic Evaluation of Knowledge Graph Embeddings</h1>
+
+<h4 id="introduction-2">Introduction</h4>
+
+<h4 id="todo-4">TODO</h4>
+
+<h4 id="todo-5">TODO</h4>
+
+<h4 id="conclusion-2">Conclusion</h4>
+
+<h1 id="amie-association-rule-mining-under-incomplete-evidence-in-ontological-knowledge-bases">AMIE: association rule mining under incomplete evidence in ontological knowledge bases</h1>
+
+<h4 id="introduction-3">Introduction</h4>
+
+<h4 id="todo-6">TODO</h4>
+
+<h4 id="todo-7">TODO</h4>
+
+<h4 id="conclusion-3">Conclusion</h4>
+
+  </div><a class="u-url" href="/2022/01/27/Combining-ML-with-Reasoning.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">My Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">My Blog</li><li><a class="u-email" href="mailto:mail@karelsmejkal.com">mail@karelsmejkal.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/smejkka3"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">smejkka3</span></a></li><li><a href="https://www.linkedin.com/in/karel-smejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">karel-smejkal</span></a></li><li><a href="https://www.twitter.com/KarelSmejkal"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">KarelSmejkal</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>My learning process and notes, including assignments from the F1Tenth 1/10 formula autonomous racing and Master Thesis Project of end-to-end autonomous parking at TU Berlin with colaboration of DAI-Labor.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

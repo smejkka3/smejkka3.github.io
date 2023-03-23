@@ -1,0 +1,46 @@
+I"d<p>In this post are described main ideas from several papers which helped me understand the topic of the project “Combining Machine Learning with Reasoning”. The purpose of reading all these appers is mainly to get idea what exactly knowledge graph embeding (KGE) is, logical reasoning and datasets created and evaluated on for (KGE).</p>
+
+<h1 id="description-of-the-topic">Description of the topic:</h1>
+<p>“Knowledge graphs are extensively used in many application domains, such as search engines, product recommendation, and bioinformatics. Knowledge graph completion (a.k.a. link prediction) refers to the task of inferring missing information, such as links. To achieve link prediction, knowledge graph embeddings (KGE) <a href="#translating-embeddings-for-modeling-multi-relational-data">1</a> <a href="#complex-embeddings-for-simple-link-prediction">2</a> are gaining popularity. However, KGE are data-driven and do not perform well for sparse entities <a href="#popularity-agnostic-evaluation-of-knowledge-graph-embeddings">3</a>. An alternative is to employ rule-based approaches, which learn rules from a knowledge graph (e.g., <a href="#amie-association-rule-mining-under-incomplete-evidence-in-ontological-knowledge-bases">4</a>), and then applies them to infer the missing links. However, this approach is also data-driven and one cannot learn rules when there is insufficient evidence. Hence, to overcome these problems, we seek to develop a novel approach that combines knowledge graph embeddings with rule-based reasoning, where the rules are based on ontologies, determined by domain experts, or specified by entailment regimes (e.g., RDFS, OWL2).” 
+<em>source <a href="https://www.dima.tu-berlin.de/fileadmin/fg131_dima-theses/DIMA_Theses__AY_2021-2022__V1.1.pdf">dima_topics</a></em></p>
+
+<h1 id="translating-embeddings-for-modeling-multi-relational-data">Translating Embeddings for Modeling Multi relational Data</h1>
+
+<h4 id="introduction">Introduction</h4>
+
+<h4 id="todo">TODO</h4>
+
+<h4 id="todo-1">TODO</h4>
+
+<h4 id="conclusion">Conclusion</h4>
+
+<h1 id="complex-embeddings-for-simple-link-prediction">Complex Embeddings for Simple Link Prediction</h1>
+
+<h4 id="introduction-1">Introduction</h4>
+
+<h4 id="todo-2">TODO</h4>
+
+<h4 id="todo-3">TODO</h4>
+
+<h4 id="conclusion-1">Conclusion</h4>
+
+<h1 id="popularity-agnostic-evaluation-of-knowledge-graph-embeddings">Popularity Agnostic Evaluation of Knowledge Graph Embeddings</h1>
+
+<h4 id="introduction-2">Introduction</h4>
+
+<h4 id="todo-4">TODO</h4>
+
+<h4 id="todo-5">TODO</h4>
+
+<h4 id="conclusion-2">Conclusion</h4>
+
+<h1 id="amie-association-rule-mining-under-incomplete-evidence-in-ontological-knowledge-bases">AMIE: association rule mining under incomplete evidence in ontological knowledge bases</h1>
+
+<h4 id="introduction-3">Introduction</h4>
+
+<h4 id="todo-6">TODO</h4>
+
+<h4 id="todo-7">TODO</h4>
+
+<h4 id="conclusion-3">Conclusion</h4>
+:ET
