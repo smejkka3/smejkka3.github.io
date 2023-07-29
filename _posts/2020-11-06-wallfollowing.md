@@ -1,43 +1,95 @@
 ---
 layout: post
-title:  "Taking The Brake: The Art of Automatic Emergency Braking"
-excerpt: "Navigating the intriguing journey of bringing a vehicle to a halt, all by itself, before it kisses an obstacle."
+title:  "Mastering the Wallfollowing Approach"
+excerpt: "Achieving the first autonomous lap using my F1Tenth car, powered by the wallfollowing algorithm."
 ---
 
-## Introduction
+## An Exciting Start
 
-Having recently delved into the fascinating world of ROS, the next challenge in line was to devise a node that harnesses `laser_scan` data to put a leash on a car that's all set to crash into an unsuspecting object. This necessitated mastering the Time To Collision (TTC) calculation, using the aforementioned LaserScan message, to predict any upcoming catastrophe. This task pushed me further into the labyrinth of publishers and subscribers, while also nudging me to unravel the secrets of the `Odometry` message and `AckermannDriveStamped` message. But before we plunge into the deep end, let's paddle through some theory.
+Diving into the fascinating world of ROS (Robot Operating System), we venture into the concept of wallfollowing, with Lecture 3 laying the groundwork. It delves into the last ROS introductory topic—Rigid Body Transformation.
 
-## AEB (Automatic Emergency Braking)
+Imagine coordinate frames in ROS as being like radar stations, each providing specific, sensor-based information. These frames are essentially 3D grids with orthogonal X, Y, and Z axes, placed at a specific position. What's thrilling is that these frames provide meaning to positions of objects, robots, and the like, but only when we establish the frame in which we're narrating the pose. 
 
-Imagine a vigilant guardian angel that takes the wheel to halt your vehicle just before it slams into an object. That's AEB for you! It is a safety net that operates based on the data fed by the vehicle's sensors. At its core, AEB is a binary classifier that is faced with a life-saving decision: to brake or not to brake.
+How do we determine the direction of the axes, you might wonder? Well, it's akin to shadow puppetry! The right-handed rule guides us - your index finger indicating the X direction, middle finger showing the Y direction, and the thumb pointing towards Z. Now, let's delve deeper into transformations and frames!
 
-#### Slip-ups
+## Unraveling Transformations and Frames
 
-The Achilles' heel of AEB is false negatives: situations where the car doesn't hit the brakes when it's seconds away from a collision. It's not hard to see why this is a no-go for a road-ready car. Then, there are false positives, which are less detrimental but still annoying. This is when your car turns overprotective and hits the brakes when there's no threat in sight.
+Why are transformations between different sensors essential, you ask? Each time sensor data arrives, we aim to transmute it uniformly. For instance, consider the frame of reference of a lidar sensor, which we can morph into the robot's frame of reference—located at the center of the rear axle. It's similar to the previous assignment where we solely considered the lidar's frame of reference to halt the car. 
 
-#### TTC (Time to Collision)
+However, a car isn't just a point in space—it has dimensions. The lidar sensor can be positioned in the center of the car, so correctly avoiding a collision should factor in the entire length of the car, not just the lidar's position. Hence, a transformation that converts measurements from one frame to another exists between frames.
 
-  Now, let's dive into the nitty-gritty of TTC calculation:
+## Navigating Reference Frames on F1Tenth car
 
-  ![Time to Collision formula from lecture 2 of F1/10 course](/assets/TTC_formula.png)
+#### map
+Think of this as the user-defined origin. All transformations are measured concerning the map, which represents the car's racing environment. Typically, once placed, it remains static.
 
-  The denominator in the equation above, known as the "range rate," is the time derivative of the range between the vehicle and a given obstacle:
+#### base_link
+Located at the center of the car's rear axle, it moves relative to the map frame as the car progresses.
 
-  ![Formula for range-rate from lecture 2 of F1/10 course](/assets/range_rate.png)
+#### lidar
+This frame captures where the lidar scan measurements occur, moving with the car relative to the map frame.
+
+#### odom
+A frame mandated by ROS, it usually represents the robot's initial position on the map before the action begins. It's fixed relative to the map.
+
+### The Dance of Rigid Body Transformation
+
+To understand how to transform data and position between frames, let's use the example of figuring out the coordinates of point p in frame 2, given its coordinates in frame 1.
+
+![frames](/assets/frames.png)
+
+Image source: [UV F1/10 course](https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf)
+
+How do we proceed?
+
+  1. Overlap both frames so their origins converge. The rationale is to compute the rotation of the second frame of reference.
+  2. Express the unit vectors of the second frame of reference in the unit vectors of the first frame of reference, as demonstrated in the picture below.
+
+![frames2](/assets/frames2.png)
+
+Image source: [UV F1/10 course](https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf)
+
+Given:
+
+x<sub>2</sub> = R<sub>11</sub>x<sub>1</sub> + R<sub>21</sub> y<sub>1</sub><br>
+y<sub>2</sub> = R<sub>12</sub>x<sub>1</sub> + R<sub>22</sub> y<sub>1</sub><br>
+
+We can see that the new frame of reference's units vector can be represented as a linear combination of the original frame of reference (considering only X,Y axis - it's a 2D problem, no Z). The formula can also be rewritten as a matrix:
+
+![rotation_m1](/assets/rotation_matrix.png)
+
+Image source: [UV F1/10 course](https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf)
+
+In addition, we define &theta; as the angle between x<sub>1</sub> and x<sub>2</sub>. This angle reveals how rotated this frame is.
+
+![theta](/assets/theta.png)
+
+Image source: [UV F1/10 course](https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf)
+
+To derive the coefficients R<sub>11</sub>, R<sub>21</sub>, R<sub>12</sub>, R<sub>22</sub>, we consider that along the x<sub>2</sub> unit vector direction, there are cos and sin components of the x<sub>1</sub> and y<sub>1</sub> unit vectors respectively. Therefore, x<sub>2</sub> and y<sub>2</sub> can be written as:
+
+x<sub>2</sub> = cos(&theta;)x<sub>1</sub> + sin(&theta;)y<sub>1</sub><br>
+y<sub>2</sub> = -sin(&theta;)x<sub>1</sub> + cos(&theta;)y<sub>1</sub><br>
+
+So, we get:
+
+![rotation_m](/assets/rotation_matrix2.png)
+
+Image source: [UV F1/10 course](https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf)
+
+With this matrix, we can represent unit vectors in the new frame of reference in terms of the original frame's unit vectors. We can also express point P's position in the new frame of reference using the rotation matrix, as shown below.
+
+![rotation](/assets/rotation_p.png)
+
+Image source: [UV F1/10 course](https://linklab-uva.github.io/autonomousracing/assets/files/ROS-tf.pdf)
+
+However, don't forget the translation too!
+
+#### ROS tf/tf2 package
+[ROS tf2 package](http://wiki.ros.org/tf2) is a fantastic tool that lets you track multiple coordinate frames over time, enabling transformation between two coordinates. It broadcasts this across ROS, making it available to any subscribing node. To dig deeper, you might want to check out the [TF2 Tutorial](http://wiki.ros.org/tf2/Tutorials), the older [TF Tutorial](http://wiki.ros.org/tf/Tutorials) and [TF2 Migration](http://wiki.ros.org/tf2/Migration).
+
+#### The Art of Wallfollowing
+This technique revolves around computing the error between the future position of the car and the current error, considering the carThe video is of my car running the wallfollowing algorithm, this is my first lap of autonomously driving car.
 
 
-#### Lidar
-
-Even though Lidar and I aren't strangers, I'll walk you through the [LaserScan message data fields](http://docs.ros.org/en/api/sensor_msgs/html/msg/LaserScan.htmlLaserScan) that are crucial for this task. Given the TTC formula, I need to employ the <i>float32[] ranges</i> to estimate the distance between the obstacle and the car (which is our numerator). For the denominator (range-rate), I'll have to engage <i>float32 angle_min, float32 angle_max</i>, and <i>float32 angle_increment</i>. This is because the range-rate calculation requires the cosine of each beam angle. In scenarios where the range-rate of a specific beam is less than zero, I set it to zero to avoid division by zero. I also explored the possibility of eliminating the zeros from the denominator and the corresponding numerator (at the same LaserScan angle), but this led to a surge in false negatives.
-
-Another vital message is the <i>Odometry</i>, specifically <i>geometry_msgs/TwistWithCovariance twist.linear.x</i>, which represents the linear speed of the car and is used in the range-rate computation.
-
-## F1Tenth Lab2 assignment
-
-After a series of trial and error in the RViz simulator, I found the sweet spot for the TTC threshold for braking: 0.3. The moment the TTC slips below this threshold, the brake is applied, making for some dramatic last-minute rescues.
-
-<iframe width="800" height="400" src="https://www.youtube.com/embed/LXWpBoFb4nk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<iframe width="800" height="400" src="https://www.youtube.com/embed/zna-dPAIdUQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<p>
-</p>
+That is it for this blog. I hope it was understandable enough. I really enjoyed this assignment, as always I learned a lot of new things. In the next blog I will move on to the waypoint following.
