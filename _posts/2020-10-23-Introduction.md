@@ -15,10 +15,11 @@ Post the inaugural lecture, my next stop was the first tutorial. The slides avai
 Although the [ROS wiki](http://wiki.ros.org/) is a treasure trove of tutorials for learning the basics of ROS, I will highlight the key takeaways from the initial lecture. The focus was primarily on ROS as a middleware, adept at managing communication among various segments of the autonomous car. Here are some fundamental components of ROS:
 
 * [Nodes](http://wiki.ros.org/Nodes): These are programs designed for specific functionality. Operating as independent processes, nodes interact with each other using topics and messages. Nodes are written using the client library, with roscpp and rospy being the main ones for C++ and Python respectively. There also exist experimental client libraries such as R and Java.
-  * The [ROS Master](http://wiki.ros.org/Master) is a unique node that is always running and doesn't necessitate user-defined codes. It enables nodes to interchange messages. To launch the ROS Master Node, use the command:
-  ```shell
-  >>> roscore
-  ```
+* The [ROS Master](http://wiki.ros.org/Master) is a unique node that is always running and doesn't necessitate user-defined codes. It enables nodes to interchange messages. To launch the ROS Master Node, use the command:
+
+```shell
+>>> roscore
+```
 
 * [Topics](http://wiki.ros.org/Topics) are channels over which nodes exchange messages. Nodes can subscribe to or publish to a topic. Topics has many-to-many relationship, so there can be multiple publishers and multiple subscribers on one topic and each topic has only one type of message.
 * [Messages](http://wiki.ros.org/Messages) are strongly-typed data structures for a topic.
