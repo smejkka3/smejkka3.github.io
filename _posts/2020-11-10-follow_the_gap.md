@@ -1,59 +1,65 @@
 ---
 layout: post
-title:  "Follow the Gap"
-excerpt: "Addressing the shortcomings of wallfollowing and implementing Follow the Gap algorithm."
+title:  "Charting Untraveled Paths: The Follow the Gap Method"
+excerpt: "A deep dive into the 'Follow the Gap' approach, exploring its solutions to the limitations of wallfollowing."
 ---
 
 ## Introduction
-Let's describe alternative approach to wallfollowing, which is just following left or right hand-side boundary of track. The Follow the Gap algorithm instead tracing the boundary is navigating trough the track without colliding to any static obstacle and finding the best path to avoid these obstacles. The wallfollowing is not completely able to solve all challenges coming with having the obstacles in the track, which are different shape. Follow the gap is simple algorithm which doesn't need a lot fo information about the track before-hand, but using the data acquired right now, known as reactive method. It is able to avoid any obstacles without any prior knowledge about the map.
+
+Let's embark on a thrilling escapade to an alternative to the conventional wallfollowing method, where the standard routine is simply adhering to the left or right boundary of the track. Instead, I introduce you to the 'Follow the Gap' algorithm. Its modus operandi is not merely tracing the boundary, but rather, darting through the track, dodging any static obstacles, and strategically finding the best route to circumvent them. Wallfollowing, although useful, faces an Achilles' heel when encountering distinctively shaped obstacles within the track. That's where the Follow the Gap algorithm shines. This clever strategist doesn't require extensive pre-existing data about the track, but rather uses the current situation to make decisions - a trait of its reactive method. Its brilliance lies in overcoming any obstacle without prior map knowledge.
 
 ## Follow the Gap
+
 #### Reactive navigation
-Reactive navigation is using immediate sensory input to decide the driving steering and velocity commands. This works for statics and in some cases also dynamic obstacles.
+
+Reactive navigation is like a skilled chess player, making tactical steering and velocity decisions based on the present sensory input. This method effectively tackles static and, in certain cases, dynamic obstacles.
 
 ### Gap finding intuition
-As the name of algorithm suggests, the car should be able to find a widest gap in the presence of immediate obstacles and drive into this gap to avoid any immediate collision. Let's say my lidar is reporting following array of distances [0.2, 6.2, 6.0, 7.0, inf, 3.0, inf, 3.0, inf, 8.0, 1.0, 3.0] you could simply choose the farthest distance obstacle and drive towards it, however this may not be possible as the car would have to pass between too obstacles which range between them is not enough for car to fit in ( there is enough room in between than - this can be computed by computing length of the arc given the angular measurements), or the angle between these obstacles is not physically possible for car to turn - as in my array is case of 7th element. To approach this problem let's define what a gap is:
- * The gap is series of at least n consecutive hits that pass some distance threshold t.
 
-If we would apply this definition to the array given above with n = 3 and t = 5.0 we would get only one gap: [6.2, 6.0, 7.0, inf]. So we would steer towards the center of this gap.
+As the algorithm's name suggests, the aim is for the car to spot the widest gap in the immediate obstacle landscape and confidently venture into this void to evade a collision. Now, imagine a lidar relaying the following array of distances: [0.2, 6.2, 6.0, 7.0, inf, 3.0, inf, 3.0, inf, 8.0, 1.0, 3.0]. The most straightforward strategy would be to steer towards the furthest obstacle, yet this might not always be feasible. The car might face two obstacles, the distance between which is too narrow for the car to slide through or the turning angle might be physically impossible for the car, as in the case of the 7th element in the given array. 
 
-Problems with this approach is that purely following the deepest gap allows the car pass between the obstacles as the car might not fit in between them. To address this challenge we can use approach use in all of robotics.
+To crack this problem, let's lay down a working definition of a 'gap':
+ * A gap is a series of at least 'n' consecutive hits exceeding a distance threshold 't'.
+
+If we apply this definition to the array with n=3 and t=5.0, we find one gap: [6.2, 6.0, 7.0, inf]. Thus, we would steer towards the heart of this gap.
+
+However, this approach isn't foolproof as the car might be lured to pass between obstacles where it wouldn't fit. To resolve this issue, we turn to an approach that's a beloved mainstay in robotics.
 
 #### Point Robot Approach
-We can assume that the robot is circular. With this assumption we can inflate the  the obstacles with the radius of robot. So if I want the robot go between the obstacles I can always represent the robot as point object and still assure that the robot will fit between the two obstacles as I'm clearing the obstacles by at least the radius of robot itself. This is better dhown on figure bellow (source: [UV lecture follow the gap](https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf)):
+
+Here's a neat trick: assume the robot to be circular. With this approximation, we can inflate the obstacles by the robot's radius. Hence, even if we decide to squeeze the robot between two obstacles, we can represent it as a point object while still ensuring it fits between the two obstacles since we have cleared the path by at least the radius of the robot. A picture is worth a thousand words, and the following figure does an excellent job of illustrating this concept ([UV lecture follow the gap](https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf)):
 ![PRA](/assets/PRA.png)
 
 #### Disparity
-Looking trough the lidar readings for consecutive readings that differ by an amount over some threshold, than we mask these readings  to appear closer to the lidar. The reminding points which are farther than the mask are the actual points where the car can fit and drive trough. This concept is nicely visualised on the following figure from [UV lecture follow the gap](https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf)
+
+To detect potential gaps, we scan the lidar readings for consecutive readings that exceed a certain threshold. These readings are then masked to appear closer to the lidar. The points that remain beyond this mask are the actual points the car can navigate through. The figure below, from [UV lecture follow the gap](https://linklab-uva.github.io/autonomousracing/assets/files/L14-Follow-the-gap.pdf), offers a great visualization:
 <img src="/assets/ftg1.png" height="500">
 
 ### Follow the gap algorithm
-* step 1:
-  Find the nearest LIDAR point and pit safety bubble around it of radius rb
-* step 2:
-  Set all points inside bubble to distance 0. This can be achieved by computing the length of the arc and than determine which points falls into the radius of buble rb. All of these points are than set to 0.
-* step 3:
-  Find maximum sequence of consecutive non-zeros among the free-space points. This is the maximum gap where the car can drive.
-* step 4:
-  Find the best point among this maximum sequence from previous step.
+The steps to follow the gap are:
 
-To make this as fast as possible, I should be looking from farther ranges for these obstacles, because doing sharp turns results in slower velocity, which can be achieved by turning earlier in less sharp angle.
+1. Find the nearest LIDAR point and create a safety bubble of radius rb around it.
+2. Set all points within the bubble to a distance of 0. This can be achieved by computing the arc's length and determining which points fall within the bubble's radius rb. All these points are then set to 0.
+3. Locate the maximum sequence of consecutive non-zeros among the free-space points. This sequence represents the maximum gap for the car to maneuver.
+4. Find the best point within this maximum sequence.
+
+For optimal results, it's crucial to detect obstacles at farther ranges early on. Early detection allows for smoother turns, avoiding sharp maneuvers that could reduce the vehicle's speed.
 
 #### Disadvantages
-There is risk of doing U turns if he car is going too fast and it has to do 90 degrees turn which it can't currently see as at particular point it will see the point on the opposite side of track, rather than the turn itself. This is shown on the figure bellow for better intuition.
+
+This algorithm isn't without its flaws. There's a risk of the car executing U-turns if it's moving too fast and has to make a 90-degree turn, which it can't currently see. In such a scenario, the car may perceive a point on the track's opposite side rather than the turn itself. The figure below demonstrates this flaw:
 <img src="/assets/ftg_fail.png" height="500">
 
-It is also shown in the nice follow the gap practical demonstration in video bellow.
+The video below offers a practical demonstration of the Follow the Gap approach.
 <iframe width="700" height="400" src="https://www.youtube.com/embed/ctTJHueaTcY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-
-
 ## F1Tenth Lab4 assignment
-My implementation of FtG algorithm consists of these steps:
- 1. Process each LiDAR scan by considering only field of view of 90 (45 to left and 45 to right as the 0th degree is exactly infront of the car) degrees, setting each value to the running mean of window 7 by convolution and clipping all values over 3m to 3m
- 2. Find the closest obstacle and set all points in bubble around it in certain radius 0. This bubble is computed by computing arc of proportion of radius and closest point and computing all angles inside this bubble. Ranges corresponding to the indexes of angles which are in the bubble are than set to 0.
- 3.  Finding the max gap by finding the longest non-zero consecutive values in the indexes of the processed lidar scan
- 4.  Finding the deepest possible scan and steer in the direction of it.
 
+My implementation of the Follow the Gap algorithm followed these steps:
+
+1. Process each LiDAR scan, considering only a field of view of 90 degrees (45 to the left and 45 to the right, with the 0th degree directly in front of the car). Set each value to the running mean of window 7 through convolution, and clip all values over 3m to 3m.
+2. Locate the closest obstacle and set all points within a certain radius around it to 0. This is done by computing the arc of the radius proportion and the closest point, then determining all angles inside this bubble. The ranges corresponding to the indices of angles within the bubble are then set to 0.
+3. Find the max gap by locating the longest non-zero consecutive values in the indices of the processed lidar scan.
+4. Find the deepest possible scan and steer towards it.
 
 <iframe width="800" height="400" src="https://www.youtube.com/embed/pKxiRvM4X6U" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
