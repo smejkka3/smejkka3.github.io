@@ -21,28 +21,26 @@ Although the [ROS wiki](http://wiki.ros.org/) is a treasure trove of tutorials f
 >>> roscore
 ```
 
-* [Topics](http://wiki.ros.org/Topics) are channels over which nodes exchange messages. Nodes can subscribe to or publish to a topic. Topics has many-to-many relationship, so there can be multiple publishers and multiple subscribers on one topic and each topic has only one type of message.
-* [Messages](http://wiki.ros.org/Messages) are strongly-typed data structures for a topic.
-* [Packages](http://wiki.ros.org/Packages) are part of software, which contains one or more nodes.
+* [Topics](http://wiki.ros.org/Topics): These are the channels facilitating message exchange among nodes. Nodes can either subscribe to or publish on a topic. Given their many-to-many relationship, a topic can have multiple publishers and subscribers, but only one type of message.
+* [Messages](http://wiki.ros.org/Messages): These are strongly-typed data structures designated for a topic.
+* [Packages](http://wiki.ros.org/Packages): They constitute a part of the software that may contain one or more nodes.
 
-The ROS Publishers and Subscribers, Messages and topic concept is very well described at [mathworks.com](https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html) with the following image:
+The interplay of ROS Publishers, Subscribers, Messages, and Topics is beautifully articulated at [mathworks.com](https://www.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html), elucidated with the following illustration:
 
 ![mathworks](https://www.mathworks.com/help/examples/ros/win64/ExchangeDataWithROSPublishersAndSubscribersExample_01.png)
 
+Next on my agenda was the turtlesim tutorial, aptly referred to as the "Hello World" of ROS. You can find the tutorial at the [ROS wiki](http://wiki.ros.org/turtlesim/Tutorials).
 
-The next thing to try for me was to follow the turtlesim tutorial, which is basically "hello world" of ROS. The tutorial is available at [ROS wiki](http://wiki.ros.org/turtlesim/Tutorials).
+Subsequent to this, I proceeded to the lecture on ROS filesystem. While this topic is indispensable for effective work in ROS, it's best understood through hands-on practice within turtlesim or your own ROS project. So, what exactly is [ROS filesystem](http://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem)? It streamlines the build process of a project while furnishing the necessary tools and flexibility to decentralize its dependencies. The crux of the lecture hinged on [catkin](http://wiki.ros.org/catkin), the [cakin_make](http://wiki.ros.org/catkin/commands/catkin_make) command, and importantly, the [package.xml](http://wiki.ros.org/catkin/package.xml) and [CMakeLists.txt](http://wiki.ros.org/catkin/CMakeLists.txt) files within the ROS package.
 
-The next lecture was about ROS filesystem. Although very important topic to know to successfully work in ROS, it is better to try it on your own inside turtlesim or your own ROS project. So what is [ROS filesystem](http://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem)? It centralises the build process of a project, while at the same time provide enough flexibility and tooling to decentralise its dependencies. The main points of the lecture were about [catkin](http://wiki.ros.org/catkin), [cakin_make](http://wiki.ros.org/catkin/commands/catkin_make) command and most importantly about [package.xml](http://wiki.ros.org/catkin/package.xml) and [CMakeLists.txt](http://wiki.ros.org/catkin/CMakeLists.txt) file inside ROS package.
-
-* [Catkin](http://wiki.ros.org/catkin): Is the build system of ROS which generates executables nad libraries. It is based on CMake from C programming language and it extends it with ROS specific features. It also makes the package more standard compliant, and thus reusable by other programmers. In the following figure is shown how the catkin workspace should be organised (taken from [UV F1/10 lecture](https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf)).
+* [Catkin](http://wiki.ros.org/catkin): This is ROS's build system responsible for generating executables and libraries. It is an extension of CMake from the C programming language, augmented with ROS-specific features. Catkin lends more standard compliance to the package, enhancing its reusability among programmers. The figure below depicts the organization of the catkin workspace (sourced from [UV F1/10 lecture](https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf)).
 <img src="/assets/catkin_ws.png">
-* [Package.xml](http://wiki.ros.org/catkin/package.xml): Contains the meta information of a package such as name, description, version, license and dependencies.
-* [CMakeLists.txt](http://wiki.ros.org/catkin/CMakeLists.txt): The main CMake file to build the package and calls catkin-specific functions. Example of how should very basic  * CMakeLists.txt look look like is in the following figure (taken from [UV F1/10 lecture](https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf)):
+* [Package.xml](http://wiki.ros.org/catkin/package.xml): This file houses the meta-information of a package such as its name, description, version, license, and dependencies.
+* [CMakeLists.txt](http://wiki.ros.org/catkin/CMakeLists.txt): As the main CMake file, it is instrumental in building the package and invoking catkin-specific functions. Below is an exemplification of how a rudimentary CMakeLists.txt should appear (sourced from [UV F1/10 lecture](https://linklab-uva.github.io/autonomousracing/assets/files/L03.pdf)):
 CMakeLists.txt
-![cmake](/assets/CMake.png")
+![cmake](/assets/CMake.png)
 
-
-Moving on to the next video and Lecture 3 from the University of Virginia, which talks about one of the most important concepts in ROS and that's Publishers and Subscribers. This lecture starts with example of <a href="http://wiki.ros.org/rospy">rospy client library</a>, explaining initialisation of ROS Node with
+I then transitioned to the subsequent video and Lecture 3 from the University of Virginia, highlighting one of the pivotal concepts in ROS: Publishers and Subscribers. This lecture opens with an illustration of the <a href="http://wiki.ros.org/rospy">rospy client library</a>, elucidating the initialization of a ROS Node with:
 
 ```shell
 rospy.init_node('my_node_name')
