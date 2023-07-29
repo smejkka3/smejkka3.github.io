@@ -104,37 +104,39 @@ I wrapped up this week by watching a couple of additional videos on ROS services
 On a final note, I would like to say that this week was quite intense but also very satisfying. The learning curve is indeed steep, but the hands-on approach is very effective and engaging. I look forward to the upcoming weeks of this journey.
 
 
-## Autoturtle assignment
+## The Great Turtle Odyssey
 
-Although I completed [Lab1 of F1Tenth](https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros) already, I decided to do the [first assignment](https://linklab-uva.github.io/autonomousracing/assets/files/A01.pdf) from the F1/10 course from University of Virginia as well to gain very good base knowledge of ROS. There are 4 tasks in total. The first one is to create node swim_shool.py where the turtle from turtlesim tutorial draw figure 8 by doing movement specified by linear and angular velocity defined by user. I'm not uploading the code as it is university course credited assignment but my results are shown in gif bellow. My first idea was to create subscriber in the node which is getting the pose of the turtle and when the pose.theta is very close to 0 (means horizontal to X axis) multiply angular velocity of turtle by -1, which makes the turtle turn the other side to which is turtle currently rotating. However due the slight inaccuracies of the pose.theta and rospy.rate the [pose.theta](http://docs.ros.org/en/melodic/api/turtlesim/html/msg/Pose.html) never was exactly 0 or its absolute value was not close enough to accurately follow the 8 figure each round. I partially solved this by increasing queue size and rospy.rate to 1000hz to increase rate of loop which gave me more pose.theta values, however this solution still was not accurate enough. What worked great is to calculate the radius of the circle from the linear and angular velocities inputted by user. Using this radius I could calculate circumference of the circle the turtle is going to draw as well as at the same time computing the distance which turtle travelled at each run of the loop and once the turtle crossed the distance of circumference of the circle multiply angular velocity of turtle by -1 and combine this approach with the pose.theta checking (as the circumference check was not accurate enough and the turtle turned slightly before finishing the complete circle) mention above with slightly less accuracy. Combining these two condition made my turtle not skip the turns after finishing drawing the complete circle.
+To fortify my mastery of ROS, I've embarked on another adventure, this time on board the [F1/10 course](https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros) from the University of Virginia. Four thrilling tasks awaited me, starring the turtle from the turtlesim tutorial, who turned out to be quite the artist!
+
+Task one invited me to create the `swim_school.py` node. The objective was simple: to make our aquatic friend trace a figure 8. A seemingly straightforward mission, you'd think? Not quite. I could control the turtle's linear and angular velocities, but due to slight discrepancies in the turtle's `pose.theta` and `rospy.rate`, it was challenging to make the turtle stick to the figure 8 after each round.
+
+Attempt number one involved creating a subscriber in the node that would flip the turtle's angular velocity when the `pose.theta` was near zero. However, this wasn't quite accurate enough. I tried increasing the queue size and `rospy.rate` to 1000Hz, hoping for more `pose.theta` values, but that still fell short.
+
+So, I shifted my strategy. Using the user-defined linear and angular velocities, I calculated the radius of the circle the turtle would draw and hence its circumference. By tracking the turtle's journey in each loop, I could tell when it had traveled the distance equivalent to the circle's circumference and, at that point, reverse the angular velocity. But even this wasn't enough, so I combined this strategy with the less accurate `pose.theta` check from my first attempt. The result? A graceful figure 8 sketched out by my diligent turtle.
 
 ![swim_school1](/assets/swim_school1.gif)
 
 ![swim_school2](/assets/swim_school2.gif)
 
-The second task random_swim_shool.py was very similar to the previous one. The only difference is that the initial position of the turtle should be random as well as linear and angular velocity of the turtle. My results shown again in gifs bellow.
+On to task two, the `random_swim_school.py`. This was an invigorating challenge, as it introduced an element of uncertainty. Both the turtle's initial position and its linear and angular velocities were randomized. The suspense was real, and the outcome was different each time!
 
 ![random_swim_school1](/assets/random_swim_school1.gif)
 
 ![random_swim_school2](/assets/random_swim_school2.gif)
 
-In the third task back_to_sqaure_one.py the task was again to draw a shape by moving turtle, however this time it was square shape with the lower left corner at position (1,1). Side length of the square should be taken from user's input in the range between 1 to 5.
+Task three demanded a shift from free-flowing curves to strict right angles. In `back_to_square_one.py`, the turtle had to sketch a square with the lower-left corner at position (1,1). The side length was an input from yours truly, within a range of 1 to 5.
+
 ![back_to_sqaure_one](/assets/back_to_sqaure_one.gif)
 
-The last problem was to swim to position defined by a user.
+Finally, the last task called for precision navigation. I had to direct the turtle to a specific user-defined location.
+
 ![swim_to_goal](/assets/swim_to_goal.gif)
 
 
-## F1Tenth Lab1 assignment
+## The F1Tenth Circuit
 
-[First Lab](https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros) of the F1Tenth was quite straight forward. The main goal is:
-* to understand directory structure and framework of ROS
-* to understand and be able to implement simple subscribers and publishers
-* to understand and be able to implement messages
-* to understand what exactly is in CMakeLists.txt and package.xml
-* to understand package dependencies
-* be able to write and to understand launch files
-* to work with RViz
-* to understand and work Bag files.
+The [first Lab](https://f1tenth-coursekit.readthedocs.io/en/stable/assignments/labs/lab1.html#lab-1-introduction-to-ros) of the F1Tenth course offered an intense deep-dive into the inner workings of ROS, from understanding its directory structure and framework to implementing simple subscribers and publishers, and mastering messages.
 
-The goal is to implement ROS package with node (either in C++, Python or both) and launch file and custom message, which subscribes to the laser_scan topic and publishes distance to the closest obstacle, farthest obstacle and both of these in one topic. I decided to do the lab in both C++ and Python as I want to practice C++ for later when it will be useful for computer vision as python is known for being quite slow. I didn't encounter some major problems, only experienced little delay while coding the C++ part as I had to iterate trough the vector of laser_scan message ranges and as it was already more than a year sice I did major project in C++ I had to go back to basic tutorials on iterators in C++. My final package as required in the task is available bellow.
+I got to grasp the nuts and bolts of CMakeLists.txt and package.xml, delve into package dependencies, and design my own launch files. Plus, I learned how to maneuver with RViz and wrangle Bag files.
+
+My objective was to develop a ROS package with a node (either in C++, Python, or both), a launch file, and a custom message. This combo had to subscribe to the `laser_scan` topic and publish the distance to the closest and farthest obstacles. I decided to tackle this in both C++ and Python to get a grip on both languages. C++ was a bit rusty, especially when it came to iterating through the vector of laser_scan message ranges. But with a little bit of help from some basic tutorials, I managed to get it back on track. The final package, as per the task's requirements, is ready and roaring to go.
