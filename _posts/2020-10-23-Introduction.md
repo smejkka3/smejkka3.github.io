@@ -1,23 +1,24 @@
 ---
 layout: post
-title:  "Introduction to Robotic Operating System (ROS)"
-excerpt: "My first steps into F1Tenth. Mostly just ROS introduction."
+title:  "Delving into the Robotic Operating System (ROS)"
+excerpt: "Embarking on the F1Tenth journey: An encompassing introduction to ROS."
 ---
-## Introduction
 
-To start with F1Tenth, the first lecture covers mostly overview of the whole curse and a brief introduction of autonomous racing. The point of the lecture was mostly to motivate students and set an outline of what to expect during the course.
+## An Aerial View
 
-After watching the first lecture the next content in line was the first tutorial. The slides on the website only briefly cover the F1Tenth simulator how to install it and how to manually drive the car inside of the simulator using keyboard. So I used lecture videos from University of Virginia by Prof. Madhur Behl available [here](https://www.youtube.com/playlist?list=PL868twsx7OjddCq3az74hu6pVsuJJzXvP) and [here](https://linklab-uva.github.io/autonomousracing/) as well as watched the first 5 videos all the way up to [F1/10 Lectures] Online ROS F1/10 Simulator to cover all the basics of ROS, which are later needed in the Lab1 Assignment. I'm gonna list bellow some of the basic points I should remember from these lectures.
+Initiating my journey with F1Tenth, the preliminary lecture provides an overarching perspective of the entire course along with a concise introduction to autonomous racing. The essence of this lecture revolves around stirring up students' interest and laying down a roadmap of what awaits them throughout the course.
 
-## ROS basics
+Post the inaugural lecture, my next stop was the first tutorial. The slides available on the website give a cursory glance at the F1Tenth simulator, its installation process, and the manual operation of the car within the simulator via a keyboard. To delve deeper, I turned to lecture videos by Prof. Madhur Behl from the University of Virginia, available [here](https://www.youtube.com/playlist?list=PL868twsx7OjddCq3az74hu6pVsuJJzXvP) and [here](https://linklab-uva.github.io/autonomousracing/). I devoted my time to the first five videos up until [F1/10 Lectures] Online ROS F1/10 Simulator, to master the rudiments of ROS, a prerequisite for Lab1 Assignment. Below, I have enumerated some salient points from these lectures that merit recollection.
 
-The [ROS wiki](http://wiki.ros.org/) already has great tutorials to use when learning basics of ROS, however I'm gonna mention some of the main points from the first lecture. It was focused on the ROS as middleware which manages communication between different parts of the autonomous car. Here are the some of the basics components of ROS:
+## Fundamentals of ROS
 
-* [Nodes](http://wiki.ros.org/Nodes) Programs with specific functionality, that runs as a single process and they communicate with other nodes using topics and messages. A node is written using the client library, the main ones are roscpp for C++ and rospy for Python. There are also some experimental client libraries such as R and Java.
-  * [ROS Master](http://wiki.ros.org/Master) is special node which runs always and it doesn't have to be written by user. It allows nodes to be able to exchange message among each other. ROS Master always has to be running. To start the ROS Master Node there is a command
-```shell
->>> roscore
-```
+Although the [ROS wiki](http://wiki.ros.org/) is a treasure trove of tutorials for learning the basics of ROS, I will highlight the key takeaways from the initial lecture. The focus was primarily on ROS as a middleware, adept at managing communication among various segments of the autonomous car. Here are some fundamental components of ROS:
+
+* [Nodes](http://wiki.ros.org/Nodes): These are programs designed for specific functionality. Operating as independent processes, nodes interact with each other using topics and messages. Nodes are written using the client library, with roscpp and rospy being the main ones for C++ and Python respectively. There also exist experimental client libraries such as R and Java.
+  * The [ROS Master](http://wiki.ros.org/Master) is a unique node that is always running and doesn't necessitate user-defined codes. It enables nodes to interchange messages. To launch the ROS Master Node, use the command:
+  ```shell
+  >>> roscore
+  ```
 
 * [Topics](http://wiki.ros.org/Topics) are channels over which nodes exchange messages. Nodes can subscribe to or publish to a topic. Topics has many-to-many relationship, so there can be multiple publishers and multiple subscribers on one topic and each topic has only one type of message.
 * [Messages](http://wiki.ros.org/Messages) are strongly-typed data structures for a topic.
