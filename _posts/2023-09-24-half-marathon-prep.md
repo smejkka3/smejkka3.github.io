@@ -1,6 +1,9 @@
-# Embarking on a Half Marathon Journey: From Gym Enthusiast to Runner
-
 ---
+layout: post
+title:  "Embarking on a Half Marathon Journey: From Gym Enthusiast to Runner"
+excerpt: "As someone who's spent the past decade hitting the gym, with a recent two-year stint in CrossFit, the idea of running a half marathon seemed like an exhilarating challenge."
+---
+# Embarking on a Half Marathon Journey: From Gym Enthusiast to Runner
 
 As someone who's spent the past decade hitting the gym, with a recent two-year stint in CrossFit, the idea of running a half marathon seemed like an exhilarating challenge. I'll admit, I'm not a seasoned runner, but I'm not overweight, and I've maintained a decent level of fitness. It was a friend, who, just over a year ago, transitioned from weights to running shoes, that inspired me to take the plunge. And so, armed with a brand-new pair of running shoes, I embarked on a 9-month training plan crafted by Chat GPT.
 
