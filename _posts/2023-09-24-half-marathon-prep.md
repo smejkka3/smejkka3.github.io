@@ -30,3 +30,31 @@ With a steady eye on the calendar, I'm aware that this journey is a marathon in 
 So, to anyone considering taking up a similar challenge, my advice is simple: trust the process, listen to your body, and don't be afraid to push your limits. The road to a half marathon may be long, but every step is a victory, and every milestone is a testament to your strength, both physically and mentally.
 
 Stay tuned for the next update on this transformative journey from weights to kilometers, as I continue to lace up and hit the pavement, one stride at a time.
+
+## Training for a Half Marathon: My Journey into Week 3 and 4
+
+Hello, dear readers!
+
+Two weeks into my half marathon training program and boy, do I have stories to tell. But first, a quick glance back. Remember that foundation-building plan I shared? It's been the blueprint for the last 14 days, and what a journey it's been!
+
+The first two weeks were about understanding my body, my rhythm, and my pace. While the easy runs on Saturdays and Thursdays felt surprisingly pleasant, the gym sessions reminded me of muscles I forgot I had! The rope jumping sessions on Tuesdays? A love-hate relationship. I loved the adrenaline, but my technique sure did need work. And yoga? An oasis of calm in an otherwise rigorous week.
+
+Now, as I usher into week 3, I'm feeling a bit more confident. Let me share my experiences and plans for the next fortnight:
+
+### Update: Week 3-4 (September 23 - October 6, 2023):
+
+**Running:** Extending my running time to 30-40 minutes has been challenging, but the autumnal winds and the beautiful changing leaves are motivation enough. With every step, I remind myself of the end goal: a successful half marathon. The Thursday runs, in particular, have become my time to introspect, to take in nature, and to push myself just a tad bit more.
+
+**Gym Sessions:** I've continued my strength training, adding a few more reps here and there. The squats, lunges, and especially the core exercises, are slowly but surely becoming my best friends. Who knew the path to a marathon also leads to toned abs?
+
+**Rope Jumping:** The rope and I, we've come to an understanding. I've finally started enjoying my sessions, focusing more on the rhythm and less on tripping. The added bonus? It's excellent cardio that complements my running sessions.
+
+**New Addition - Foam Rolling:** This, my friends, has been a game-changer. Post-run, I've taken to foam rolling, focusing on my calves and hamstrings. The relief is immediate and incredibly satisfying. If you've never tried it, I can't recommend it enough.
+
+**Feelings & Reflections:** The overarching sentiment at this stage? Excitement mixed with a tinge of nervousness. The commitment to train every day, to wake up even when the bed feels incredibly inviting, is what's testing me more than the physical exertion.
+
+**Goals for the next weeks:** As I inch closer to the end of the month, my goals are set. I aim to master that 40-minute run without a break, fine-tune my rope jumping technique, and perhaps, just perhaps, indulge in a cheeky cheat meal (or two!).
+
+Stay tuned, everyone. The journey continues, and as always, your support and kind words propel me forward. Here's to more miles, more stories, and that ultimate finish line.
+s
+
