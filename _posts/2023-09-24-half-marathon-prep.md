@@ -56,5 +56,44 @@ Now, as I usher into week 3, I'm feeling a bit more confident. Let me share my e
 **Goals for the next weeks:** As I inch closer to the end of the month, my goals are set. I aim to master that 40-minute run without a break, fine-tune my rope jumping technique, and perhaps, just perhaps, indulge in a cheeky cheat meal (or two!).
 
 Stay tuned, everyone. The journey continues, and as always, your support and kind words propel me forward. Here's to more miles, more stories, and that ultimate finish line.
-s
 
+
+### Update: Week 5-13 (Ocober 7 - December 2, 2023):
+
+## A Rollercoaster Month: From Brazil to Berlin, Challenges and Comebacks
+
+---
+
+The past month has been nothing short of a rollercoaster ride. I packed my bags and jetted off to Brazil, armed with the determination to continue my half marathon training while immersing myself in the vibrant Brazilian culture. However, as fate would have it, my journey took an unexpected turn.
+
+### Running Woes
+
+Eager to maintain my running momentum, I started the first week in Brazil with a plan to run 5 km four times a week. The scenic routes were captivating, but after a series of runs, my right knee began protesting vehemently. It seems the impact of running combined with the unforgiving pavements didn't sit well with my body. Perhaps my muscular frame was a bit too heavy for the constant pounding.
+
+### A Jumping Switch
+
+In an attempt to salvage my cardio goals, I pivoted to a rope jumping program using an app called Crossrope. The initial excitement, however, was short-lived as my right knee pain escalated. Despite reducing the intensity, after a week, I had to make a tough call and cease all jumping activities.
+
+### Brazilian Cuisine Temptations
+
+Adding salt to the wound (or perhaps sugar to the injury), the irresistible allure of Brazilian cuisine proved too tempting to resist. My diet, which was diligently maintained during the initial weeks of my training, took a nosedive. It was a feast of flavors, but not exactly the fuel my body needed.
+
+### Fitness Retreat
+
+Coupled with the dietary detour, my fitness journey took an unexpected retreat. A sedentary lifestyle in Brazil, combined with the abrupt halt to my exercise routine, set me back considerably. The vibrant energy of the country clashed with my temporarily muted fitness aspirations.
+
+### Health Woes
+
+Returning to Berlin in the middle of November, my health threw another curveball. A few days before my departure from Brazil, I found myself grappling with viral conjunctivitis. The uncomfortable eye condition intensified during the flight, rendering me practically housebound for the subsequent three weeks.
+
+### Slow But Steady Comeback
+
+Emerging from the health setback, I cautiously resumed my fitness routine. The initial weeks involved a combination of CrossFit three times a week, gym sessions twice a week, and the occasional run when the weather permitted. It was a slow but steady return to the regimen I had diligently crafted before the unexpected hurdles.
+
+### A Glimmer of Hope
+
+As the Christmas season approaches, I'm hopeful that the worst is behind me. The setbacks were unforeseen and challenging, but they've only fueled my determination to reclaim my fitness journey. The holiday season, notorious for indulgences, presents an opportunity to strike a balance between festive cheer and disciplined training.
+
+In the grand narrative of a half marathon preparation, this month has been a subplot of challenges, setbacks, and comebacks. The road to fitness is seldom a straight line, but rather a mosaic of twists and turns. As I lace up my shoes and face the winter winds, I'm reminded that the journey is just as important as the destination.
+
+Stay tuned for the next chapter of this marathon adventure, where I navigate the festive season and push the boundaries of resilience. Until then, here's to running, jumping, and embracing the unpredictable journey toward the half marathon finish line!
