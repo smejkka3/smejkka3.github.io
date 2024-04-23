@@ -77,3 +77,55 @@ As the Christmas season approaches, I'm hopeful that the worst is behind me. The
 In the grand narrative of a half marathon preparation, this month has been a subplot of challenges, setbacks, and comebacks. The road to fitness is seldom a straight line, but rather a mosaic of twists and turns. As I lace up my shoes and face the winter winds, I'm reminded that the journey is just as important as the destination.
 
 Stay tuned for the next chapter of this marathon adventure, where I navigate the festive season and push the boundaries of resilience. Until then, here's to running, jumping, and embracing the unpredictable journey toward the half marathon finish line!
+
+
+### Update: Week 14-29 (December 2, 2023 - March 16, 2024):
+
+## A Chilly Interlude: Snowy Czechia and the Battle with Injury
+
+---
+
+After bidding farewell to the vibrant energy of Brazil and the unexpected health setbacks, I found myself back in the cozy embrace of my family in Czechia. But as the winter settled in, so did the frosty temperatures and blankets of snow, creating a picturesque yet challenging backdrop for my training.
+
+## Frozen Roads and Hibernating Shoes
+
+The allure of running against the backdrop of a winter wonderland was undeniable, but the reality of icy pavements and sub-zero temperatures posed a formidable challenge. Despite my best intentions, I found myself reluctant to brave the elements, opting instead for the warmth and comfort of indoor spaces.
+
+## A Structured Restart
+
+As the new year dawned, so did a renewed sense of determination. I crafted a structured training plan, designed to gradually ease me back into my running routine while accommodating the wintry conditions. Two short runs during the week, each spanning 5 kilometers, complemented by a longer run on Sundays, double the distance.
+
+## Battling the Chill
+
+Motivation became my steadfast companion as I ventured out into the frosty air, my breath forming misty clouds as I pounded the frozen ground beneath me. The biting cold tested my resolve, but with each step, I felt a sense of accomplishment and progress, despite the numbing sensation creeping into my extremities.
+
+## A Painful Setback
+
+However, just as the momentum of progress began to build, a familiar foe reared its head once more. My right knee, seemingly recovered from its earlier woes, began to protest with renewed vigor. The sharp twinges of pain served as a sobering reminder of the fragility of the human body, particularly when subjected to the rigors of training.
+
+## CrossFit to the Rescue
+
+With a heavy heart, I made the difficult decision to halt my running endeavors and redirect my focus towards strengthening and rehabilitating my injured knee. CrossFit became my sanctuary, offering a diverse array of exercises to challenge and fortify my body, all while minimizing the strain on my compromised joint.
+
+## Patience and Persistence
+
+As the weeks stretched into months, I remained steadfast in my commitment to recovery. Each session at the gym was a testament to my resilience and determination, a silent vow to overcome adversity and emerge stronger than before. Though the road ahead was fraught with uncertainty, I refused to let setbacks define my journey.
+
+## A Glimpse of Spring
+
+Finally, as the last vestiges of winter began to fade, so too did the persistent ache in my knee. With cautious optimism, I tentatively reintroduced running into my routine, taking care to listen to my body and heed its signals. The thawing landscape mirrored the gradual thawing of my fears and doubts, paving the way for a triumphant return to the roads and trails that had once been my sanctuary.
+
+## Embracing the Journey
+
+As I reflect on the tumultuous months that have passed, I am reminded of the invaluable lessons learned along the way. The path to progress is rarely linear, often fraught with obstacles and setbacks that test our resolve and resilience. Yet, it is precisely through these challenges that we discover the depths of our strength and determination.
+
+## Looking Ahead
+
+With spring on the horizon and the promise of new beginnings in the air, I eagerly anticipate the next chapter of my marathon journey. Armed with newfound wisdom and a renewed sense of purpose, I stand ready to embrace whatever challenges lie ahead, confident in my ability to conquer them with grace and perseverance.
+
+Join me as I continue to chase my dreams, one step at a time, towards the elusive finish line of the half marathon. Until then, here's to the unwavering spirit of resilience and the enduring beauty of the journey itself.
+
+
+
+
+
