@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Why I’m Documenting My Marathon Prep"
-excerpt: "As someone who's spent the past decade hitting the gym, with a recent two-year stint in CrossFit, the idea of running a marathon seemed like an exhilarating challenge."
+excerpt: "After winning the lottery entry to the 2025 Berlin Marathon, I'm documenting my journey — blending marathon training, data analysis, and self-discipline to grow both as a runner and as a data engineer."
 ---
 
 Back in 2024, I wrote a blog post about my first half marathon. I’m honestly not sure if anyone read it — maybe not even by accident — but it meant something to me. It was my first real feat of endurance and a first taste of competition. I didn’t quite hit my goal of running it under 2 hours, but I still got a solid time for a first-timer with less preparation than I’d hoped for.
