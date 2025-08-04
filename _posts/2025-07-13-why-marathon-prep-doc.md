@@ -27,7 +27,7 @@ There are a few reasons:
 - **Writing**: I want to improve my writing skills — for work, for thinking, for clarity.
 - **Discipline**: Documenting the process forces me to be more deliberate. It’s easy to skip workouts. It’s harder to skip reflection.
 - **Curiosity**: I’m a data engineer. I’ve spent the past 5 years building data pipelines, working with analytics, and automating stuff. Now I have a Suunto watch that exports everything I do into CSV files. You already know what’s coming — I want to analyze it. Automatically. Visually. Transparently. From performance charts to workout logs and CrossFit WOD analysis.
-- **Learning**: Lately, I’ve felt stuck in my own field. Not learning new tools, not keeping up with the tech or fitness research like I used to. This marathon prep is a chance to break that rut. I want to apply everything I know — data science, computer vision, automation — to my own fitness. I want to dive into sports science. Learn the why behind heart rate zones, lactate thresholds, VO₂ max, and more.
+- **Learning**: Lately, I’ve felt stuck in my own field. Not learning new tools, not keeping up with the tech or fitness research like I used to. This marathon prep is a chance to break that rut. I want to apply everything I know — data engineering, data science, computer vision, automation — to my own fitness. I want to dive into sports science. Learn the why behind heart rate zones, lactate thresholds, VO₂ max, and more.
 
 ---
 
