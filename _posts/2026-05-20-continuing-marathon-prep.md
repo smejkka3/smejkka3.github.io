@@ -112,8 +112,6 @@ That run gave me confidence.
 
 At the same time, July also exposed the other side of marathon prep: accumulated fatigue.
 
-At the same time, July also exposed the other side of marathon prep: accumulated fatigue.
-
 Some runs felt flat from the first kilometer. Sleep quality mattered more. Recovery became more important than motivation. I started realizing marathon training isn’t really about heroic workouts — it’s about how well you can absorb training week after week without breaking yourself.
 
 And honestly, my body started fighting back a little.
